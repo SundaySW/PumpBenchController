@@ -1,6 +1,3 @@
-[submodule "Ext_Libs/protos_core"]
-	path = Ext_Libs/protos_core
-	url = https://sundaysw@github.com/reus-inc/protos_core
 [submodule "ParamService"]
 	path = ParamService
 	url = https://sundaysw@github.com/sundaysw/protosparamservice

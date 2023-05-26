@@ -1,0 +1,12 @@
+
+Plot{
+    /*background: none;*/
+    background-color: red;
+}
+
+QToolTip {
+    background-color: red;
+    color: #BBBBBB;
+    border: none;
+    font-family: Rubik;
+}

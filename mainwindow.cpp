@@ -2,14 +2,13 @@
 #include "./ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    :QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    benchController(new BenchController(ui, this))
 {
-    ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
