@@ -76,7 +76,7 @@ void BenchItemSettingsDlg::setParamConnections(){
         int minValue = ui->setValueMin_lineEdit->text().toInt(&okMin);
         int newMaxValue = ui->setValueMax_lineEdit->text().toInt(&okMax);
         if(okMin && okMax)
-                emit newSetValueBounds(qMakePair(minValue, newMaxValue));
+            emit newSetValueBounds(qMakePair(minValue, newMaxValue));
     });
 }
 
@@ -137,10 +137,11 @@ void BenchItemSettingsDlg::refreshParamList(){
 
 void BenchItemSettingsDlg::loadNewParam(const QString& mapKey){
     paramItem = paramService->getParam(mapKey);
-    if (paramItem.get()) {
+    if (paramItem.get()){
         connect(paramItem.get(), &ParamItem::paramRatesChanged, [this](uchar t, short v) { setActualValues(t, v); });
         connect(paramItem.get(), &ParamItem::paramCalibDataChanged,
                 [this](uchar t, double v) { setActualValues(t, v); });
+        getRates();
         emit itemParamChanged(paramItem);
     }
 }
@@ -237,4 +238,10 @@ void BenchItemSettingsDlg::setLabelActualValue(QLabel* label, const QString& val
 void BenchItemSettingsDlg::unsetActualValue(QLabel* label){
     label->clear();
     label->setStyleSheet("color: bisque;font-weight: normal;");
+}
+
+void BenchItemSettingsDlg::setPidBoundsOfNewItem(std::tuple<double, double> bounds) {
+    auto[min, max] = bounds;
+    ui->pidMin_lineEdit->setText(QString("%1").arg(min));
+    ui->pidMax_lineEdit->setText(QString("%1").arg(max));
 }

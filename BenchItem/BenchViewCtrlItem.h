@@ -8,6 +8,7 @@
 #include <QSlider>
 #include <QLineEdit>
 #include <QComboBox>
+#include <optional>
 #include "ParamService.h"
 #include "BenchViewItem.h"
 #include "QColor"
@@ -30,7 +31,7 @@ public slots:
     void receiveItem(QSharedPointer<BenchViewItem>& item);
     void receiveItemsNameList(const QStringList&);
 private:
-    QString name;
+    QString name, setParamMapKey;
     ParamService* paramService;
     BenchItemSettingsDlg* settingsDlg;
     QPushButton* configBtn;
@@ -42,12 +43,9 @@ private:
     QSlider* valueSlider;
     PIDControl pidControl;
     QSharedPointer<BenchViewItem> targetValueItem;
-    QString setParamMapKey;
-    uchar setParamId;
-    uchar setParamHost;
-    int requestedValue;
-    double pidTargetValue;
-    int minSetValueBound, maxSetValueBound;
+    std::optional<uchar> setParamId, setParamHost;
+    int requestedValue, minSetValueBound, maxSetValueBound;
+    std::optional<double> pidTargetValue;
     bool pidEnabled = false;
     void sendValue();
     void textValueEdited();
@@ -55,12 +53,16 @@ private:
     void pidButtonClicked();
     void targetValueChanged();
     void newTargetValueItem(const QString &mapKey);
-    template<class T>
+        template<class T>
     bool checkValue(T val);
     void newTargetValueItemUpdate();
     void configBtnClicked();
-    template<typename T>
-    void setRequestedValue(T val);
+        template<typename T>
+        bool setRequestedValue(T val);
+    void checkPIDTargetValue();
+    bool isOKReceivedNewParam(const QSharedPointer<BenchViewItem> &item);
+    static void showMsgBox(const QString &msg);
+    void managePIDStatus(bool state);
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHVIEWCTRLITEM_H

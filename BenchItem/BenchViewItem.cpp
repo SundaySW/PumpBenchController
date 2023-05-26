@@ -106,3 +106,7 @@ const QVariant &BenchViewItem::getCurrentValue() const {
 QPushButton *BenchViewItem::getButton() const{
     return button;
 }
+
+bool BenchViewItem::isProtosParamSelected(){
+    return !item.isNull();
+}

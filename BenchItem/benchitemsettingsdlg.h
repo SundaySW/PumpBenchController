@@ -22,6 +22,7 @@ public:
     ~BenchItemSettingsDlg();
     void setActualValues(const ProtosMessage &message);
     void refreshParamList();
+    void setPidBoundsOfNewItem(std::tuple<double, double>);
 signals:
     void itemParamChanged(QSharedPointer<ParamItem>&);
     void newSetParamKey(const QString&);

@@ -23,6 +23,7 @@ public:
     QString getParamKey();
     std::tuple<double, double> getBounds();
     [[nodiscard]]ParamItem* getParamPtr() const;
+    bool isProtosParamSelected();
     bool getCurrentStatus() const;
     const QIcon &getIcon() const;
     QString getLastValueDateTimeStr();
@@ -49,7 +50,6 @@ private:
     QTimer* updateValueTimer;
     void itemButtonClicked();
     void updateValueTimerFinished();
-
     void changeIconColor(bool ref);
 };
 
