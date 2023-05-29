@@ -57,3 +57,18 @@ void ServerConnectionDlg::autoConnectBtnClicked(){
         ui->autoConnect_pushButton->setChecked(autoConnect);
     emit autoConnectStateChanged(autoConnect);
 }
+
+QJsonObject ServerConnectionDlg::saveDataToJson(){
+    QJsonObject retVal;
+    retVal["IP"] = ui->ip_lineEdit->text();
+    retVal["Port"] = ui->port_lineEdit->text();
+    return retVal;
+}
+
+void ServerConnectionDlg::loadDataFromJson(const QJsonObject& jsonObject){
+    if(jsonObject.empty())
+        return;
+    ui->ip_lineEdit->setText(jsonObject["IP"].toString());
+    ui->port_lineEdit->setText(jsonObject["Port"].toString());
+    connectToServer();
+}

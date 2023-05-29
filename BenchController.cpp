@@ -3,6 +3,12 @@
 //
 #include "BenchController.h"
 
+#ifdef _BUILD_TYPE_
+#define CURRENT_BUILD_TYPE_ _BUILD_TYPE_
+#else
+#define CURRENT_BUILD_TYPE_ "CHECK CMAKE"
+#endif
+
 BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
         socketAdapter(new SocketAdapter()),
         paramService(new ParamService()),
@@ -17,6 +23,7 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
     setView();
     setViewMap();
     makeConnections();
+    loadFromJson();
 }
 BenchController::~BenchController(){}
 
@@ -28,6 +35,48 @@ void BenchController::setView(){
     statusErrorIcon = QIcon(":/item_icons/item_svg/sktb_logo_error.svg");
     serverConnectedIcon = QIcon(":/icons/server_connected.svg");
     serverDisconnectedIcon = QIcon(":/icons/server_disconnected.svg");
+}
+
+void BenchController::loadFromJson(){
+//    serverConnectionDlg->connectToServer();
+    auto pathToFile = QString(CURRENT_BUILD_TYPE_) == "Debug" ? "/../" : "/";
+    auto configFile = new QFile(QCoreApplication::applicationDirPath() + QString("%1/saved.json").arg(pathToFile));
+    configFile->open(QIODevice::ReadWrite);
+    QByteArray saveData = configFile->readAll();
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(saveData));
+    jsonSaved = jsonDocument.object();
+
+    paramService->loadParams(jsonSaved);
+
+    QJsonArray paramArr = jsonSaved["UpdateItems"].toArray();
+    for(const auto& param : paramArr)
+    {
+        auto loadItemJson = param.toObject();
+        if(!loadItemJson.isEmpty())
+            updateItemsMap.value(loadItemJson["ItemName"].toString())->loadDataFromJson(loadItemJson);
+    }
+    controlItem->loadDataFromJson(jsonSaved["ControlItem"].toObject());
+    serverConnectionDlg->loadDataFromJson(jsonSaved["serverConnection"].toObject());
+}
+
+void BenchController::saveToJson() {
+    paramService->saveParams(jsonSaved);
+
+    QJsonArray paramArr;
+    for(auto& p: updateItemsMap)
+        paramArr.append(p->saveDataToJSon());
+    jsonSaved["UpdateItems"] = paramArr;
+    jsonSaved["ControlItem"] = controlItem->saveDataToJSon();
+    jsonSaved["serverConnection"] = serverConnectionDlg->saveDataToJson();
+
+    QJsonDocument doc;
+    doc.setObject(jsonSaved);
+    auto pathToFile = QString(CURRENT_BUILD_TYPE_) == "Debug" ? "/../" : "/";
+    auto configFile = new QFile(QCoreApplication::applicationDirPath() + QString("%1/saved.json").arg(pathToFile));
+    configFile->open(QIODevice::ReadWrite);
+    configFile->resize(0);
+    configFile->write(doc.toJson(QJsonDocument::Indented));
+    configFile->close();
 }
 
 void BenchController::setViewMap(){
@@ -64,6 +113,7 @@ void BenchController::makeConnections(){
     connect(ui->server_button, &QPushButton::clicked, [this](){ serverBtnClicked();});
     connect(serverConnectionDlg, &ServerConnectionDlg::eventInServerConnection, [this](const QString& s, bool b){ eventServerConnectionHandler(s, b);});
     connect(ui->status_button, &QPushButton::clicked, [this](){ statusBtnClicked(); });
+    connect(ui->settings_button_2, &QPushButton::clicked, [this](){ saveToJson(); });
 }
 
 void BenchController::serverBtnClicked(){
@@ -77,7 +127,7 @@ void BenchController::statusBtnClicked(){
         delete item;
     }
     ui->status_listWidget->clear();
-    ui->status_button->setIcon(statusDefIcon);
+    ui->status_button->setIcon(statusOkIcon);
 }
 
 void BenchController::onItemNewValue(const QString& name){
@@ -86,14 +136,14 @@ void BenchController::onItemNewValue(const QString& name){
         bool noError = item->getCurrentStatus();
         if(!noError){
             updateErrorStatusList(item.get());
+            ui->status_button->setIcon(statusErrorIcon);
         }
-        ui->status_button->setIcon(noError ? statusOkIcon : statusErrorIcon);
     }
 }
 
 void BenchController::updateErrorStatusList(BenchViewItem* item){
-    auto itemStr = QString("%1 at %2\nvalue: %3").arg(item->getName(), item->getLastValueDateTimeStr(), item->getCurrentValue().toString());
-    auto newItem = new QListWidgetItem(item->getIcon(), itemStr);
+    auto itemStr = QString("%1 at %2\nvalue: %3").arg(item->getName().toUpper(), item->getLastValueDateTimeStr(), item->getCurrentValue().toString());
+    auto newItem = new QListWidgetItem(item->getErrorIcon(), itemStr);
     ui->status_listWidget->addItem(newItem);
 }
 
@@ -105,7 +155,7 @@ void BenchController::sendItemsNameList(BenchViewCtrlItem* customer){
 }
 
 void BenchController::sendItemFromName(const QString &itemName, BenchViewCtrlItem *customer) {
-    auto& item = updateItemsMap.find(itemName).value();
+    auto item = updateItemsMap.value(itemName);
     if(item)
         customer->receiveItem(item);
 }

@@ -25,10 +25,12 @@ public:
     [[nodiscard]]ParamItem* getParamPtr() const;
     bool isProtosParamSelected();
     bool getCurrentStatus() const;
-    const QIcon &getIcon() const;
+    const QIcon &getErrorIcon() const;
     QString getLastValueDateTimeStr();
     const QVariant &getCurrentValue() const;
     QPushButton *getButton() const;
+    void loadDataFromJson(const QJsonObject&);
+    QJsonObject saveDataToJSon();
 signals:
     void signalValueUpdated_itemValue(double value, bool ok);
     void signalValueUpdated_itemName(const QString& name);

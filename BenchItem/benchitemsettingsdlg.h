@@ -15,20 +15,25 @@ class BenchItemSettingsDlg : public QDialog
     Q_OBJECT
 public:
     struct PIDSettings{
-        double min, max;
-        double Kp,Ki,Kd;
+        double min = 0, max = 5000;
+        double Kp = 0.1, Ki = 0.5, Kd = 0.01;
     };
-    explicit BenchItemSettingsDlg(const QString&, ParamService* ps, bool, QWidget *parent = nullptr);
+    explicit BenchItemSettingsDlg(QString , ParamService* ps, bool, QWidget *parent = nullptr);
     ~BenchItemSettingsDlg();
     void setActualValues(const ProtosMessage &message);
     void refreshParamList();
     void setPidBoundsOfNewItem(std::tuple<double, double>);
+    void setUpdateValueBounds(const QPair<double, double>&);
+    void setSetValueBounds(const QPair<int, int>&);
+    void setSetParamAddr(const QPair<uchar , uchar>&);
+    void setPIDSettings(const QJsonObject&);
+    void setUpdateParam(const QString& mapKey);
 signals:
     void itemParamChanged(QSharedPointer<ParamItem>&);
     void newSetParamKey(const QString&);
     void newSetParamId(uchar);
     void newSetParamHost(uchar);
-    void newPIDSettigs(const PIDSettings&);
+    void newPIDSettings(const PIDSettings&);
     void newSetValueBounds(const QPair<int, int>&);
     void newUpdateValueBounds(const QPair<double, double>&);
 private:
@@ -38,14 +43,13 @@ private:
     PIDSettings pidSettings;
     QString itemName;
 
-    void loadNewParam(const QString &mapKey);
+    void newParamRequested(const QString &mapKey);
     void getCalib();
     void getRates();
     void setCalib();
     void setRates();
-
     template<class T>
-    void setActualValues(uchar paramField, T value);
+        void setActualValues(uchar paramField, T value);
     static void setLabelActualValue(QLabel *label, const QString &value);
     static void unsetActualValue(QLabel *label);
     void pidValuesConnection();

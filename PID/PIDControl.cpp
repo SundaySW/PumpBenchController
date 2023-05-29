@@ -40,3 +40,30 @@ void PIDControl::changeKs(double Kp, double Ki, double Kd){
     integralGain = Ki;
     derivativeGain = Kd;
 }
+
+void PIDControl::reset(){
+    integral = 0;
+    preError = 0;
+}
+
+QJsonObject PIDControl::toJson(){
+    QJsonObject retVal;
+    retVal["valueMin"] = valueMin;
+    retVal["valueMax"] = valueMax;
+    retVal["proportionalGain"] = proportionalGain;
+    retVal["integralGain"] = integralGain;
+    retVal["derivativeGain"] = derivativeGain;
+    retVal["preError"] = preError;
+    retVal["integral"] = integral;
+    return retVal;
+}
+
+void PIDControl::fromJson(const QJsonObject& jsonObject) {
+    valueMin = jsonObject["valueMin"].toDouble();
+    valueMax = jsonObject["valueMax"].toDouble();
+    proportionalGain = jsonObject["proportionalGain"].toDouble();
+    integralGain = jsonObject["integralGain"].toDouble();
+    derivativeGain = jsonObject["derivativeGain"].toDouble();
+    preError = jsonObject["preError"].toDouble();
+    integral = jsonObject["integral"].toDouble();
+}

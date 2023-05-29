@@ -39,6 +39,8 @@ private:
     void updateErrorStatusList(BenchViewItem *item);
     void eventServerConnectionHandler(const QString &eventStr, bool isError);
     void setView();
+    void loadFromJson();
+    void saveToJson();
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHCONTROLLER_H

@@ -72,7 +72,7 @@ void BenchViewItem::itemButtonClicked(){
 }
 
 QString BenchViewItem::getName(){
-    return name.toUpper();
+    return name;
 }
 
 QString BenchViewItem::getParamKey(){
@@ -91,8 +91,8 @@ bool BenchViewItem::getCurrentStatus() const{
     return currentStatus;
 }
 
-const QIcon &BenchViewItem::getIcon() const{
-    return iconDef;
+const QIcon &BenchViewItem::getErrorIcon() const{
+    return iconError;
 }
 
 QString BenchViewItem::getLastValueDateTimeStr() {
@@ -105,6 +105,32 @@ const QVariant &BenchViewItem::getCurrentValue() const {
 
 QPushButton *BenchViewItem::getButton() const{
     return button;
+}
+
+void BenchViewItem::loadDataFromJson(const QJsonObject& jsonObject){
+    if(jsonObject.empty())
+        return;
+    name = jsonObject["ItemName"].toString();
+    normalValueLowerBound = jsonObject["NormalLowerBoundValue"].toInt();
+    normalValueUpperBound = jsonObject["NormalUpperBoundValue"].toInt();
+    currentValue = jsonObject["LastValue"].toDouble();
+    currentStatus = jsonObject["LastStatus"].toBool();
+    settingsDlg->setUpdateValueBounds(QPair<double,double>(normalValueLowerBound, normalValueUpperBound));
+    auto isNull = jsonObject["paramTableName"].isNull();
+    if(!isNull)
+        settingsDlg->setUpdateParam(jsonObject["paramTableName"].toString());
+}
+
+QJsonObject BenchViewItem::saveDataToJSon(){
+    QJsonObject jsonObject;
+    if(!item.isNull())
+        jsonObject["paramTableName"] = item->getTableName();
+    jsonObject["ItemName"] = name;
+    jsonObject["NormalLowerBoundValue"] = normalValueLowerBound;
+    jsonObject["NormalUpperBoundValue"] = normalValueUpperBound;
+    jsonObject["LastValue"] = currentValue.toString();
+    jsonObject["LastStatus"] = currentStatus;
+    return jsonObject;
 }
 
 bool BenchViewItem::isProtosParamSelected(){

@@ -24,6 +24,8 @@ public:
                       QComboBox* tpc,QSlider* vs,
                       QWidget *parent = nullptr);
     void loadTargetItems(const QStringList &values);
+    void loadDataFromJson(const QJsonObject&);
+    QJsonObject saveDataToJSon();
 signals:
     void requestParamKeyByName(const QString&);
     void requestItemsList();
@@ -31,7 +33,7 @@ public slots:
     void receiveItem(QSharedPointer<BenchViewItem>& item);
     void receiveItemsNameList(const QStringList&);
 private:
-    QString name, setParamMapKey;
+    QString name;
     ParamService* paramService;
     BenchItemSettingsDlg* settingsDlg;
     QPushButton* configBtn;

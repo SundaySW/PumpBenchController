@@ -21,8 +21,8 @@ BenchViewCtrlItem::BenchViewCtrlItem(QString _name, ParamService* ps, QPushButto
     pidControl()
 {
     settingsDlg = new BenchItemSettingsDlg(name, paramService, false, parent);
-//    itemValueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,7}\\.[0-9]{1,5}")));
-//    targetValueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,7}\\.[0-9]{1,5}")));
+    itemValueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,7}\\.[0-9]{1,5}")));
+    targetValueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,7}\\.[0-9]{1,5}")));
 
     connect(itemValueEdit, &QLineEdit::editingFinished, [this]() { textValueEdited();});
     connect(valueSlider, &QAbstractSlider::valueChanged, [this](int pos) { sliderMoved(pos);});
@@ -33,8 +33,9 @@ BenchViewCtrlItem::BenchViewCtrlItem(QString _name, ParamService* ps, QPushButto
     connect(configBtn, &QPushButton::clicked, [this](){ configBtnClicked();});
     connect(settingsDlg, &BenchItemSettingsDlg::newSetParamId, [this](uchar id){ setParamId = id;});
     connect(settingsDlg, &BenchItemSettingsDlg::newSetParamHost, [this](uchar Host){ setParamHost = Host;});
-    connect(settingsDlg, &BenchItemSettingsDlg::newPIDSettigs, [this](const BenchItemSettingsDlg::PIDSettings& settings){
+    connect(settingsDlg, &BenchItemSettingsDlg::newPIDSettings, [this](const BenchItemSettingsDlg::PIDSettings& settings){
         pidControl.changeKs(settings.Kp,settings.Ki,settings.Kd);
+        pidControl.changeValueBounds(settings.min, settings.max);
     });
     connect(settingsDlg, &BenchItemSettingsDlg::newSetValueBounds, [this](const QPair<int, int>& newPairValues){
         minSetValueBound = newPairValues.first;
@@ -80,7 +81,7 @@ bool BenchViewCtrlItem::setRequestedValue(T val){
 void BenchViewCtrlItem::sendValue(){
     if(setParamId.has_value() && setParamHost.has_value()){
         paramService->setParamValueChanged(setParamId.value(), setParamHost.value(), requestedValue);
-    }else{
+    }else if(!setParamId.has_value() || !setParamHost.has_value()){
         showMsgBox("Set Param not set!");
     }
 }
@@ -96,7 +97,7 @@ void BenchViewCtrlItem::pidButtonClicked(){
 
 void BenchViewCtrlItem::managePIDStatus(bool state){
     if(targetValueItem.isNull()){
-        showMsgBox("Set Param Addr not set!");
+        showMsgBox("Target Value not set!");
         pidEnabledBtn->setChecked(false);
         return;
     }
@@ -105,6 +106,8 @@ void BenchViewCtrlItem::managePIDStatus(bool state){
         pidEnabledBtn->setChecked(false);
         return;
     }
+    if(state)
+        pidControl.reset();
     pidEnabledBtn->setChecked(state);
     pidEnabled = state;
 }
@@ -147,12 +150,14 @@ bool BenchViewCtrlItem::isOKReceivedNewParam(const QSharedPointer<BenchViewItem>
             showMsgBox(QString("No Protos Param selected in %1 item").arg(item->getName()));
         else{
             showMsgBox(QString("No Protos Param selected in %1 item\nStill using %2").arg(item->getName(), targetValueItem->getName()));
-            targetParamCombobox->setCurrentText(targetValueItem->getName().toLower());
+            targetParamCombobox->setCurrentText(targetValueItem->getName());
         }
         return false;
     }else if(item == targetValueItem){
-        targetParamCombobox->setCurrentText(targetValueItem->getName().toLower());
+        targetParamCombobox->setCurrentText(targetValueItem->getName());
         return false;
+    }else{
+        targetParamCombobox->setCurrentText(item->getName());
     }
     return true;
 }
@@ -196,4 +201,49 @@ void BenchViewCtrlItem::newTargetValueItemUpdate(){
 void BenchViewCtrlItem::loadTargetItems(const QStringList& values){
     targetParamCombobox->clear();
     targetParamCombobox->addItems(values);
+}
+
+void BenchViewCtrlItem::loadDataFromJson(const QJsonObject& jsonObject){
+    if(jsonObject.empty())
+        return;
+    name = jsonObject["ItemName"].toString();
+    setParamId = (uchar)jsonObject["setParamId"].toInt();
+    setParamHost = (uchar)jsonObject["setParamHost"].toInt();
+    requestedValue = jsonObject["requestedValue"].toInt();
+    minSetValueBound = jsonObject["minSetValueBound"].toInt();
+    maxSetValueBound = jsonObject["maxSetValueBound"].toInt();
+    pidTargetValue = jsonObject["pidTargetValue"].toDouble();
+    pidEnabled = jsonObject["pidEnabled"].toBool();
+    pidControl.fromJson(jsonObject["pidSettings"].toObject());
+    auto isNull = jsonObject["targetValueItemName"].isNull();
+    if(!isNull){
+        newTargetValueItem(jsonObject["targetValueItemName"].toString());
+    }
+
+    setRequestedValue(requestedValue);
+    targetValueEdit->setText(QString("%1").arg(jsonObject["pidTargetValue"].toDouble()));
+    pidEnabledBtn->setChecked(pidEnabled);
+    settingsDlg->setPIDSettings(jsonObject["pidSettings"].toObject());
+    settingsDlg->setSetValueBounds(QPair<double,double>(minSetValueBound, maxSetValueBound));
+    settingsDlg->setSetParamAddr(QPair<uchar, uchar>(setParamId.value(), setParamHost.value()));
+}
+
+QJsonObject BenchViewCtrlItem::saveDataToJSon(){
+    QJsonObject jsonObject;
+    jsonObject["ItemName"] = name;
+    if(!targetValueItem.isNull())
+        jsonObject["targetValueItemName"] = targetValueItem->getName();
+    if(setParamId.has_value())
+        jsonObject["setParamId"] = setParamId.value();
+    if(setParamHost.has_value())
+        jsonObject["setParamHost"] = setParamHost.value();
+    if(pidTargetValue.has_value()){
+        jsonObject["pidTargetValue"] = pidTargetValue.value();
+    }
+    jsonObject["requestedValue"] = requestedValue;
+    jsonObject["minSetValueBound"] = minSetValueBound;
+    jsonObject["maxSetValueBound"] = maxSetValueBound;
+    jsonObject["pidEnabled"] = pidEnabled;
+    jsonObject["pidSettings"] = pidControl.toJson();
+    return jsonObject;
 }

@@ -1260,7 +1260,7 @@ QScrollBar::sub-line:vertical {
          </property>
          <property name="icon">
           <iconset resource="Resources/files.qrc">
-           <normaloff>:/icons/settings.svg</normaloff>:/icons/settings.svg</iconset>
+           <normaloff>:/icons/save.svg</normaloff>:/icons/save.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1861,7 +1861,7 @@ border-radius: 4px;
                    </property>
                    <property name="minimumSize">
                     <size>
-                     <width>150</width>
+                     <width>107</width>
                      <height>0</height>
                     </size>
                    </property>

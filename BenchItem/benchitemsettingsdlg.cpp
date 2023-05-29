@@ -10,10 +10,11 @@ BenchItemSettingsDlg::~BenchItemSettingsDlg()
     delete ui;
 }
 
-BenchItemSettingsDlg::BenchItemSettingsDlg(const QString& name, ParamService* ps, bool updateParam, QWidget *parent):
+BenchItemSettingsDlg::BenchItemSettingsDlg(QString name, ParamService* ps, bool updateParam, QWidget *parent):
     paramService(ps),
     QDialog(parent),
-    itemName(name),
+    itemName(std::move(name)),
+    pidSettings(),
     ui(new Ui::BenchItemSettingsDlg)
 {
     ui->setupUi(this);
@@ -30,7 +31,7 @@ void BenchItemSettingsDlg::updateParamConnections(){
     ui->lowerBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     ui->upperBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     connect(ui->refresh_button, &QPushButton::clicked, [this](){ refreshParamList(); });
-    connect(ui->updateParam_comboBox, &QComboBox::currentTextChanged, [this](const QString& s){ loadNewParam(s);});
+    connect(ui->updateParam_comboBox, &QComboBox::currentTextChanged, [this](const QString& s){ newParamRequested(s);});
     connect(ui->lowerBound_lineEdit, &QLineEdit::editingFinished, [this](){
         bool okMin,okMax;
         double newMinValue = ui->lowerBound_lineEdit->text().toDouble(&okMax);
@@ -102,31 +103,31 @@ void BenchItemSettingsDlg::pidValuesConnection(){
         bool ok;
         auto newValue = ui->pidKd_lineEdit->text().toDouble(&ok);
         if(ok)pidSettings.Kd = newValue;
-        emit newPIDSettigs(pidSettings);
+        emit newPIDSettings(pidSettings);
     });
     connect(ui->pidKi_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidKi_lineEdit->text().toDouble(&ok);
         if(ok)pidSettings.Ki = newValue;
-        emit newPIDSettigs(pidSettings);
+        emit newPIDSettings(pidSettings);
     });
     connect(ui->pidKp_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidKp_lineEdit->text().toDouble(&ok);
         if(ok)pidSettings.Kp = newValue;
-        emit newPIDSettigs(pidSettings);
+        emit newPIDSettings(pidSettings);
     });
     connect(ui->pidMin_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidMin_lineEdit->text().toDouble(&ok);
         if(ok)pidSettings.min = newValue;
-        emit newPIDSettigs(pidSettings);
+        emit newPIDSettings(pidSettings);
     });
     connect(ui->pidMax_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidMax_lineEdit->text().toDouble(&ok);
         if(ok)pidSettings.max = newValue;
-        emit newPIDSettigs(pidSettings);
+        emit newPIDSettings(pidSettings);
     });
 }
 
@@ -135,13 +136,19 @@ void BenchItemSettingsDlg::refreshParamList(){
     ui->updateParam_comboBox->addItems(paramService->getAllParamsStrList());
 }
 
-void BenchItemSettingsDlg::loadNewParam(const QString& mapKey){
-    paramItem = paramService->getParam(mapKey);
-    if (paramItem.get()){
-        connect(paramItem.get(), &ParamItem::paramRatesChanged, [this](uchar t, short v) { setActualValues(t, v); });
-        connect(paramItem.get(), &ParamItem::paramCalibDataChanged,
-                [this](uchar t, double v) { setActualValues(t, v); });
+void BenchItemSettingsDlg::newParamRequested(const QString& mapKey){
+    auto newParam = paramService->getParam(mapKey);
+    if(!newParam.isNull()){
+        if(paramItem.isNull()){
+            paramItem = newParam;
+            connect(paramItem.get(), &ParamItem::paramRatesChanged,
+                    [this](uchar t, short v) { setActualValues(t, v); });
+            connect(paramItem.get(), &ParamItem::paramCalibDataChanged,
+                    [this](uchar t, double v) { setActualValues(t, v); });
+        }else
+            paramItem = newParam;
         getRates();
+        ui->updateParam_comboBox->addItem(mapKey);
         emit itemParamChanged(paramItem);
     }
 }
@@ -244,4 +251,34 @@ void BenchItemSettingsDlg::setPidBoundsOfNewItem(std::tuple<double, double> boun
     auto[min, max] = bounds;
     ui->pidMin_lineEdit->setText(QString("%1").arg(min));
     ui->pidMax_lineEdit->setText(QString("%1").arg(max));
+}
+
+void BenchItemSettingsDlg::setUpdateValueBounds(const QPair<double, double>& bounds) {
+    auto[min, max] = bounds;
+    ui->lowerBound_lineEdit->setText(QString("%1").arg(min));
+    ui->upperBound_lineEdit->setText(QString("%1").arg(max));
+}
+
+void BenchItemSettingsDlg::setSetValueBounds(const QPair<int, int>& bounds) {
+    auto[min, max] = bounds;
+    ui->setValueMin_lineEdit->setText(QString("%1").arg(min));
+    ui->setValueMax_lineEdit->setText(QString("%1").arg(max));
+}
+
+void BenchItemSettingsDlg::setSetParamAddr(const QPair<uchar , uchar>& bounds){
+    auto[ID, HOST] = bounds;
+    ui->setParamID_lineEdit->setText(QString("%1").arg(ID));
+    ui->setParamHost_lineEdit->setText(QString("%1").arg(HOST));
+}
+
+void BenchItemSettingsDlg::setPIDSettings(const QJsonObject& jsonObject){
+    ui->pidMin_lineEdit->setText(QString("%1").arg(jsonObject["valueMin"].toDouble()));
+    ui->pidMax_lineEdit->setText(QString("%1").arg(jsonObject["valueMax"].toDouble()));
+    ui->pidKp_lineEdit->setText(QString("%1").arg(jsonObject["proportionalGain"].toDouble()));
+    ui->pidKi_lineEdit->setText(QString("%1").arg(jsonObject["integralGain"].toDouble()));
+    ui->pidKd_lineEdit->setText(QString("%1").arg(jsonObject["derivativeGain"].toDouble()));
+}
+
+void BenchItemSettingsDlg::setUpdateParam(const QString& mapKey){
+    newParamRequested(mapKey);
 }

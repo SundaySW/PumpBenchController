@@ -15,6 +15,9 @@ class ServerConnectionDlg : public QDialog
 public:
     explicit ServerConnectionDlg(const QSharedPointer<SocketAdapter>& sA, QWidget *parent = nullptr);
     ~ServerConnectionDlg();
+    void loadDataFromJson(const QJsonObject&);
+    void connectToServer();
+    QJsonObject saveDataToJson();
 signals:
     void autoConnectStateChanged(bool);
     void eventInServerConnection(const QString&, bool);
@@ -24,7 +27,6 @@ private:
     bool autoConnect;
     void connectBtnClicked();
     void autoConnectBtnClicked();
-    void connectToServer();
 };
 
 #endif // SERVERCONNECTIONDLG_H
