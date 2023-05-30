@@ -21,7 +21,11 @@ find_package(${qt_ver}SerialPort  REQUIRED)
 find_package(${qt_ver}Sql         REQUIRED)
 find_package(${qt_ver}Svg         REQUIRED)
 find_package(${qt_ver}Xml         REQUIRED)
-
+# For OPENGl
+find_package(OpenGL REQUIRED)
+find_package(${qt_ver} REQUIRED COMPONENTS Widgets OpenGL)
+# end For OPENGl
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS PrintSupport)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/ParamService/*.*
@@ -43,6 +47,8 @@ set(PROJECT_SOURCES
         ${SOURCES}
         colors.h)
 
+add_subdirectory(qcustomplot)
+
 add_executable(${PROJECT_NAME}
         ${PROJECT_SOURCES}
         )
@@ -58,7 +64,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/BenchItem
         ${CMAKE_CURRENT_SOURCE_DIR}/PID
         ${CMAKE_CURRENT_SOURCE_DIR}/Dialogs
-#        ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot
+        ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot
         )
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
@@ -101,9 +107,14 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         ${qt_ver}::Sql
         ${qt_ver}::Svg
         ${qt_ver}::Xml
+        ${qt_ver}::Widgets qcustomplot
+        ${qt_ver}::OpenGL
+        ${OPENGL_LIBRARIES}
         )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
+    QCUSTOMPLOT_USE_OPENGL
+    QCUSTOMPLOT_USE_LIBRARY
 )
 
 install(TARGETS ${PROJECT_NAME}

@@ -62,6 +62,7 @@ QJsonObject ServerConnectionDlg::saveDataToJson(){
     QJsonObject retVal;
     retVal["IP"] = ui->ip_lineEdit->text();
     retVal["Port"] = ui->port_lineEdit->text();
+    retVal["autoConnect"] = autoConnect;
     return retVal;
 }
 
@@ -70,5 +71,10 @@ void ServerConnectionDlg::loadDataFromJson(const QJsonObject& jsonObject){
         return;
     ui->ip_lineEdit->setText(jsonObject["IP"].toString());
     ui->port_lineEdit->setText(jsonObject["Port"].toString());
-    connectToServer();
+    ui->autoConnect_pushButton->setChecked(jsonObject["autoConnect"].toBool());
+    autoConnect = jsonObject["autoConnect"].toBool();
+}
+
+bool ServerConnectionDlg::reconnectIsOn() const {
+    return autoConnect;
 }

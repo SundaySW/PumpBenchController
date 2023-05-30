@@ -93,7 +93,7 @@
            <item>
             <widget class="QComboBox" name="updateParam_comboBox">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -103,6 +103,9 @@
                <width>200</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::AdjustToContents</enum>
              </property>
             </widget>
            </item>

@@ -7,6 +7,7 @@
 #include <QGraphicsColorizeEffect>
 #include <utility>
 #include <QDomDocument>
+#include "colors.h"
 
 BenchViewItem::BenchViewItem(QString _name, QWidget* _plot, QLabel* _label, QPushButton* _button, ParamService* ps, QWidget *parent):
     name(std::move(_name)),
@@ -22,8 +23,10 @@ BenchViewItem::BenchViewItem(QString _name, QWidget* _plot, QLabel* _label, QPus
     settingsDlg = new BenchItemSettingsDlg(name, paramService, true, parent);
 
     connect(settingsDlg, &BenchItemSettingsDlg::itemParamChanged, [this](QSharedPointer<ParamItem>& newItem){
+        if(!item.isNull())
+            disconnect(item.get());
         item = newItem;
-        connect(item.get(), &ParamItem::newParamValue, [this](){ updateView(); });
+        connect(item.get(), &ParamItem::newParamValue, [this](){ updateView();});
     });
     connect(settingsDlg, &BenchItemSettingsDlg::newUpdateValueBounds, [this](const QPair<double, double>& newPairValues){
         normalValueLowerBound = newPairValues.first;
@@ -40,7 +43,8 @@ BenchViewItem::BenchViewItem(QString _name, QWidget* _plot, QLabel* _label, QPus
 void BenchViewItem::updateView(){
     processValue();
     label->setText(currentValue.toString());
-    currentStatus ? label->setStyleSheet("color:#B0CB1F;") : label->setStyleSheet("color:#EA556F;");
+    currentStatus ? label->setStyleSheet(QString("color:%1;").arg(active_color_hex))
+                   :label->setStyleSheet(QString("color:%1;").arg(alert_color_hex));
     changeIconColor(currentStatus);
     //todo plot add point + rePlot
 }
@@ -118,7 +122,7 @@ void BenchViewItem::loadDataFromJson(const QJsonObject& jsonObject){
     settingsDlg->setUpdateValueBounds(QPair<double,double>(normalValueLowerBound, normalValueUpperBound));
     auto isNull = jsonObject["paramTableName"].isNull();
     if(!isNull)
-        settingsDlg->setUpdateParam(jsonObject["paramTableName"].toString());
+        settingsDlg->setUpdateParamFromController(jsonObject["paramTableName"].toString());
 }
 
 QJsonObject BenchViewItem::saveDataToJSon(){
@@ -135,4 +139,112 @@ QJsonObject BenchViewItem::saveDataToJSon(){
 
 bool BenchViewItem::isProtosParamSelected(){
     return !item.isNull();
+}
+
+const QIcon &BenchViewItem::getIcon() const{
+    return iconDef;
+}
+
+void BenchViewItem::setPlot(){
+    Plot->setOpenGl(true);
+    Plot->setNotAntialiasedElement(QCP::AntialiasedElement::aeAxes);
+    Plot->plotLayout()->clear();
+//    auto pathToFile = QString(CURRENT_BUILD_TYPE_) == "Debug" ? "/../" : "/";
+//    Plot->setBackground(QPixmap(QCoreApplication::applicationDirPath() + QString("%1/Resources/background.png").arg(pathToFile)));
+    Plot->setBackground(QBrush(QColor(main_back_color)));
+    Plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    Plot->plotLayout()->setFillOrder(QCPLayoutGrid::FillOrder::foRowsFirst);
+    Plot->plotLayout()->setRowSpacing(0);
+
+    connect(Plot, &QCustomPlot::mouseDoubleClick, [this](QMouseEvent*  event) {
+        if(QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
+            auto* rect = Plot->axisRectAt(event->pos());
+            if(rect){
+                rect->axis(QCPAxis::atBottom)->rescale();
+                Plot->replot();
+            }
+        }
+    });
+}
+
+void BenchViewItem::bindGraph(){
+    selfGraph = Plot->addGraph(rect->axis(QCPAxis::atBottom), rect->axis(QCPAxis::atLeft));
+    selfGraph->data()->set(graphData);
+
+    QPen graphPen = QPen(color, lineWidth);
+    QPen axisPen = QPen(color);
+    selfGraph->setLineStyle(lineStyle);
+    if(selfGraph->lineStyle() == QCPGraph::lsNone)
+        selfGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 7));
+    selfGraph->setPen(graphPen);
+    axis->setBasePen(axisPen);
+    axis->setSubTickPen(axisPen);
+    axis->setTickPen(axisPen);
+    auto itemName = getName();
+    if(name.length()>12){//todo improve!
+        itemName.clear();
+        for(const auto& s : name.split(" "))
+            itemName += s +'\n';
+    }
+    axis->setLabel(itemName.trimmed());
+    axis->setLabelColor(itemColor);
+    axis->setTickLabelColor(itemColor);
+
+    selfGraph->rescaleValueAxis();
+    selfGraph->rescaleKeyAxis();
+    selfGraph->setSelectable(QCP::SelectionType::stDataRange);
+}
+
+void BenchViewItem::prepareRect(){
+    rect = new QCPAxisRect(Plot);
+    auto* bottomAxis = rect->axis(QCPAxis::atBottom);
+    auto* topAxis = rect->axis(QCPAxis::atTop);
+    auto* rightAxis = rect->axis(QCPAxis::atRight);
+    auto* leftAxis = rect->axis(QCPAxis::atLeft);
+    rect->setRangeZoom(Qt::Vertical);
+    rect->setRangeZoomAxes(rect->axes());
+    connect(rightAxis, SIGNAL(rangeChanged(QCPRange)), leftAxis, SLOT(setRange(QCPRange)));
+    connect(Plot->xAxis, SIGNAL(rangeChanged(QCPRange)), bottomAxis, SLOT(setRange(QCPRange)));
+    connect(bottomAxis, SIGNAL(rangeChanged(QCPRange)), Plot->xAxis, SLOT(setRange(QCPRange)));
+    rect->setupFullAxesBox(true);
+    rect->setMargins(QMargins(0, 0, 0, 0));
+    rect->setMarginGroup(QCP::msLeft|QCP::msRight, marginGroup);
+    rect->setAutoMargins(QCP::msLeft|QCP::msRight|QCP::msBottom);
+
+    topAxis->setOffset(0);
+    topAxis->setTicks(false);
+    topAxis->setTickLabels(false);
+    topAxis->setSubTicks(false);
+    topAxis->setBasePen(Qt::NoPen);
+    topAxis->setSelectableParts(QCPAxis::SelectablePart::spNone);
+
+    bottomAxis->setOffset(0);
+    bottomAxis->setTickLabels(false);
+    bottomAxis->setBasePen(Qt::NoPen);
+    bottomAxis->setTickPen(Qt::NoPen);
+    bottomAxis->setSubTickPen(Qt::NoPen);
+    bottomAxis->setSelectableParts(QCPAxis::SelectablePart::spNone);
+
+    leftAxis->setTickLabels(false);
+    leftAxis->setTickPen(Qt::NoPen);
+    leftAxis->setSubTickPen(Qt::NoPen);
+    leftAxis->setBasePen(Qt::NoPen);
+    rightAxis->setTickLabels(true);
+    rightAxis->setTicks(true);
+    rightAxis->setSubTicks(true);
+    rightAxis->setTickLabels(false);
+    rightAxis->setSubTicks(false);
+    rightAxis->setTickLength(0);
+    rightAxis->setBasePen(Qt::NoPen);
+
+    QPen gridPen = QPen(QColor(LogVieverColor_grid), 1, Qt::SolidLine);
+    QPen subGridPen = QPen(QColor(LogVieverColor_subgrid), 1, Qt::SolidLine);
+    for(auto *axis : rect->axes()) {
+        axis->setLayer("axes");
+        axis->grid()->setLayer("grid");
+        axis->grid()->setSubGridVisible(true);
+        axis->grid()->setZeroLinePen(Qt::NoPen);
+        axis->grid()->setPen(gridPen);
+        axis->grid()->setSubGridPen(subGridPen);
+    }
 }

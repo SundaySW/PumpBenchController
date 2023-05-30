@@ -23,15 +23,15 @@ public:
                       QPushButton* pid, QPushButton* send,
                       QComboBox* tpc,QSlider* vs,
                       QWidget *parent = nullptr);
-    void loadTargetItems(const QStringList &values);
     void loadDataFromJson(const QJsonObject&);
     QJsonObject saveDataToJSon();
+
 signals:
     void requestParamKeyByName(const QString&);
     void requestItemsList();
 public slots:
     void receiveItem(QSharedPointer<BenchViewItem>& item);
-    void receiveItemsNameList(const QStringList&);
+    void receiveItemsNameList(const QVector<BenchViewItem::ViewItemData> &data);
 private:
     QString name;
     ParamService* paramService;

@@ -37,14 +37,14 @@ void BenchItemSettingsDlg::updateParamConnections(){
         double newMinValue = ui->lowerBound_lineEdit->text().toDouble(&okMax);
         double newMaxValue = ui->upperBound_lineEdit->text().toDouble(&okMin);
         if(okMin && okMax)
-                emit newUpdateValueBounds(qMakePair(newMinValue, newMaxValue));
+            emit newUpdateValueBounds(qMakePair(newMinValue, newMaxValue));
     });
     connect(ui->upperBound_lineEdit, &QLineEdit::editingFinished, [this](){
         bool okMin,okMax;
         double newMinValue = ui->lowerBound_lineEdit->text().toDouble(&okMax);
         double newMaxValue = ui->upperBound_lineEdit->text().toDouble(&okMin);
         if(okMin && okMax)
-                emit newUpdateValueBounds(qMakePair(newMinValue, newMaxValue));
+            emit newUpdateValueBounds(qMakePair(newMinValue, newMaxValue));
     });
 }
 
@@ -136,19 +136,17 @@ void BenchItemSettingsDlg::refreshParamList(){
     ui->updateParam_comboBox->addItems(paramService->getAllParamsStrList());
 }
 
-void BenchItemSettingsDlg::newParamRequested(const QString& mapKey){
+void BenchItemSettingsDlg::newParamRequested(const QString& mapKey) {
     auto newParam = paramService->getParam(mapKey);
-    if(!newParam.isNull()){
-        if(paramItem.isNull()){
-            paramItem = newParam;
-            connect(paramItem.get(), &ParamItem::paramRatesChanged,
-                    [this](uchar t, short v) { setActualValues(t, v); });
-            connect(paramItem.get(), &ParamItem::paramCalibDataChanged,
-                    [this](uchar t, double v) { setActualValues(t, v); });
-        }else
-            paramItem = newParam;
+    if(!newParam.isNull()) {
+        if(!paramItem.isNull())
+            disconnect(paramItem.get());
+        paramItem = newParam;
+        connect(paramItem.get(), &ParamItem::paramRatesChanged,
+                [this](uchar t, short v) { setActualValues(t, v); });
+        connect(paramItem.get(), &ParamItem::paramCalibDataChanged,
+                [this](uchar t, double v) { setActualValues(t, v); });
         getRates();
-        ui->updateParam_comboBox->addItem(mapKey);
         emit itemParamChanged(paramItem);
     }
 }
@@ -279,6 +277,8 @@ void BenchItemSettingsDlg::setPIDSettings(const QJsonObject& jsonObject){
     ui->pidKd_lineEdit->setText(QString("%1").arg(jsonObject["derivativeGain"].toDouble()));
 }
 
-void BenchItemSettingsDlg::setUpdateParam(const QString& mapKey){
+void BenchItemSettingsDlg::setUpdateParamFromController(const QString& mapKey){
+    refreshParamList();
     newParamRequested(mapKey);
+    ui->updateParam_comboBox->setCurrentText(mapKey);
 }

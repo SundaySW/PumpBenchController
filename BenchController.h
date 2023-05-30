@@ -30,8 +30,10 @@ private:
     QIcon logOkIcon, logErrorIcon;
     QIcon statusOkIcon, statusErrorIcon, statusDefIcon;
     QIcon serverConnectedIcon, serverDisconnectedIcon;
+    QTimer* serverReconnectionTimer;
+    bool hasError;
     void makeConnections();
-    void sendItemsNameList(BenchViewCtrlItem *customer);
+    void sendItemsNameLogoListToComboBoxes(BenchViewCtrlItem *customer);
     void sendItemFromName(const QString &itemName, BenchViewCtrlItem *customer);
     void statusBtnClicked();
     void serverBtnClicked();
@@ -41,6 +43,7 @@ private:
     void setView();
     void loadFromJson();
     void saveToJson();
+    void serverConnectionHandler();
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHCONTROLLER_H

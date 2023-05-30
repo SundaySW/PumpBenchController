@@ -9,12 +9,15 @@
 #define CURRENT_BUILD_TYPE_ "CHECK CMAKE"
 #endif
 
+#define serverReconnectionTime 5000
+
 BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
         socketAdapter(new SocketAdapter()),
         paramService(new ParamService()),
         ui(_ui),
         mainWindow(mw),
-        serverConnectionDlg(new ServerConnectionDlg(socketAdapter, mw))
+        serverConnectionDlg(new ServerConnectionDlg(socketAdapter, mw)),
+        serverReconnectionTimer(new QTimer(this))
 {
     ui->setupUi(mw);
     jsonSaved = QJsonObject();
@@ -38,7 +41,6 @@ void BenchController::setView(){
 }
 
 void BenchController::loadFromJson(){
-//    serverConnectionDlg->connectToServer();
     auto pathToFile = QString(CURRENT_BUILD_TYPE_) == "Debug" ? "/../" : "/";
     auto configFile = new QFile(QCoreApplication::applicationDirPath() + QString("%1/saved.json").arg(pathToFile));
     configFile->open(QIODevice::ReadWrite);
@@ -98,13 +100,15 @@ void BenchController::setViewMap(){
             new BenchViewCtrlItem("valveSet", paramService.get(), ui->setParamConfig_pushButton,
                                   ui->setParamValue_lineEdit, ui->pidTargetValue_lineEdit, ui->pidEnable_pushButton,
                                   ui->sendParamValue_button, ui->pidValue_comboBox, ui->valveSet_slider, mainWindow));
-    controlItem->loadTargetItems(updateItemsMap.keys());
+    sendItemsNameLogoListToComboBoxes(controlItem.get());
 }
 
 void BenchController::makeConnections(){
-    connect(controlItem.get(), &BenchViewCtrlItem::requestItemsList, [this](){ sendItemsNameList(controlItem.get());});
+    connect(controlItem.get(), &BenchViewCtrlItem::requestItemsList, [this](){
+        sendItemsNameLogoListToComboBoxes(controlItem.get());});
     connect(controlItem.get(), &BenchViewCtrlItem::requestParamKeyByName, [this](const QString& s){ sendItemFromName(s, controlItem.get());});
-
+    connect(serverReconnectionTimer, &QTimer::timeout, [this]() { serverConnectionHandler(); });
+    serverReconnectionTimer->start(serverReconnectionTime);
     for(const auto& viewItem : updateItemsMap){
         connect(viewItem.get(), &BenchViewItem::signalValueUpdated_itemName, [this](const QString& name){
             onItemNewValue(name);
@@ -114,6 +118,12 @@ void BenchController::makeConnections(){
     connect(serverConnectionDlg, &ServerConnectionDlg::eventInServerConnection, [this](const QString& s, bool b){ eventServerConnectionHandler(s, b);});
     connect(ui->status_button, &QPushButton::clicked, [this](){ statusBtnClicked(); });
     connect(ui->settings_button_2, &QPushButton::clicked, [this](){ saveToJson(); });
+}
+
+void BenchController::serverConnectionHandler(){
+    if(serverConnectionDlg->reconnectIsOn() && !socketAdapter->IsConnected())
+        serverConnectionDlg->connectToServer();
+    serverReconnectionTimer->start(serverReconnectionTime);
 }
 
 void BenchController::serverBtnClicked(){
@@ -126,8 +136,10 @@ void BenchController::statusBtnClicked(){
         ui->status_listWidget->removeItemWidget(item);
         delete item;
     }
+    hasError = false;
     ui->status_listWidget->clear();
-    ui->status_button->setIcon(statusOkIcon);
+    if(socketAdapter->IsConnected())
+        ui->status_button->setIcon(statusOkIcon);
 }
 
 void BenchController::onItemNewValue(const QString& name){
@@ -136,7 +148,9 @@ void BenchController::onItemNewValue(const QString& name){
         bool noError = item->getCurrentStatus();
         if(!noError){
             updateErrorStatusList(item.get());
-            ui->status_button->setIcon(statusErrorIcon);
+            if(!hasError)
+                ui->status_button->setIcon(statusErrorIcon);
+            hasError = true;
         }
     }
 }
@@ -147,11 +161,12 @@ void BenchController::updateErrorStatusList(BenchViewItem* item){
     ui->status_listWidget->addItem(newItem);
 }
 
-void BenchController::sendItemsNameList(BenchViewCtrlItem* customer){
-    auto nameList = QStringList();
+void BenchController::sendItemsNameLogoListToComboBoxes(BenchViewCtrlItem* customer){
+    auto viewItemDataVec = QVector<BenchViewItem::ViewItemData>();
+    viewItemDataVec.reserve(updateItemsMap.size());
     for(const auto& viewItem : updateItemsMap)
-        nameList.append(viewItem->getName());
-    customer->receiveItemsNameList(nameList);
+        viewItemDataVec.append(BenchViewItem::ViewItemData{viewItem->getIcon(),viewItem->getName()});
+    customer->receiveItemsNameList(viewItemDataVec);
 }
 
 void BenchController::sendItemFromName(const QString &itemName, BenchViewCtrlItem *customer) {
@@ -169,4 +184,6 @@ void BenchController::eventServerConnectionHandler(const QString& eventStr, bool
         ui->log_listWidget->item(ui->log_listWidget->count()-1)->setIcon(logOkIcon);
     }
     ui->server_button->setIcon(socketAdapter->IsConnected() ? serverConnectedIcon : serverDisconnectedIcon);
+    if(!hasError)
+        ui->status_button->setIcon(socketAdapter->IsConnected() ? statusOkIcon : statusErrorIcon);
 }

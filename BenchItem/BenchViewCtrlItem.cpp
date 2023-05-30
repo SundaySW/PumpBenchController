@@ -156,9 +156,8 @@ bool BenchViewCtrlItem::isOKReceivedNewParam(const QSharedPointer<BenchViewItem>
     }else if(item == targetValueItem){
         targetParamCombobox->setCurrentText(targetValueItem->getName());
         return false;
-    }else{
+    }else
         targetParamCombobox->setCurrentText(item->getName());
-    }
     return true;
 }
 
@@ -183,9 +182,11 @@ void BenchViewCtrlItem::showMsgBox(const QString& msg){
     msgBox.exec();
 }
 
-void BenchViewCtrlItem::receiveItemsNameList(const QStringList& names){
+void BenchViewCtrlItem::receiveItemsNameList(const QVector<BenchViewItem::ViewItemData> &data){
     targetParamCombobox->clear();
-    targetParamCombobox->addItems(names);
+    for(const auto& item: data){
+        targetParamCombobox->addItem(item.icon, item.name);
+    }
 }
 
 void BenchViewCtrlItem::newTargetValueItemUpdate(){
@@ -198,17 +199,12 @@ void BenchViewCtrlItem::newTargetValueItemUpdate(){
         sendValue();
 }
 
-void BenchViewCtrlItem::loadTargetItems(const QStringList& values){
-    targetParamCombobox->clear();
-    targetParamCombobox->addItems(values);
-}
-
-void BenchViewCtrlItem::loadDataFromJson(const QJsonObject& jsonObject){
-    if(jsonObject.empty())
+void BenchViewCtrlItem::loadDataFromJson(const QJsonObject& jsonObject) {
+    if (jsonObject.empty())
         return;
     name = jsonObject["ItemName"].toString();
-    setParamId = (uchar)jsonObject["setParamId"].toInt();
-    setParamHost = (uchar)jsonObject["setParamHost"].toInt();
+    setParamId = (uchar) jsonObject["setParamId"].toInt();
+    setParamHost = (uchar) jsonObject["setParamHost"].toInt();
     requestedValue = jsonObject["requestedValue"].toInt();
     minSetValueBound = jsonObject["minSetValueBound"].toInt();
     maxSetValueBound = jsonObject["maxSetValueBound"].toInt();
@@ -216,16 +212,17 @@ void BenchViewCtrlItem::loadDataFromJson(const QJsonObject& jsonObject){
     pidEnabled = jsonObject["pidEnabled"].toBool();
     pidControl.fromJson(jsonObject["pidSettings"].toObject());
     auto isNull = jsonObject["targetValueItemName"].isNull();
-    if(!isNull){
+    if (!isNull) {
         newTargetValueItem(jsonObject["targetValueItemName"].toString());
     }
+
+    settingsDlg->setPIDSettings(jsonObject["pidSettings"].toObject());
+    settingsDlg->setSetValueBounds(QPair<double, double>(minSetValueBound, maxSetValueBound));
+    settingsDlg->setSetParamAddr(QPair<uchar, uchar>(setParamId.value(), setParamHost.value()));
 
     setRequestedValue(requestedValue);
     targetValueEdit->setText(QString("%1").arg(jsonObject["pidTargetValue"].toDouble()));
     pidEnabledBtn->setChecked(pidEnabled);
-    settingsDlg->setPIDSettings(jsonObject["pidSettings"].toObject());
-    settingsDlg->setSetValueBounds(QPair<double,double>(minSetValueBound, maxSetValueBound));
-    settingsDlg->setSetParamAddr(QPair<uchar, uchar>(setParamId.value(), setParamHost.value()));
 }
 
 QJsonObject BenchViewCtrlItem::saveDataToJSon(){

@@ -27,7 +27,7 @@ public:
     void setSetValueBounds(const QPair<int, int>&);
     void setSetParamAddr(const QPair<uchar , uchar>&);
     void setPIDSettings(const QJsonObject&);
-    void setUpdateParam(const QString& mapKey);
+    void setUpdateParamFromController(const QString& mapKey);
 signals:
     void itemParamChanged(QSharedPointer<ParamItem>&);
     void newSetParamKey(const QString&);

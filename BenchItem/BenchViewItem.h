@@ -11,10 +11,15 @@
 #include "Param_Item/ParamItem.h"
 #include "benchitemsettingsdlg.h"
 #include "ParamService.h"
+#include "qcustomplot.h"
 
 class BenchViewItem: public QObject{
     Q_OBJECT
 public:
+    struct ViewItemData{
+        QIcon icon;
+        QString name;
+    };
     BenchViewItem() = delete;
     BenchViewItem(QString name, QWidget*, QLabel*, QPushButton*, ParamService*, QWidget *parent = nullptr);
     void updateView();
@@ -25,6 +30,7 @@ public:
     [[nodiscard]]ParamItem* getParamPtr() const;
     bool isProtosParamSelected();
     bool getCurrentStatus() const;
+    const QIcon &getIcon() const;
     const QIcon &getErrorIcon() const;
     QString getLastValueDateTimeStr();
     const QVariant &getCurrentValue() const;
@@ -46,13 +52,19 @@ private:
     QIcon iconDef, iconOK, iconError;
     double currentValueDouble;
     bool currentStatus;
-    QWidget* plot;
+    QCustomPlot* Plot;
+    QCPAxisRect* rect;
+    QCPGraph* selfGraph;
+    QCPGraph::LineStyle lineStyle = QCPGraph::lsLine;
+    QVector<QCPGraphData> graphData;
     QPushButton* button;
     QLabel* label;
     QTimer* updateValueTimer;
     void itemButtonClicked();
     void updateValueTimerFinished();
     void changeIconColor(bool ref);
+
+    void setPlot();
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHVIEWITEM_H

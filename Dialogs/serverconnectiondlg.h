@@ -18,6 +18,7 @@ public:
     void loadDataFromJson(const QJsonObject&);
     void connectToServer();
     QJsonObject saveDataToJson();
+    bool reconnectIsOn() const;
 signals:
     void autoConnectStateChanged(bool);
     void eventInServerConnection(const QString&, bool);
