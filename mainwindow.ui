@@ -280,7 +280,7 @@ QScrollBar::sub-line:vertical {
          </layout>
         </item>
         <item>
-         <widget class="QWidget" name="in_gauge_plot" native="true">
+         <widget class="QCustomPlot" name="in_gauge_plot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -416,7 +416,7 @@ QScrollBar::sub-line:vertical {
          </layout>
         </item>
         <item>
-         <widget class="QWidget" name="motor_temp_plot" native="true">
+         <widget class="QCustomPlot" name="motor_temp_plot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -552,7 +552,7 @@ QScrollBar::sub-line:vertical {
          </layout>
         </item>
         <item>
-         <widget class="QWidget" name="flow_plot" native="true">
+         <widget class="QCustomPlot" name="flow_plot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -688,7 +688,7 @@ QScrollBar::sub-line:vertical {
          </layout>
         </item>
         <item>
-         <widget class="QWidget" name="out_gauge_plot" native="true">
+         <widget class="QCustomPlot" name="out_gauge_plot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -824,7 +824,7 @@ QScrollBar::sub-line:vertical {
          </layout>
         </item>
         <item>
-         <widget class="QWidget" name="tank_temp_plot" native="true">
+         <widget class="QCustomPlot" name="tank_temp_plot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -966,7 +966,7 @@ QScrollBar::sub-line:vertical {
          </layout>
         </item>
         <item>
-         <widget class="QWidget" name="rpm_plot" native="true">
+         <widget class="QCustomPlot" name="rpm_plot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -1441,7 +1441,7 @@ QScrollBar::sub-line:vertical {
            </layout>
           </item>
           <item>
-           <widget class="QWidget" name="valve_plot" native="true">
+           <widget class="QCustomPlot" name="valve_plot" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -1565,7 +1565,7 @@ QScrollBar::sub-line:vertical {
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>80</width>
+                 <width>100</width>
                  <height>0</height>
                 </size>
                </property>
@@ -1612,7 +1612,7 @@ QScrollBar::sub-line:vertical {
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>120</width>
+                 <width>100</width>
                  <height>0</height>
                 </size>
                </property>
@@ -1861,7 +1861,7 @@ border-radius: 4px;
                    </property>
                    <property name="minimumSize">
                     <size>
-                     <width>150</width>
+                     <width>107</width>
                      <height>0</height>
                     </size>
                    </property>
@@ -2026,6 +2026,14 @@ border-radius: 4px;
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="Resources/files.qrc"/>
  </resources>

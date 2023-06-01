@@ -14,4 +14,7 @@
 #define active_color QRgb(0xB0CB1F)
 #define active_color_hex QString("#B0CB1F")
 
+#define plot_color_grid QRgb(0x616161)
+#define plot_color_subgrid QRgb(0x4F5152)
+
 #endif //PUMPBENCHCONTROLLER_COLORS_H

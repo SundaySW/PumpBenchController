@@ -17,7 +17,7 @@ class BenchController: public QObject{
 public:
     explicit BenchController(Ui::MainWindow *_ui, QMainWindow* mw);
     void setViewMap();
-    ~BenchController();
+    ~BenchController() = default;
 private:
     Ui::MainWindow *ui;
     QMainWindow* mainWindow;
@@ -31,6 +31,8 @@ private:
     QIcon statusOkIcon, statusErrorIcon, statusDefIcon;
     QIcon serverConnectedIcon, serverDisconnectedIcon;
     QTimer* serverReconnectionTimer;
+    QTimer* plotReDrawTimer;
+
     bool hasError;
     void makeConnections();
     void sendItemsNameLogoListToComboBoxes(BenchViewCtrlItem *customer);
@@ -44,6 +46,8 @@ private:
     void loadFromJson();
     void saveToJson();
     void serverConnectionHandler();
+
+    void plotReDrawTimerHandler();
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHCONTROLLER_H

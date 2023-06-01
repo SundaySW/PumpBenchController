@@ -21,7 +21,7 @@ public:
         QString name;
     };
     BenchViewItem() = delete;
-    BenchViewItem(QString name, QWidget*, QLabel*, QPushButton*, ParamService*, QWidget *parent = nullptr);
+    BenchViewItem(QString name, QCustomPlot*, QLabel*, QPushButton*, ParamService*, QWidget *parent = nullptr);
     void updateView();
     void processValue();
     QString getName();
@@ -37,6 +37,7 @@ public:
     QPushButton *getButton() const;
     void loadDataFromJson(const QJsonObject&);
     QJsonObject saveDataToJSon();
+    void repaintPlot();
 signals:
     void signalValueUpdated_itemValue(double value, bool ok);
     void signalValueUpdated_itemName(const QString& name);
@@ -52,19 +53,30 @@ private:
     QIcon iconDef, iconOK, iconError;
     double currentValueDouble;
     bool currentStatus;
+    bool livePlot = true;
+
     QCustomPlot* Plot;
     QCPAxisRect* rect;
     QCPGraph* selfGraph;
+    QSharedPointer<QCPAxisTickerTime> timeTicker;
+    int lineWidth = 1;
     QCPGraph::LineStyle lineStyle = QCPGraph::lsLine;
-    QVector<QCPGraphData> graphData;
+    QSharedPointer<QCPGraphDataContainer> graphData;
     QPushButton* button;
+    double lastKey;
+
     QLabel* label;
     QTimer* updateValueTimer;
     void itemButtonClicked();
     void updateValueTimerFinished();
     void changeIconColor(bool ref);
-
     void setPlot();
+    void plotBindGraph();
+    void prepareRect();
+    void updatePlotData();
+    void unsetPlotData();
+    void resetPlotData();
+    void generateColor();
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHVIEWITEM_H

@@ -21,6 +21,7 @@ BenchItemSettingsDlg::BenchItemSettingsDlg(QString name, ParamService* ps, bool 
     ui->itemName_label->setText(itemName.toUpper());
     ui->itemName_label->setStyleSheet(QString("color: %1;").arg(default_color_hex));
     updateParam ? ui->setParamSettings_groupBox->setEnabled(false) : ui->updateParamSettings_groupBox->setEnabled(false);
+    ui->updateParam_comboBox->setCurrentIndex(-1);
     updateParamConnections();
     setParamConnections();
     paramSettingsConnection();
@@ -31,6 +32,7 @@ void BenchItemSettingsDlg::updateParamConnections(){
     ui->lowerBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     ui->upperBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     connect(ui->refresh_button, &QPushButton::clicked, [this](){ refreshParamList(); });
+    connect(ui->unbindParam_button, &QPushButton::clicked, [this](){ unbindProtosParam(); });
     connect(ui->updateParam_comboBox, &QComboBox::currentTextChanged, [this](const QString& s){ newParamRequested(s);});
     connect(ui->lowerBound_lineEdit, &QLineEdit::editingFinished, [this](){
         bool okMin,okMax;
@@ -46,6 +48,13 @@ void BenchItemSettingsDlg::updateParamConnections(){
         if(okMin && okMax)
             emit newUpdateValueBounds(qMakePair(newMinValue, newMaxValue));
     });
+}
+
+void BenchItemSettingsDlg::unbindProtosParam(){
+    disconnect(paramItem.get());
+    paramItem.reset();
+    emit itemParamUnbinded();
+    ui->updateParam_comboBox->setCurrentIndex(-1);
 }
 
 void BenchItemSettingsDlg::setParamConnections(){
@@ -82,8 +91,8 @@ void BenchItemSettingsDlg::setParamConnections(){
 }
 
 void BenchItemSettingsDlg::paramSettingsConnection(){
-    ui->offset_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
-    ui->mult_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
+    ui->offset_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
+    ui->mult_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
     ui->updateRate_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     ui->controlRate_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     ui->sendRate_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
@@ -133,14 +142,17 @@ void BenchItemSettingsDlg::pidValuesConnection(){
 
 void BenchItemSettingsDlg::refreshParamList(){
     ui->updateParam_comboBox->clear();
+    ui->updateParam_comboBox->setCurrentIndex(-1);
     ui->updateParam_comboBox->addItems(paramService->getAllParamsStrList());
 }
 
 void BenchItemSettingsDlg::newParamRequested(const QString& mapKey) {
     auto newParam = paramService->getParam(mapKey);
     if(!newParam.isNull()) {
-        if(!paramItem.isNull())
-            disconnect(paramItem.get());
+        if(!paramItem.isNull()){
+            disconnect(paramItem.get(), &ParamItem::paramRatesChanged, nullptr, nullptr);
+            disconnect(paramItem.get(), &ParamItem::paramCalibDataChanged, nullptr, nullptr);
+        }
         paramItem = newParam;
         connect(paramItem.get(), &ParamItem::paramRatesChanged,
                 [this](uchar t, short v) { setActualValues(t, v); });
@@ -279,6 +291,6 @@ void BenchItemSettingsDlg::setPIDSettings(const QJsonObject& jsonObject){
 
 void BenchItemSettingsDlg::setUpdateParamFromController(const QString& mapKey){
     refreshParamList();
-    newParamRequested(mapKey);
+    emit newParamRequested(mapKey);
     ui->updateParam_comboBox->setCurrentText(mapKey);
 }

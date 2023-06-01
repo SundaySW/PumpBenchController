@@ -9,7 +9,11 @@
 #define CURRENT_BUILD_TYPE_ "CHECK CMAKE"
 #endif
 
-#define serverReconnectionTime 5000
+#define serverReconnectionTime 1000
+#define plotsReDrawTime 1000
+
+
+QRandomGenerator generator = QRandomGenerator();
 
 BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
         socketAdapter(new SocketAdapter()),
@@ -17,6 +21,7 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
         ui(_ui),
         mainWindow(mw),
         serverConnectionDlg(new ServerConnectionDlg(socketAdapter, mw)),
+        plotReDrawTimer(new QTimer(this)),
         serverReconnectionTimer(new QTimer(this))
 {
     ui->setupUi(mw);
@@ -28,7 +33,6 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
     makeConnections();
     loadFromJson();
 }
-BenchController::~BenchController(){}
 
 void BenchController::setView(){
     logOkIcon = QIcon(":/icons/ok_circle.svg");
@@ -109,6 +113,8 @@ void BenchController::makeConnections(){
     connect(controlItem.get(), &BenchViewCtrlItem::requestParamKeyByName, [this](const QString& s){ sendItemFromName(s, controlItem.get());});
     connect(serverReconnectionTimer, &QTimer::timeout, [this]() { serverConnectionHandler(); });
     serverReconnectionTimer->start(serverReconnectionTime);
+    connect(plotReDrawTimer, &QTimer::timeout, [this]() { plotReDrawTimerHandler();});
+    plotReDrawTimer->start(plotsReDrawTime);
     for(const auto& viewItem : updateItemsMap){
         connect(viewItem.get(), &BenchViewItem::signalValueUpdated_itemName, [this](const QString& name){
             onItemNewValue(name);
@@ -120,10 +126,14 @@ void BenchController::makeConnections(){
     connect(ui->settings_button_2, &QPushButton::clicked, [this](){ saveToJson(); });
 }
 
+void BenchController::plotReDrawTimerHandler(){
+    for(const auto& viewItem : updateItemsMap)
+        viewItem->repaintPlot();
+}
+
 void BenchController::serverConnectionHandler(){
     if(serverConnectionDlg->reconnectIsOn() && !socketAdapter->IsConnected())
         serverConnectionDlg->connectToServer();
-    serverReconnectionTimer->start(serverReconnectionTime);
 }
 
 void BenchController::serverBtnClicked(){

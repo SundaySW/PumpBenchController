@@ -30,6 +30,7 @@ public:
     void setUpdateParamFromController(const QString& mapKey);
 signals:
     void itemParamChanged(QSharedPointer<ParamItem>&);
+    void itemParamUnbinded();
     void newSetParamKey(const QString&);
     void newSetParamId(uchar);
     void newSetParamHost(uchar);
@@ -56,6 +57,8 @@ private:
     void updateParamConnections();
     void setParamConnections();
     void paramSettingsConnection();
+
+    void unbindProtosParam();
 };
 
 #endif // BENCHITEMSETTINGSDLG_H
