@@ -22,7 +22,8 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
         mainWindow(mw),
         serverConnectionDlg(new ServerConnectionDlg(socketAdapter, mw)),
         plotReDrawTimer(new QTimer(this)),
-        serverReconnectionTimer(new QTimer(this))
+        serverReconnectionTimer(new QTimer(this)),
+        scenariosDock(new ScenariosDock())
 {
     ui->setupUi(mw);
     jsonSaved = QJsonObject();
@@ -32,6 +33,8 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
     setViewMap();
     makeConnections();
     loadFromJson();
+    mw->addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, scenariosDock.get());
+
 }
 
 void BenchController::setView(){

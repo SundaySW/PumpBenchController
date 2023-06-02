@@ -44,6 +44,8 @@
         <file>ok_circle.svg</file>
         <file>drag_handle.svg</file>
         <file>server_disconnected.svg</file>
+        <file>add_msg_scenario.svg</file>
+        <file>add_set_scenario.svg</file>
     </qresource>
     <qresource prefix="/css">
         <file>css/dbsettings.css</file>
@@ -79,5 +81,10 @@
         <file>item_svg/tank_temp_error.svg</file>
         <file>item_svg/valve_feedback_error.svg</file>
         <file>item_svg/setParamConfig.svg</file>
+    </qresource>
+    <qresource prefix="/icons/comparison_icons">
+        <file>comparison_icons/equal.svg</file>
+        <file>comparison_icons/less.svg</file>
+        <file>comparison_icons/more.svg</file>
     </qresource>
 </RCC>

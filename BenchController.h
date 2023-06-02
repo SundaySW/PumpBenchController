@@ -11,6 +11,7 @@
 #include "Dialogs/serverconnectiondlg.h"
 #include "ui_mainwindow.h"
 #include <utility>
+#include "Scenarios/scenariosdock.h"
 
 class BenchController: public QObject{
     Q_OBJECT
@@ -32,6 +33,7 @@ private:
     QIcon serverConnectedIcon, serverDisconnectedIcon;
     QTimer* serverReconnectionTimer;
     QTimer* plotReDrawTimer;
+    QSharedPointer<ScenariosDock> scenariosDock;
 
     bool hasError;
     void makeConnections();

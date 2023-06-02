@@ -33,7 +33,7 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/BenchItem/*.*
         ${CMAKE_CURRENT_SOURCE_DIR}/PID/*.*
         ${CMAKE_CURRENT_SOURCE_DIR}/Dialogs/*.*
-        #        ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot/*.*
+        ${CMAKE_CURRENT_SOURCE_DIR}/Scenarios/*.*
         )
 
 set(PROJECT_SOURCES
@@ -44,8 +44,9 @@ set(PROJECT_SOURCES
         Resources/files.qrc
         BenchController.cpp
         BenchController.h
+        colors.h
         ${SOURCES}
-        colors.h)
+        )
 
 add_subdirectory(qcustomplot)
 
@@ -64,6 +65,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/BenchItem
         ${CMAKE_CURRENT_SOURCE_DIR}/PID
         ${CMAKE_CURRENT_SOURCE_DIR}/Dialogs
+        ${CMAKE_CURRENT_SOURCE_DIR}/Scenarios
         ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot
         )
 
