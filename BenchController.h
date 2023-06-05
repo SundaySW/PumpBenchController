@@ -28,6 +28,7 @@ private:
     QSharedPointer<SocketAdapter> socketAdapter;
     ServerConnectionDlg* serverConnectionDlg;
     QJsonObject jsonSaved;
+    bool hasError;
     QIcon logOkIcon, logErrorIcon;
     QIcon statusOkIcon, statusErrorIcon, statusDefIcon;
     QIcon serverConnectedIcon, serverDisconnectedIcon;
@@ -35,10 +36,7 @@ private:
     QTimer* plotReDrawTimer;
     QSharedPointer<ScenariosDock> scenariosDock;
 
-    bool hasError;
     void makeConnections();
-    void sendItemsNameLogoListToComboBoxes(BenchViewCtrlItem *customer);
-    void sendItemFromName(const QString &itemName, BenchViewCtrlItem *customer);
     void statusBtnClicked();
     void serverBtnClicked();
     void onItemNewValue(const QString &name);
@@ -48,8 +46,12 @@ private:
     void loadFromJson();
     void saveToJson();
     void serverConnectionHandler();
-
     void plotReDrawTimerHandler();
+    void loadScenarioDock();
+    template<typename T>
+    void sendItemFromName(const QString &itemName, T *customer);
+    template<typename T>
+    void sendItemsNameLogoListToComboBoxes(T *customer);
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHCONTROLLER_H

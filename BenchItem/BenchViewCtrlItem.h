@@ -56,14 +56,14 @@ private:
     void targetValueChanged();
     void newTargetValueItem(const QString &mapKey);
         template<class T>
-    bool checkValue(T val);
+        bool checkValue(T val);
     void newTargetValueItemUpdate();
     void configBtnClicked();
         template<typename T>
         bool setRequestedValue(T val);
     void checkPIDTargetValue();
     bool isOKReceivedNewParam(const QSharedPointer<BenchViewItem> &item);
-    static void showMsgBox(const QString &msg);
+    void showMsgBox(const QString &msg);
     void managePIDStatus(bool state);
 };
 

@@ -15,11 +15,14 @@ class ScenariosDock : public QDockWidget
 public:
     explicit ScenariosDock(QWidget *parent = nullptr);
     ~ScenariosDock();
+signals:
+    void reqNewItemFromScenario(const QString&, ScenariosItemBox*);
+    void reqViewItemsList(ScenariosItemBox*);
+    void protosMsgToSend(const QString&);
 private:
     Ui::ScenariosDock *ui;
     QList<QSharedPointer<ScenariosItemBox>> msgItemsList;
     QList<QSharedPointer<ScenariosItemControl>> setItemsList;
-
     void addMsgItem();
 };
 

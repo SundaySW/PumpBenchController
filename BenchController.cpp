@@ -12,7 +12,6 @@
 #define serverReconnectionTime 1000
 #define plotsReDrawTime 1000
 
-
 QRandomGenerator generator = QRandomGenerator();
 
 BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
@@ -23,7 +22,7 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
         serverConnectionDlg(new ServerConnectionDlg(socketAdapter, mw)),
         plotReDrawTimer(new QTimer(this)),
         serverReconnectionTimer(new QTimer(this)),
-        scenariosDock(new ScenariosDock())
+        scenariosDock(new ScenariosDock(mw))
 {
     ui->setupUi(mw);
     jsonSaved = QJsonObject();
@@ -33,8 +32,20 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
     setViewMap();
     makeConnections();
     loadFromJson();
-    mw->addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, scenariosDock.get());
+    loadScenarioDock();
+}
 
+void BenchController::loadScenarioDock(){
+    mainWindow->addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, scenariosDock.get());
+    connect(scenariosDock.get(), &ScenariosDock::reqViewItemsList, [this](ScenariosItemBox* item){
+        sendItemsNameLogoListToComboBoxes(item);
+    });
+    connect(scenariosDock.get(), &ScenariosDock::reqNewItemFromScenario, [this](const QString& n, ScenariosItemBox* c){
+        sendItemFromName(n, c);
+    });
+    connect(scenariosDock.get(), &ScenariosDock::protosMsgToSend, [this](const QString& m){
+        socketAdapter->SendMsg(m);
+    });
 }
 
 void BenchController::setView(){
@@ -174,7 +185,8 @@ void BenchController::updateErrorStatusList(BenchViewItem* item){
     ui->status_listWidget->addItem(newItem);
 }
 
-void BenchController::sendItemsNameLogoListToComboBoxes(BenchViewCtrlItem* customer){
+template<typename T>
+void BenchController::sendItemsNameLogoListToComboBoxes(T* customer){
     auto viewItemDataVec = QVector<BenchViewItem::ViewItemData>();
     viewItemDataVec.reserve(updateItemsMap.size());
     for(const auto& viewItem : updateItemsMap)
@@ -182,7 +194,8 @@ void BenchController::sendItemsNameLogoListToComboBoxes(BenchViewCtrlItem* custo
     customer->receiveItemsNameList(viewItemDataVec);
 }
 
-void BenchController::sendItemFromName(const QString &itemName, BenchViewCtrlItem *customer) {
+template<typename T>
+void BenchController::sendItemFromName(const QString& itemName, T* customer) {
     auto item = updateItemsMap.value(itemName);
     if(item)
         customer->receiveItem(item);

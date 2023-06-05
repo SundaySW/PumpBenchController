@@ -22,7 +22,7 @@ BenchViewCtrlItem::BenchViewCtrlItem(QString _name, ParamService* ps, QPushButto
 {
     settingsDlg = new BenchItemSettingsDlg(name, paramService, false, parent);
     itemValueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,7}\\.[0-9]{1,5}")));
-    targetValueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,7}\\.[0-9]{1,5}")));
+//    targetValueEdit->setValidator(new QRegExpValidator(QRegExp(R"([0-9a-fA-F]{1,8}\.[0-9a-fA-F]{1,8})")));
 
     connect(itemValueEdit, &QLineEdit::editingFinished, [this]() { textValueEdited();});
     connect(valueSlider, &QAbstractSlider::valueChanged, [this](int pos) { sliderMoved(pos);});
@@ -117,6 +117,8 @@ void BenchViewCtrlItem::targetValueChanged() {
     double newValue = targetValueEdit->text().toDouble(&ok);
     if(!ok){
         targetValueEdit->clear();
+        showMsgBox("Incorrect target value!\n"
+                   "Should be float xxx.xxx");
         return;
     }
     pidTargetValue = newValue;
@@ -169,15 +171,15 @@ void BenchViewCtrlItem::checkPIDTargetValue(){
     auto[min, max] = targetValueItem->getBounds();
     auto currentItemValue = targetValueItem->getCurrentValue().toDouble();
     if(pidTargetValue > max || pidTargetValue < min){
-        showMsgBox(QString("Target value out of range for new item\n"
-                           "Value is set with current new item value"));
+        showMsgBox(QString("Target value out of range for this item (bounds in settings diag)\n"
+                           "Value is set with currently received value! Please check!"));
         targetValueEdit->setText(QString("%1").arg(currentItemValue));
         pidTargetValue = currentItemValue;
     }
 }
 
 void BenchViewCtrlItem::showMsgBox(const QString& msg){
-    QMessageBox msgBox;
+    QMessageBox msgBox(targetValueEdit);
     msgBox.setText(msg);
     msgBox.exec();
 }
