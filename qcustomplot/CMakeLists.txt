@@ -20,10 +20,10 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-        Qt${QT_VERSION_MAJOR}::Core
-        Qt${QT_VERSION_MAJOR}::Gui
-        Qt${QT_VERSION_MAJOR}::Widgets
-        Qt${QT_VERSION_MAJOR}::PrintSupport
-        Qt${QT_VERSION_MAJOR}::OpenGL
+        ${qt_ver}::Core
+        ${qt_ver}::Gui
+        ${qt_ver}::Widgets
+        ${qt_ver}::PrintSupport
+        ${qt_ver}::OpenGL
         ${OPENGL_LIBRARIES}
 )

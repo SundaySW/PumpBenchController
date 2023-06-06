@@ -45,7 +45,7 @@ void ScenariosItemBox::receiveItem(QSharedPointer<BenchViewItem>& item){
     if(!isOKReceivedNewParam(item))
         return;
     if(targetValueItem)
-        disconnect(targetValueItem->getParamPtr());
+        disconnect(targetValueItem->getParamPtr(), &ParamItem::newParamValue, this, nullptr);
     targetValueItem = item;
     connect(targetValueItem->getParamPtr(), &ParamItem::newParamValue, [this](){ newTargetValueItemUpdate();});
 }

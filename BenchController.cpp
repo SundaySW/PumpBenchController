@@ -138,6 +138,7 @@ void BenchController::makeConnections(){
     connect(serverConnectionDlg, &ServerConnectionDlg::eventInServerConnection, [this](const QString& s, bool b){ eventServerConnectionHandler(s, b);});
     connect(ui->status_button, &QPushButton::clicked, [this](){ statusBtnClicked(); });
     connect(ui->settings_button_2, &QPushButton::clicked, [this](){ saveToJson(); });
+    connect(ui->log_listWidget, &QListWidget::itemDoubleClicked, [this](){ ui->log_listWidget->clear(); });
 }
 
 void BenchController::plotReDrawTimerHandler(){

@@ -21,7 +21,7 @@ BenchViewCtrlItem::BenchViewCtrlItem(QString _name, ParamService* ps, QPushButto
     pidControl()
 {
     settingsDlg = new BenchItemSettingsDlg(name, paramService, false, parent);
-    itemValueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]{1,7}\\.[0-9]{1,5}")));
+    itemValueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9a-FA-F]+")));
 //    targetValueEdit->setValidator(new QRegExpValidator(QRegExp(R"([0-9a-fA-F]{1,8}\.[0-9a-fA-F]{1,8})")));
 
     connect(itemValueEdit, &QLineEdit::editingFinished, [this]() { textValueEdited();});
@@ -129,7 +129,7 @@ void BenchViewCtrlItem::newTargetValueItem(const QString& itemName) {
     if(targetValueItem.isNull()){
         emit requestParamKeyByName(itemName);
     }else if(targetValueItem->getName() != itemName){
-        disconnect(targetValueItem->getParamPtr());
+        disconnect(targetValueItem->getParamPtr(), &ParamItem::newParamValue, this, nullptr);
         emit requestParamKeyByName(itemName);
     }
 }

@@ -21,7 +21,7 @@ signals:
     void protosMsgToSend(const QString&);
 private:
     Ui::ScenariosDock *ui;
-    QList<QSharedPointer<ScenariosItemBox>> msgItemsList;
+    QMap<ScenariosItemBox*, QSharedPointer<ScenariosItemBox>> msgItemsMap;
     QList<QSharedPointer<ScenariosItemControl>> setItemsList;
     void addMsgItem();
 };

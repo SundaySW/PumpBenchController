@@ -41,6 +41,7 @@ public:
 signals:
     void signalValueUpdated_itemValue(double value, bool ok);
     void signalValueUpdated_itemName(const QString& name);
+
 protected:
     double normalValueUpperBound,normalValueLowerBound;
     BenchItemSettingsDlg* settingsDlg;

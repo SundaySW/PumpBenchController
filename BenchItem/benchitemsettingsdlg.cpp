@@ -51,7 +51,7 @@ void BenchItemSettingsDlg::updateParamConnections(){
 }
 
 void BenchItemSettingsDlg::unbindProtosParam(){
-    disconnect(paramItem.get());
+    disconnect(paramItem.get(), nullptr, this, nullptr);
     paramItem.reset();
     emit itemParamUnbinded();
     ui->updateParam_comboBox->setCurrentIndex(-1);
@@ -150,8 +150,8 @@ void BenchItemSettingsDlg::newParamRequested(const QString& mapKey) {
     auto newParam = paramService->getParam(mapKey);
     if(!newParam.isNull()) {
         if(!paramItem.isNull()){
-            disconnect(paramItem.get(), &ParamItem::paramRatesChanged, nullptr, nullptr);
-            disconnect(paramItem.get(), &ParamItem::paramCalibDataChanged, nullptr, nullptr);
+            disconnect(paramItem.get(), &ParamItem::paramRatesChanged, this, nullptr);
+            disconnect(paramItem.get(), &ParamItem::paramCalibDataChanged, this, nullptr);
         }
         paramItem = newParam;
         connect(paramItem.get(), &ParamItem::paramRatesChanged,

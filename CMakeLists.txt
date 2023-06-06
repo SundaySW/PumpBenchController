@@ -1,15 +1,24 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(PumpBenchController VERSION 0.1 LANGUAGES CXX)
+#set(CMAKE_TOOLCHAIN_FILE cmake/toolchain.cmake)
+
+project(PumpBenchController VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+message("SysName: ${CMAKE_SYSTEM_NAME}")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(CMAKE_PREFIX_PATH $ENV{HOME}/rpi/qt5.15)
+    #    set(TARGET_USER sa)
+    #    set(CMAKE_INSTALL_RPATH "/home/${TARGET_USER}/${PROJECT_NAME}")
+endif()
 
 set(qt_ver      Qt5)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
@@ -25,7 +34,7 @@ find_package(${qt_ver}Xml         REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(${qt_ver} REQUIRED COMPONENTS Widgets OpenGL)
 # end For OPENGl
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS PrintSupport)
+find_package(${qt_ver} REQUIRED COMPONENTS PrintSupport)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/ParamService/*.*
@@ -76,18 +85,11 @@ endif()
 
 IF(CMAKE_BUILD_TYPE MATCHES Release)
     message("Release build!")
-    set_property(TARGET ${PROJECT_NAME} PROPERTY WIN32_EXECUTABLE true)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/saved_params.json ${CMAKE_CURRENT_BINARY_DIR}/saved_params.json COPYONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/saved.json ${CMAKE_CURRENT_BINARY_DIR}/saved.json COPYONLY)
     add_custom_command(
             TARGET ${PROJECT_NAME} PRE_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Resource/ ${CMAKE_CURRENT_BINARY_DIR}/Resource/
             COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Resources/ ${CMAKE_CURRENT_BINARY_DIR}/Resources/
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/deploy_libs ${CMAKE_CURRENT_BINARY_DIR}/
-    )
-    add_custom_command(
-            TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND windeployqt "$<TARGET_FILE:${PROJECT_NAME}>"
-            VERBATIM
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot/bin ${CMAKE_CURRENT_BINARY_DIR}/
     )
     add_custom_command(
             TARGET ${PROJECT_NAME} POST_BUILD
@@ -98,6 +100,14 @@ IF(CMAKE_BUILD_TYPE MATCHES Release)
             COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_autogen
             COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/.cmake
     )
+    if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+        set_property(TARGET ${PROJECT_NAME} PROPERTY WIN32_EXECUTABLE true)
+        add_custom_command(
+                TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND windeployqt "$<TARGET_FILE:${PROJECT_NAME}>"
+                VERBATIM
+        )
+    endif()
 ENDIF()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

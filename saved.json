@@ -1,0 +1,185 @@
+{
+    "ControlItem": {
+        "ItemName": "valveSet",
+        "maxSetValueBound": 4200,
+        "minSetValueBound": 0,
+        "pidEnabled": false,
+        "pidSettings": {
+            "derivativeGain": 0.01,
+            "integral": -2513.500024414058,
+            "integralGain": 0.5,
+            "preError": -228.5,
+            "proportionalGain": 0.1,
+            "valueMax": 5000,
+            "valueMin": 0
+        },
+        "pidTargetValue": 1000,
+        "requestedValue": 0,
+        "setParamHost": 5,
+        "setParamId": 5,
+        "targetValueItemName": "rpm"
+    },
+    "Params": [
+        {
+            "DestID": 255,
+            "ExpectedValue": "2097.5",
+            "HostID": 16,
+            "ID": 49,
+            "LastValueType": 8,
+            "Note": "",
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": 1000,
+            "Value": "2097.5",
+            "ViewUpdateRate": 4000,
+            "altName": "",
+            "dateTime": "Чт июн 1 14:55:06 2023",
+            "state": 0,
+            "writeToDB": false
+        },
+        {
+            "DestID": 255,
+            "ExpectedValue": "5392.61328125",
+            "HostID": 16,
+            "ID": 50,
+            "LastValueType": 8,
+            "Note": "",
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": 1000,
+            "Value": "5394.3544921875",
+            "ViewUpdateRate": 4000,
+            "altName": "",
+            "dateTime": "Чт июн 1 14:55:06 2023",
+            "state": 0,
+            "writeToDB": false
+        },
+        {
+            "DestID": 255,
+            "ExpectedValue": "1228.5",
+            "HostID": 16,
+            "ID": 51,
+            "LastValueType": 8,
+            "Note": "",
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": 1000,
+            "Value": "1228.5001220703125",
+            "ViewUpdateRate": 4000,
+            "altName": "",
+            "dateTime": "Чт июн 1 14:55:06 2023",
+            "state": 0,
+            "writeToDB": false
+        },
+        {
+            "DestID": 255,
+            "ExpectedValue": "4095",
+            "HostID": 16,
+            "ID": 52,
+            "LastValueType": 8,
+            "Note": "",
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": 1000,
+            "Value": "3481.60009765625",
+            "ViewUpdateRate": 4000,
+            "altName": "",
+            "dateTime": "Чт июн 1 14:55:06 2023",
+            "state": 0,
+            "writeToDB": false
+        },
+        {
+            "DestID": 255,
+            "ExpectedValue": "819",
+            "HostID": 16,
+            "ID": 53,
+            "LastValueType": 8,
+            "Note": "",
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": 1000,
+            "Value": "4295",
+            "ViewUpdateRate": 4000,
+            "altName": "",
+            "dateTime": "Чт июн 1 14:55:06 2023",
+            "state": 0,
+            "writeToDB": false
+        },
+        {
+            "DestID": 255,
+            "ExpectedValue": "0",
+            "HostID": 16,
+            "ID": 65,
+            "LastValueType": 8,
+            "Note": "",
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": -1104,
+            "Value": "0",
+            "ViewUpdateRate": 5000,
+            "altName": "",
+            "dateTime": "Чт июн 1 14:55:06 2023",
+            "state": 0,
+            "writeToDB": false
+        }
+    ],
+    "UpdateItems": [
+        {
+            "ItemName": "flow",
+            "LastStatus": true,
+            "LastValue": "3481.60009765625",
+            "NormalLowerBoundValue": 0,
+            "NormalUpperBoundValue": 55000,
+            "paramTableName": "param_0x34_host_0x10"
+        },
+        {
+            "ItemName": "in_gauge",
+            "LastStatus": true,
+            "LastValue": "1228.5001220703125",
+            "NormalLowerBoundValue": 0,
+            "NormalUpperBoundValue": 8000,
+            "paramTableName": "param_0x33_host_0x10"
+        },
+        {
+            "ItemName": "motor_temp",
+            "LastStatus": false,
+            "LastValue": "0",
+            "NormalLowerBoundValue": 0,
+            "NormalUpperBoundValue": 0
+        },
+        {
+            "ItemName": "out_gauge",
+            "LastStatus": false,
+            "LastValue": "0",
+            "NormalLowerBoundValue": 0,
+            "NormalUpperBoundValue": 0
+        },
+        {
+            "ItemName": "rpm",
+            "LastStatus": true,
+            "LastValue": "2097.5",
+            "NormalLowerBoundValue": 0,
+            "NormalUpperBoundValue": 5000,
+            "paramTableName": "param_0x31_host_0x10"
+        },
+        {
+            "ItemName": "tank_temp",
+            "LastStatus": false,
+            "LastValue": "0",
+            "NormalLowerBoundValue": 0,
+            "NormalUpperBoundValue": 0
+        },
+        {
+            "ItemName": "valve_feedback",
+            "LastStatus": false,
+            "LastValue": "0",
+            "NormalLowerBoundValue": 0,
+            "NormalUpperBoundValue": 0
+        }
+    ],
+    "serverConnection": {
+        "IP": "192.168.1.99",
+        "Port": "3699",
+        "autoConnect": true
+    }
+}

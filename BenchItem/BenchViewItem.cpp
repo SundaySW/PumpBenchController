@@ -26,13 +26,13 @@ BenchViewItem::BenchViewItem(QString _name, QCustomPlot* _plot, QLabel* _label, 
 
     connect(settingsDlg, &BenchItemSettingsDlg::itemParamChanged, [this](QSharedPointer<ParamItem>& newItem){
         if(!item.isNull())
-            disconnect(item.get(), &ParamItem::newParamValue, nullptr, nullptr);
+            disconnect(item.get(), nullptr, this, nullptr);
         item = newItem;
-        connect(item.get(), &ParamItem::newParamValue, [this](){ updateView();});
+        connect(item.get(), &ParamItem::newParamValue, this, &BenchViewItem::updateView);
         resetPlotData();
     });
     connect(settingsDlg, &BenchItemSettingsDlg::itemParamUnbinded, [this](){
-        disconnect(item.get(), &ParamItem::newParamValue, nullptr, nullptr);
+        disconnect(item.get(), nullptr, this, nullptr);
         item.reset();
         unsetPlotData();
     });
