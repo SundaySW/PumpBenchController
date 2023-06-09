@@ -9,12 +9,19 @@ ScenariosDock::ScenariosDock(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->addMsgScenario_pushButton, &QPushButton::clicked, [this](){ addMsgItem();});
-//    connect(ui->addSetScenario_pushButton, &QPushButton::clicked, [this](){ ;});
+    connect(ui->addSetScenario_pushButton, &QPushButton::clicked, [this](){
+        QMessageBox msgBox(this);
+        msgBox.setText("Bzzzzzzzz!");
+        msgBox.setIconPixmap(QPixmap(":/icons/bee.svg"));
+        msgBox.exec();
+    });
 }
 
-void ScenariosDock::addMsgItem(){
+ScenariosItemBox* ScenariosDock::addMsgItem(){
     auto shrdPtr = QSharedPointer<ScenariosItemBox>(new ScenariosItemBox(this));
     auto* scenariosItemBoxPtr = shrdPtr.get();
+    emit reqViewItemsList(scenariosItemBoxPtr);
+    scenariosItemBoxPtr->setTitle(QString("Scenario №%1").arg(++scenarioCount));
     msgItemsMap.insert(scenariosItemBoxPtr, shrdPtr);
     connect(scenariosItemBoxPtr, &ScenariosItemBox::requestItemByName, [this, scenariosItemBoxPtr](const QString& name){
         emit reqNewItemFromScenario(name, scenariosItemBoxPtr);
@@ -31,10 +38,31 @@ void ScenariosDock::addMsgItem(){
         ui->itemsLayout->removeWidget(scenariosItemBoxPtr);
     });
     ui->itemsLayout->addWidget(scenariosItemBoxPtr);
-    emit reqViewItemsList(scenariosItemBoxPtr);
+    return scenariosItemBoxPtr;
 }
 
 ScenariosDock::~ScenariosDock()
 {
     delete ui;
+}
+
+void ScenariosDock::loadDataFromJson(const QJsonObject& scenarioArr){
+    if(scenarioArr.empty())
+        return;
+    auto msgScenarios = scenarioArr["MsgScenarios"].toArray();
+    for(const auto& scenario : msgScenarios)
+    {
+        auto loadItemJson = scenario.toObject();
+        if(!loadItemJson.isEmpty())
+            addMsgItem()->loadDataFromJson(loadItemJson);
+    }
+}
+
+QJsonObject ScenariosDock::saveDataToJson(){
+    auto retVal = QJsonObject();
+    QJsonArray paramArr;
+    for(auto& s: msgItemsMap)
+        paramArr.append(s->saveDataToJSon());
+    retVal["MsgScenarios"] = paramArr;
+    return retVal;
 }

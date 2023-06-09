@@ -24,7 +24,7 @@ public:
                       QComboBox* tpc,QSlider* vs,
                       QWidget *parent = nullptr);
     void loadDataFromJson(const QJsonObject&);
-    QJsonObject saveDataToJSon();
+    QJsonObject saveDataToJson();
 
 signals:
     void requestParamKeyByName(const QString&);

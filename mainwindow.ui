@@ -1242,7 +1242,7 @@ QScrollBar::sub-line:vertical {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="settings_button_2">
+        <widget class="QPushButton" name="save_button">
          <property name="minimumSize">
           <size>
            <width>45</width>

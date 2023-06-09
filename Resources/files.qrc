@@ -46,6 +46,8 @@
         <file>server_disconnected.svg</file>
         <file>add_msg_scenario.svg</file>
         <file>add_set_scenario.svg</file>
+        <file>bee.svg</file>
+        <file>bees.gif</file>
     </qresource>
     <qresource prefix="/css">
         <file>css/dbsettings.css</file>

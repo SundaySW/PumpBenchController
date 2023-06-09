@@ -15,6 +15,8 @@ class ScenariosItemBox : public QGroupBox
 public:
     explicit ScenariosItemBox(QWidget *parent = nullptr);
     ~ScenariosItemBox();
+    void loadDataFromJson(const QJsonObject&);
+    QJsonObject saveDataToJSon();
 signals:
     void deleteMe();
     void requestItemByName(const QString&);

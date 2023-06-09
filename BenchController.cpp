@@ -31,8 +31,8 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
     setView();
     setViewMap();
     makeConnections();
-    loadFromJson();
     loadScenarioDock();
+    loadFromJson();
 }
 
 void BenchController::loadScenarioDock(){
@@ -41,6 +41,7 @@ void BenchController::loadScenarioDock(){
         sendItemsNameLogoListToComboBoxes(item);
     });
     connect(scenariosDock.get(), &ScenariosDock::reqNewItemFromScenario, [this](const QString& n, ScenariosItemBox* c){
+        int css = 9;
         sendItemFromName(n, c);
     });
     connect(scenariosDock.get(), &ScenariosDock::protosMsgToSend, [this](const QString& m){
@@ -77,6 +78,7 @@ void BenchController::loadFromJson(){
     }
     controlItem->loadDataFromJson(jsonSaved["ControlItem"].toObject());
     serverConnectionDlg->loadDataFromJson(jsonSaved["serverConnection"].toObject());
+    scenariosDock->loadDataFromJson(jsonSaved["Scenarios"].toObject());
 }
 
 void BenchController::saveToJson() {
@@ -86,8 +88,9 @@ void BenchController::saveToJson() {
     for(auto& p: updateItemsMap)
         paramArr.append(p->saveDataToJSon());
     jsonSaved["UpdateItems"] = paramArr;
-    jsonSaved["ControlItem"] = controlItem->saveDataToJSon();
+    jsonSaved["ControlItem"] = controlItem->saveDataToJson();
     jsonSaved["serverConnection"] = serverConnectionDlg->saveDataToJson();
+    jsonSaved["Scenarios"] = scenariosDock->saveDataToJson();
 
     QJsonDocument doc;
     doc.setObject(jsonSaved);
@@ -137,7 +140,7 @@ void BenchController::makeConnections(){
     connect(ui->server_button, &QPushButton::clicked, [this](){ serverBtnClicked();});
     connect(serverConnectionDlg, &ServerConnectionDlg::eventInServerConnection, [this](const QString& s, bool b){ eventServerConnectionHandler(s, b);});
     connect(ui->status_button, &QPushButton::clicked, [this](){ statusBtnClicked(); });
-    connect(ui->settings_button_2, &QPushButton::clicked, [this](){ saveToJson(); });
+    connect(ui->save_button, &QPushButton::clicked, [this](){ saveToJson(); });
     connect(ui->log_listWidget, &QListWidget::itemDoubleClicked, [this](){ ui->log_listWidget->clear(); });
 }
 

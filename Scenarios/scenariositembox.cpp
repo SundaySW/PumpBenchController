@@ -112,3 +112,35 @@ void ScenariosItemBox::receiveItemsNameList(const QVector<BenchViewItem::ViewIte
     for(const auto& item: data)
         ui->viewItem_comboBox->addItem(item.icon, item.name);
 }
+
+void ScenariosItemBox::loadDataFromJson(const QJsonObject& jsonObject){
+    if(jsonObject.empty())
+        return;
+    this->setTitle(jsonObject["ScenarioName"].toString());
+    if(!jsonObject["scenarioMsg"].isNull())
+        msgToSend = jsonObject["scenarioMsg"].toString();
+    if(!jsonObject["scenarioTargetValue"].isUndefined())
+        targetValue = jsonObject["scenarioTargetValue"].toDouble();
+    enabled = jsonObject["scenarioEnabled"].toBool();
+    ui->enable_pushButton->setChecked(enabled);
+    if(targetValue.has_value())
+        ui->targetValue_lineEdit->setText(QString("%1").arg(targetValue.value()));
+    if(msgToSend.has_value())
+        ui->msg_lineEdit->setText(msgToSend.value());
+    ui->comparison_comboBox->setCurrentIndex(jsonObject["scenarioComparisonType"].toInt());
+    newTargetValueItem(jsonObject["targetValueItemName"].toString());
+}
+
+QJsonObject ScenariosItemBox::saveDataToJSon(){
+    QJsonObject jsonObject;
+    jsonObject["ScenarioName"] = this->title();
+    if(targetValueItem)
+        jsonObject["targetValueItemName"] = ui->viewItem_comboBox->currentText();
+    if(targetValue.has_value())
+        jsonObject["scenarioTargetValue"] = targetValue.value();
+    if(msgToSend.has_value())
+        jsonObject["scenarioMsg"] = msgToSend.value();
+    jsonObject["scenarioComparisonType"] = ui->comparison_comboBox->currentIndex();
+    jsonObject["scenarioEnabled"] = enabled;
+    return jsonObject;
+}

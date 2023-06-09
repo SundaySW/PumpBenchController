@@ -227,7 +227,7 @@ void BenchViewCtrlItem::loadDataFromJson(const QJsonObject& jsonObject) {
     pidEnabledBtn->setChecked(pidEnabled);
 }
 
-QJsonObject BenchViewCtrlItem::saveDataToJSon(){
+QJsonObject BenchViewCtrlItem::saveDataToJson(){
     QJsonObject jsonObject;
     jsonObject["ItemName"] = name;
     if(!targetValueItem.isNull())

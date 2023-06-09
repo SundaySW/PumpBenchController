@@ -15,15 +15,18 @@ class ScenariosDock : public QDockWidget
 public:
     explicit ScenariosDock(QWidget *parent = nullptr);
     ~ScenariosDock();
+    void loadDataFromJson(const QJsonObject&);
+    QJsonObject saveDataToJson();
 signals:
     void reqNewItemFromScenario(const QString&, ScenariosItemBox*);
     void reqViewItemsList(ScenariosItemBox*);
     void protosMsgToSend(const QString&);
 private:
+    int scenarioCount = 0;
     Ui::ScenariosDock *ui;
     QMap<ScenariosItemBox*, QSharedPointer<ScenariosItemBox>> msgItemsMap;
     QList<QSharedPointer<ScenariosItemControl>> setItemsList;
-    void addMsgItem();
+    ScenariosItemBox* addMsgItem();
 };
 
 #endif // SCENARIOSDOCK_H
