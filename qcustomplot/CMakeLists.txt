@@ -13,7 +13,10 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
         QCUSTOMPLOT_USE_LIBRARY
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 target_sources(${PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot.h

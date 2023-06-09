@@ -8,33 +8,28 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-#set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message("SysName: ${CMAKE_SYSTEM_NAME}")
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(CMAKE_PREFIX_PATH $ENV{HOME}/rpi/qt5.15)
-    #    set(TARGET_USER sa)
-    #    set(CMAKE_INSTALL_RPATH "/home/${TARGET_USER}/${PROJECT_NAME}")
-endif()
 
 set(qt_ver      Qt5)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(${qt_ver}Widgets     REQUIRED)
-find_package(${qt_ver}Gui         REQUIRED)
-find_package(${qt_ver}Core        REQUIRED)
-find_package(${qt_ver}Network     REQUIRED)
-find_package(${qt_ver}SerialPort  REQUIRED)
-find_package(${qt_ver}Sql         REQUIRED)
-find_package(${qt_ver}Svg         REQUIRED)
-find_package(${qt_ver}Xml         REQUIRED)
-# For OPENGl
-find_package(OpenGL REQUIRED)
-find_package(${qt_ver} REQUIRED COMPONENTS Widgets OpenGL)
-# end For OPENGl
-find_package(${qt_ver} REQUIRED COMPONENTS PrintSupport)
+find_package(${qt_ver}Widgets       REQUIRED)
+find_package(${qt_ver}Gui           REQUIRED)
+find_package(${qt_ver}Core          REQUIRED)
+find_package(${qt_ver}Network       REQUIRED)
+find_package(${qt_ver}SerialPort    REQUIRED)
+find_package(${qt_ver}Sql           REQUIRED)
+find_package(${qt_ver}Svg           REQUIRED)
+find_package(${qt_ver}Xml           REQUIRED)
+find_package(${qt_ver}PrintSupport  REQUIRED)
+
+find_package(${qt_ver}OpenGL        REQUIRED)
+find_package(OpenGL                 REQUIRED)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/ParamService/*.*
@@ -121,6 +116,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         ${qt_ver}::Xml
         ${qt_ver}::Widgets qcustomplot
         ${qt_ver}::OpenGL
+        ${qt_ver}::PrintSupport
         ${OPENGL_LIBRARIES}
         )
 
