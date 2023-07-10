@@ -50,7 +50,10 @@ set(PROJECT_SOURCES
         BenchController.h
         colors.h
         ${SOURCES}
-        )
+        config.h.in)
+
+configure_file(
+        config.h.in config.h)
 
 add_subdirectory(qcustomplot)
 
@@ -78,13 +81,27 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set (WIN32_RESOURCES Resources/resource.rc)
 endif()
 
+IF(CMAKE_BUILD_TYPE MATCHES Debug)
+    message("Debug build!")
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/saved.json ${CMAKE_CURRENT_BINARY_DIR}/saved.json COPYONLY)
+    add_custom_command(
+            TARGET ${PROJECT_NAME} PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Resources/ ${CMAKE_CURRENT_BINARY_DIR}/Resources/
+    )
+    if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+        add_custom_command(
+                TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot/bin ${CMAKE_CURRENT_BINARY_DIR}/
+        )
+    endif()
+ENDIF()
+
 IF(CMAKE_BUILD_TYPE MATCHES Release)
     message("Release build!")
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/saved.json ${CMAKE_CURRENT_BINARY_DIR}/saved.json COPYONLY)
     add_custom_command(
             TARGET ${PROJECT_NAME} PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Resources/ ${CMAKE_CURRENT_BINARY_DIR}/Resources/
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot/bin ${CMAKE_CURRENT_BINARY_DIR}/
     )
     add_custom_command(
             TARGET ${PROJECT_NAME} POST_BUILD
@@ -100,7 +117,14 @@ IF(CMAKE_BUILD_TYPE MATCHES Release)
         add_custom_command(
                 TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND windeployqt "$<TARGET_FILE:${PROJECT_NAME}>"
+                COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot/bin ${CMAKE_CURRENT_BINARY_DIR}/
                 VERBATIM
+        )
+    endif()
+    if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        add_custom_command(
+            TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/qcustomplot/ ${CMAKE_CURRENT_BINARY_DIR}/
         )
     endif()
 ENDIF()

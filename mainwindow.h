@@ -16,6 +16,6 @@ public:
     ~MainWindow();
 private:
     Ui::MainWindow *ui;
-    BenchController* benchController;
+    BenchController* benchController_;
 };
 #endif // MAINWINDOW_H

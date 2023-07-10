@@ -184,7 +184,7 @@
       <item>
        <widget class="QGroupBox" name="normalValues_groupBox">
         <property name="title">
-         <string>Normal Value Bounds</string>
+         <string>Normal value_ Bounds</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -317,7 +317,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>ID (hex)</string>
+                <string>ID_ (hex)</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -402,7 +402,7 @@
         <item>
          <widget class="QGroupBox" name="groupBox_4">
           <property name="title">
-           <string>Set Value bounds</string>
+           <string>Set value_ bounds</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_16">
            <item>

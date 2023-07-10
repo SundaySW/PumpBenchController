@@ -6,7 +6,7 @@ ScenariosItemBox::ScenariosItemBox(QWidget *parent) :
     ui(new Ui::ScenariosItemBox)
 {
     ui->setupUi(this);
-    msgMatch = QRegExp(R"([0-9a-fA-F]{8}\.[0-9]{1}\.[0-9a-fA-F]{16})");
+    msgMatch = QRegExp(R"([0-9a-fA-F]{8}\.[0-9]{1}\.[0-9a-fA-F]{2,16})");
 //    ui->targetValue_lineEdit->setValidator(new QRegExpValidator(QRegExp(R"([0-9a-fA-F]{1,8}\.[0-9a-fA-F]{1,8})")));
     ui->msg_lineEdit->setValidator(new QRegExpValidator(msgMatch));
     connect(ui->remove_pushButton, &QPushButton::clicked, [this](){ emit deleteMe();});
@@ -14,12 +14,18 @@ ScenariosItemBox::ScenariosItemBox(QWidget *parent) :
     connect(ui->viewItem_comboBox, &QComboBox::currentTextChanged, [this](const QString& s){ newTargetValueItem(s); });
     connect(ui->targetValue_lineEdit, &QLineEdit::editingFinished, [this](){ targetValueEdited();});
     connect(ui->msg_lineEdit, &QLineEdit::editingFinished, [this](){ msgEdited();});
+    connect(ui->msg_lineEdit, &QLineEdit::textChanged, [this](){
+        ui->msg_lineEdit->setStyleSheet("color: grey;");
+        msgToSend.reset();
+    });
 }
 
 void ScenariosItemBox::msgEdited(){
     auto newMsg = ui->msg_lineEdit->text();
-    if(msgMatch.indexIn(newMsg) != -1)
+    if(msgMatch.indexIn(newMsg) != -1){
         msgToSend = newMsg;
+        ui->msg_lineEdit->setStyleSheet("color: green;");
+    }
     else
         showMsgBox("Incorrect msg format!");
 }
@@ -53,9 +59,9 @@ void ScenariosItemBox::receiveItem(QSharedPointer<BenchViewItem>& item){
 bool ScenariosItemBox::isOKReceivedNewParam(const QSharedPointer<BenchViewItem>& item){
     if(!item->isProtosParamSelected()){
         if(targetValueItem.isNull())
-            showMsgBox(QString("No Protos Param selected in %1 item").arg(item->getName()));
+            showMsgBox(QString("No Protos Param selected in %1 protos_item_").arg(item->getName()));
         else{
-            showMsgBox(QString("No Protos Param selected in %1 item\nStill using %2").arg(item->getName(), targetValueItem->getName()));
+            showMsgBox(QString("No Protos Param selected in %1 protos_item_\nStill using %2").arg(item->getName(), targetValueItem->getName()));
             ui->viewItem_comboBox->setCurrentText(targetValueItem->getName());
         }
         return false;
@@ -74,8 +80,14 @@ void ScenariosItemBox::showMsgBox(const QString& msg){
 }
 
 void ScenariosItemBox::newTargetValueItemUpdate(){
-    if(!enabled || !targetValue.has_value() || !msgToSend.has_value())
+    if(!enabled || !targetValue.has_value())
         return;
+    if(!msgToSend.has_value()){
+        enabled = false;
+        ui->enable_pushButton->setChecked(enabled);
+        showMsgBox("Protos message not set or incorrect!");
+        return;
+    }
     auto processValue = targetValueItem->getParamPtr()->getValue().toDouble();
     switch (ui->comparison_comboBox->currentIndex()) {
         case 0: //greater
@@ -111,6 +123,7 @@ void ScenariosItemBox::receiveItemsNameList(const QVector<BenchViewItem::ViewIte
     ui->viewItem_comboBox->clear();
     for(const auto& item: data)
         ui->viewItem_comboBox->addItem(item.icon, item.name);
+    ui->viewItem_comboBox->setCurrentIndex(-1);
 }
 
 void ScenariosItemBox::loadDataFromJson(const QJsonObject& jsonObject){

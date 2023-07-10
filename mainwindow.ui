@@ -1916,7 +1916,7 @@ border-radius: 4px;
                   </font>
                  </property>
                  <property name="text">
-                  <string>Target Value</string>
+                  <string>Target value_</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>

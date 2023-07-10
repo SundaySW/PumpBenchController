@@ -2696,7 +2696,7 @@ protected:
 
   Great care must be taken however if the sort key is modified through the non-const iterators. For
   performance reasons, the iterators don't automatically cause a re-sorting upon their
-  manipulation. It is thus the responsibility of the user to leave the container in a sorted state
+  manipulation. It is thus the responsibility of the user to leave the container in a sorted state_
   when finished with the data manipulation, before calling any other methods on the container. A
   complete re-sort (e.g. after finishing all sort key manipulation) can be done by calling \ref
   sort. Failing to do so can not be detected by the container efficiently and will cause both
@@ -3046,10 +3046,10 @@ void QCPDataContainer<DataType>::clear()
   Re-sorts all data points in the container by their sort key.
 
   When setting, adding or removing points using the QCPDataContainer interface (\ref set, \ref add,
-  \ref remove, etc.), the container makes sure to always stay in a sorted state such that a full
+  \ref remove, etc.), the container makes sure to always stay in a sorted state_ such that a full
   resort is never necessary. However, if you choose to directly manipulate the sort key on data
   points by accessing and modifying it through the non-const iterators (\ref begin, \ref end), it
-  is your responsibility to bring the container back into a sorted state before any other methods
+  is your responsibility to bring the container back into a sorted state_ before any other methods
   are called on it. This can be achieved by calling this method immediately after finishing the
   sort key manipulation.
 */
@@ -3062,7 +3062,7 @@ void QCPDataContainer<DataType>::sort()
 /*!
   Frees all unused memory that is currently in the preallocation and postallocation pools.
   
-  Note that QCPDataContainer automatically decides whether squeezing is necessary, if \ref
+  note_ that QCPDataContainer automatically decides whether squeezing is necessary, if \ref
   setAutoSqueeze is left enabled. It should thus not be necessary to use this method for typical
   applications.
   
@@ -3599,7 +3599,7 @@ private:
 /* end of 'src/plottable.h' */
 
 
-/* including file 'src/item.h'             */
+/* including file 'src/protos_item_.h'             */
 /* modified 2022-11-06T12:45:56, size 9425 */
 
 class QCP_LIB_DECL QCPItemAnchor
@@ -3645,7 +3645,7 @@ class QCP_LIB_DECL QCPItemPosition : public QCPItemAnchor
   Q_GADGET
 public:
   /*!
-    Defines the ways an item position can be specified. Thus it defines what the numbers passed to
+    Defines the ways an protos_item_ position can be specified. Thus it defines what the numbers passed to
     \ref setCoords actually mean.
     
     \see setType
@@ -3781,7 +3781,7 @@ private:
   friend class QCPItemAnchor;
 };
 
-/* end of 'src/item.h' */
+/* end of 'src/protos_item_.h' */
 
 
 /* including file 'src/core.h'              */
@@ -3895,7 +3895,7 @@ public:
   int graphCount() const;
   QList<QCPGraph*> selectedGraphs() const;
 
-  // item interface:
+  // protos_item_ interface:
   QCPAbstractItem *item(int index) const;
   QCPAbstractItem *item() const;
   bool removeItem(QCPAbstractItem *item);
@@ -4112,7 +4112,7 @@ PlottableType *QCustomPlot::plottableAt(const QPointF &pos, bool onlySelectable,
 }
 
 /*!
-  Returns the item at the pixel position \a pos. The item type (a QCPAbstractItem subclass) that shall be
+  Returns the protos_item_ at the pixel position \a pos. The protos_item_ type (a QCPAbstractItem subclass) that shall be
   taken into consideration can be specified via the template parameter. Items that only consist of single
   lines (e.g. \ref QCPItemLine or \ref QCPItemCurve) have a tolerance band around them, see \ref
   setSelectionTolerance. If multiple items come into consideration, the one closest to \a pos is returned.
@@ -4120,7 +4120,7 @@ PlottableType *QCustomPlot::plottableAt(const QPointF &pos, bool onlySelectable,
   If \a onlySelectable is true, only items that are selectable (QCPAbstractItem::setSelectable) are
   considered.
   
-  If there is no item at \a pos, returns \c nullptr.
+  If there is no protos_item_ at \a pos, returns \c nullptr.
   
   \see plottableAt, layoutElementAt
 */
@@ -4135,7 +4135,7 @@ ItemType *QCustomPlot::itemAt(const QPointF &pos, bool onlySelectable) const
     ItemType *currentItem = qobject_cast<ItemType*>(item);
     if (!currentItem || (onlySelectable && !currentItem->selectable())) // we could have also passed onlySelectable to the selectTest function, but checking here is faster, because we have access to QCPAbstractItem::selectable
       continue;
-    if (!currentItem->clipToAxisRect() || currentItem->clipRect().contains(pos.toPoint())) // only consider clicks inside axis cliprect of the item if actually clipped to it
+    if (!currentItem->clipToAxisRect() || currentItem->clipRect().contains(pos.toPoint())) // only consider clicks inside axis cliprect of the protos_item_ if actually clipped to it
     {
       double currentDistance = currentItem->selectTest(pos, false);
       if (currentDistance >= 0 && currentDistance < resultDistance)
@@ -6416,7 +6416,7 @@ protected:
 /* end of 'src/plottables/plottable-errorbar.h' */
 
 
-/* including file 'src/items/item-straightline.h' */
+/* including file 'src/items/protos_item_-straightline.h' */
 /* modified 2022-11-06T12:45:56, size 3137        */
 
 class QCP_LIB_DECL QCPItemStraightLine : public QCPAbstractItem
@@ -6456,10 +6456,10 @@ protected:
   QPen mainPen() const;
 };
 
-/* end of 'src/items/item-straightline.h' */
+/* end of 'src/items/protos_item_-straightline.h' */
 
 
-/* including file 'src/items/item-line.h'  */
+/* including file 'src/items/protos_item_-line.h'  */
 /* modified 2022-11-06T12:45:56, size 3429 */
 
 class QCP_LIB_DECL QCPItemLine : public QCPAbstractItem
@@ -6506,10 +6506,10 @@ protected:
   QPen mainPen() const;
 };
 
-/* end of 'src/items/item-line.h' */
+/* end of 'src/items/protos_item_-line.h' */
 
 
-/* including file 'src/items/item-curve.h' */
+/* including file 'src/items/protos_item_-curve.h' */
 /* modified 2022-11-06T12:45:56, size 3401 */
 
 class QCP_LIB_DECL QCPItemCurve : public QCPAbstractItem
@@ -6557,10 +6557,10 @@ protected:
   QPen mainPen() const;
 };
 
-/* end of 'src/items/item-curve.h' */
+/* end of 'src/items/protos_item_-curve.h' */
 
 
-/* including file 'src/items/item-rect.h'  */
+/* including file 'src/items/protos_item_-rect.h'  */
 /* modified 2022-11-06T12:45:56, size 3710 */
 
 class QCP_LIB_DECL QCPItemRect : public QCPAbstractItem
@@ -6616,10 +6616,10 @@ protected:
   QBrush mainBrush() const;
 };
 
-/* end of 'src/items/item-rect.h' */
+/* end of 'src/items/protos_item_-rect.h' */
 
 
-/* including file 'src/items/item-text.h'  */
+/* including file 'src/items/protos_item_-text.h'  */
 /* modified 2022-11-06T12:45:56, size 5576 */
 
 class QCP_LIB_DECL QCPItemText : public QCPAbstractItem
@@ -6713,10 +6713,10 @@ protected:
   QBrush mainBrush() const;
 };
 
-/* end of 'src/items/item-text.h' */
+/* end of 'src/items/protos_item_-text.h' */
 
 
-/* including file 'src/items/item-ellipse.h' */
+/* including file 'src/items/protos_item_-ellipse.h' */
 /* modified 2022-11-06T12:45:56, size 3890   */
 
 class QCP_LIB_DECL QCPItemEllipse : public QCPAbstractItem
@@ -6775,10 +6775,10 @@ protected:
   QBrush mainBrush() const;
 };
 
-/* end of 'src/items/item-ellipse.h' */
+/* end of 'src/items/protos_item_-ellipse.h' */
 
 
-/* including file 'src/items/item-pixmap.h' */
+/* including file 'src/items/protos_item_-pixmap.h' */
 /* modified 2022-11-06T12:45:56, size 4407  */
 
 class QCP_LIB_DECL QCPItemPixmap : public QCPAbstractItem
@@ -6844,10 +6844,10 @@ protected:
   QPen mainPen() const;
 };
 
-/* end of 'src/items/item-pixmap.h' */
+/* end of 'src/items/protos_item_-pixmap.h' */
 
 
-/* including file 'src/items/item-tracer.h' */
+/* including file 'src/items/protos_item_-tracer.h' */
 /* modified 2022-11-06T12:45:56, size 4811  */
 
 class QCP_LIB_DECL QCPItemTracer : public QCPAbstractItem
@@ -6866,7 +6866,7 @@ class QCP_LIB_DECL QCPItemTracer : public QCPAbstractItem
   /// \endcond
 public:
   /*!
-    The different visual appearances a tracer item can have. Some styles size may be controlled with \ref setSize.
+    The different visual appearances a tracer protos_item_ can have. Some styles size may be controlled with \ref setSize.
     
     \see setStyle
   */
@@ -6930,10 +6930,10 @@ protected:
 };
 Q_DECLARE_METATYPE(QCPItemTracer::TracerStyle)
 
-/* end of 'src/items/item-tracer.h' */
+/* end of 'src/items/protos_item_-tracer.h' */
 
 
-/* including file 'src/items/item-bracket.h' */
+/* including file 'src/items/protos_item_-bracket.h' */
 /* modified 2022-11-06T12:45:56, size 3991   */
 
 class QCP_LIB_DECL QCPItemBracket : public QCPAbstractItem
@@ -6947,7 +6947,7 @@ class QCP_LIB_DECL QCPItemBracket : public QCPAbstractItem
   /// \endcond
 public:
   /*!
-    Defines the various visual shapes of the bracket item. The appearance can be further modified
+    Defines the various visual shapes of the bracket protos_item_. The appearance can be further modified
     by \ref setLength and \ref setPen.
     
     \see setStyle
@@ -6997,7 +6997,7 @@ protected:
 };
 Q_DECLARE_METATYPE(QCPItemBracket::BracketStyle)
 
-/* end of 'src/items/item-bracket.h' */
+/* end of 'src/items/protos_item_-bracket.h' */
 
 
 /* including file 'src/polar/radialaxis.h'  */

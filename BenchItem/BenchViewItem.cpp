@@ -12,40 +12,40 @@
 extern QRandomGenerator generator;
 
 BenchViewItem::BenchViewItem(QString _name, QCustomPlot* _plot, QLabel* _label, QPushButton* _button, ParamService* ps, QWidget *parent):
-    name(std::move(_name)),
-    Plot(_plot),
-    label(_label),
-    button(_button),
-    paramService(ps),
-    normalValueUpperBound(0),
-    normalValueLowerBound(0),
-    QObject(parent),
-    updateValueTimer(new QTimer(this))
+        item_name_(std::move(_name)),
+        Plot(_plot),
+        label(_label),
+        button(_button),
+        param_service_(ps),
+        normal_value_upperBound_(0),
+        normal_value_lower_bound_(0),
+        QObject(parent),
+        updateValueTimer(new QTimer(this))
 {
-    settingsDlg = new BenchItemSettingsDlg(name, paramService, true, parent);
+    settings_dlg_ = new BenchItemSettingsDlg(item_name_, param_service_, true, parent);
 
-    connect(settingsDlg, &BenchItemSettingsDlg::itemParamChanged, [this](QSharedPointer<ParamItem>& newItem){
-        if(!item.isNull())
-            disconnect(item.get(), nullptr, this, nullptr);
-        item = newItem;
-        connect(item.get(), &ParamItem::newParamValue, this, &BenchViewItem::updateView);
+    connect(settings_dlg_, &BenchItemSettingsDlg::itemParamChanged, [this](QSharedPointer<ParamItem>& newItem){
+        if(!protos_item_.isNull())
+            disconnect(protos_item_.get(), nullptr, this, nullptr);
+        protos_item_ = newItem;
+        connect(protos_item_.get(), &ParamItem::newParamValue, this, &BenchViewItem::updateView);
         resetPlotData();
     });
-    connect(settingsDlg, &BenchItemSettingsDlg::itemParamUnbinded, [this](){
-        disconnect(item.get(), nullptr, this, nullptr);
-        item.reset();
+    connect(settings_dlg_, &BenchItemSettingsDlg::itemParamUnbinded, [this](){
+        disconnect(protos_item_.get(), nullptr, this, nullptr);
+        protos_item_.reset();
         unsetPlotData();
     });
-    connect(settingsDlg, &BenchItemSettingsDlg::newUpdateValueBounds, [this](const QPair<double, double>& newPairValues){
-        normalValueLowerBound = newPairValues.first;
-        normalValueUpperBound = newPairValues.second;
+    connect(settings_dlg_, &BenchItemSettingsDlg::newUpdateValueBounds, [this](const QPair<double, double>& newPairValues){
+        normal_value_lower_bound_ = newPairValues.first;
+        normal_value_upperBound_ = newPairValues.second;
     });
     connect(button, &QPushButton::clicked, [this](){ itemButtonClicked(); });
     connect(updateValueTimer, &QTimer::timeout, [this]() { updateValueTimerFinished(); });
 
     iconDef = button->icon();
-    iconOK = QIcon(QString(":/item_icons/item_svg/%1%2.svg").arg(name, "_active"));
-    iconError = QIcon(QString(":/item_icons/item_svg/%1%2.svg").arg(name, "_error"));
+    iconOK = QIcon(QString(":/item_icons/item_svg/%1%2.svg").arg(item_name_, "_active"));
+    iconError = QIcon(QString(":/item_icons/item_svg/%1%2.svg").arg(item_name_, "_error"));
     generateColor();
     setPlot();
 }
@@ -82,7 +82,7 @@ void BenchViewItem::unsetPlotData(){
 
 void BenchViewItem::updateView(){
     processValue();
-    label->setText(QString::number(currentValueDouble, 'f', 2));
+    label->setText(QString::number(current_value_double_, 'f', 2));
     currentStatus ? label->setStyleSheet(QString("color:%1;").arg(active_color_hex))
                    :label->setStyleSheet(QString("color:%1;").arg(alert_color_hex));
     changeIconColor(currentStatus);
@@ -90,20 +90,20 @@ void BenchViewItem::updateView(){
 }
 
 void BenchViewItem::updatePlotData(){
-    lastKey = item->getLastValueDateTime().toSecsSinceEpoch();
+    lastKey = protos_item_->getLastValueDateTime().toSecsSinceEpoch();
     if(!graphData.isNull())
-        graphData->add(QCPGraphData(lastKey, currentValueDouble));
+        graphData->add(QCPGraphData(lastKey, current_value_double_));
     else return;
 }
 
 void BenchViewItem::processValue() {
-    currentValue = item->getValue();
+    currentValue_ = protos_item_->getValue();
     bool ok;
-    currentValueDouble = currentValue.toDouble(&ok);
+    current_value_double_ = currentValue_.toDouble(&ok);
     if(ok){
-        currentStatus = currentValueDouble >= normalValueLowerBound && currentValueDouble <= normalValueUpperBound;
-        updateValueTimer->start(item->getViewUpdateRate());
-        signalValueUpdated_itemName(name);
+        currentStatus = current_value_double_ >= normal_value_lower_bound_ && current_value_double_ <= normal_value_upperBound_;
+        updateValueTimer->start(protos_item_->getViewUpdateRate());
+        signalValueUpdated_itemName(item_name_);
     }
 }
 
@@ -118,24 +118,24 @@ void BenchViewItem::updateValueTimerFinished(){
 }
 
 void BenchViewItem::itemButtonClicked(){
-    settingsDlg->show();
-    settingsDlg->raise();
+    settings_dlg_->show();
+    settings_dlg_->raise();
 }
 
 QString BenchViewItem::getName(){
-    return name;
+    return item_name_;
 }
 
 QString BenchViewItem::getParamKey(){
-    return item->getTableName();
+    return protos_item_->getTableName();
 }
 
 std::tuple<double, double> BenchViewItem::getBounds() {
-    return { normalValueLowerBound, normalValueUpperBound };
+    return {normal_value_lower_bound_, normal_value_upperBound_ };
 }
 
 ParamItem* BenchViewItem::getParamPtr() const{
-    return item.get();
+    return protos_item_.get();
 }
 
 bool BenchViewItem::getCurrentStatus() const{
@@ -147,11 +147,11 @@ const QIcon &BenchViewItem::getErrorIcon() const{
 }
 
 QString BenchViewItem::getLastValueDateTimeStr() {
-    return item->getLastValueDateTime().toString("yyyy.MM.dd-hh:mm:ss");
+    return protos_item_->getLastValueDateTime().toString("yyyy.MM.dd-hh:mm:ss");
 }
 
 const QVariant &BenchViewItem::getCurrentValue() const {
-    return currentValue;
+    return currentValue_;
 }
 
 QPushButton *BenchViewItem::getButton() const{
@@ -161,31 +161,31 @@ QPushButton *BenchViewItem::getButton() const{
 void BenchViewItem::loadDataFromJson(const QJsonObject& jsonObject){
     if(jsonObject.empty())
         return;
-    name = jsonObject["ItemName"].toString();
-    normalValueLowerBound = jsonObject["NormalLowerBoundValue"].toInt();
-    normalValueUpperBound = jsonObject["NormalUpperBoundValue"].toInt();
-    currentValue = jsonObject["LastValue"].toDouble();
+    item_name_ = jsonObject["ItemName"].toString();
+    normal_value_lower_bound_ = jsonObject["NormalLowerBoundValue"].toInt();
+    normal_value_upperBound_ = jsonObject["NormalUpperBoundValue"].toInt();
+    currentValue_ = jsonObject["LastValue"].toDouble();
     currentStatus = jsonObject["LastStatus"].toBool();
-    settingsDlg->setUpdateValueBounds(QPair<double,double>(normalValueLowerBound, normalValueUpperBound));
+    settings_dlg_->setUpdateValueBounds(QPair<double,double>(normal_value_lower_bound_, normal_value_upperBound_));
     auto paramName = jsonObject["paramTableName"].toString();
     if(!paramName.isEmpty())
-        settingsDlg->setUpdateParamFromController(jsonObject["paramTableName"].toString());
+        settings_dlg_->setUpdateParamFromController(jsonObject["paramTableName"].toString());
 }
 
 QJsonObject BenchViewItem::saveDataToJSon(){
     QJsonObject jsonObject;
-    if(!item.isNull())
-        jsonObject["paramTableName"] = item->getTableName();
-    jsonObject["ItemName"] = name;
-    jsonObject["NormalLowerBoundValue"] = normalValueLowerBound;
-    jsonObject["NormalUpperBoundValue"] = normalValueUpperBound;
-    jsonObject["LastValue"] = currentValue.toString();
+    if(!protos_item_.isNull())
+        jsonObject["paramTableName"] = protos_item_->getTableName();
+    jsonObject["ItemName"] = item_name_;
+    jsonObject["NormalLowerBoundValue"] = normal_value_lower_bound_;
+    jsonObject["NormalUpperBoundValue"] = normal_value_upperBound_;
+    jsonObject["LastValue"] = currentValue_.toString();
     jsonObject["LastStatus"] = currentStatus;
     return jsonObject;
 }
 
 bool BenchViewItem::isProtosParamSelected(){
-    return !item.isNull();
+    return !protos_item_.isNull();
 }
 
 const QIcon &BenchViewItem::getIcon() const{

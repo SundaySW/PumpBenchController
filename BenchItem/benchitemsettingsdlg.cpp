@@ -178,7 +178,7 @@ void BenchItemSettingsDlg::getRates(){
     unsetActualValue(ui->updateRate_actualValue_label);
     unsetActualValue(ui->sendRate_actualValue_label);
     unsetActualValue(ui->controlRate_actualValue_label);
-//        param.getParamType() == UPDATE ? makeMsg(ProtosMessage::UPDATE_RATE) : makeMsg(ProtosMessage::CTRL_RATE);
+//        param.getParamType() == kUpdate ? makeMsg(ProtosMessage::UPDATE_RATE) : makeMsg(ProtosMessage::CTRL_RATE);
     paramService->sendServiceMsgReq(paramItem.get(), ProtosMessage::UPDATE_RATE);
     paramService->sendServiceMsgReq(paramItem.get(), ProtosMessage::CTRL_RATE);
     paramService->sendServiceMsgReq(paramItem.get(), ProtosMessage::SEND_RATE);
@@ -191,7 +191,7 @@ void BenchItemSettingsDlg::setCalib(){
     if(offsetText.length()){
         float offsetValue = offsetText.toFloat(&ok);
         if(ok) paramService->sendServiceMsgSet(paramItem.get(), offsetValue, ProtosMessage::OFFSET);
-        else QMessageBox::information(this, "Wrong Offset Value", "Should be float");
+        else QMessageBox::information(this, "Wrong Offset value_", "Should be float");
     }
     if(multText.length()){
         float multValue = multText.toFloat(&ok);
@@ -206,11 +206,11 @@ void BenchItemSettingsDlg::setRates(){
     bool ok;
     if(updateRateText.length()){
         short updateRateValue = updateRateText.toShort(&ok);
-//            if(ok) param.getParamType() == UPDATE ?
+//            if(ok) param.getParamType() == kUpdate ?
 //                makeMsg(ProtosMessage::UPDATE_RATE, updateRateValue, true)
 //                    : makeMsg(ProtosMessage::CTRL_RATE, updateRateValue, true);
         if(ok) paramService->sendServiceMsgSet(paramItem.get(), updateRateValue, ProtosMessage::UPDATE_RATE);
-        else QMessageBox::information(this, "Wrong Update Rate Value", "Should be short");
+        else QMessageBox::information(this, "Wrong Update Rate value_", "Should be short");
     }
     if(controlRateText.length()){
         short controlRateValue = controlRateText.toShort(&ok);

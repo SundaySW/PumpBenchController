@@ -5,7 +5,6 @@
 #ifndef PUMPBENCHCONTROLLER_BENCHVIEWITEM_H
 #define PUMPBENCHCONTROLLER_BENCHVIEWITEM_H
 
-
 #include <QLabel>
 #include <QPushButton>
 #include "Param_Item/ParamItem.h"
@@ -43,16 +42,17 @@ signals:
     void signalValueUpdated_itemName(const QString& name);
 
 protected:
-    double normalValueUpperBound,normalValueLowerBound;
-    BenchItemSettingsDlg* settingsDlg;
+    double normal_value_upperBound_;
+    double normal_value_lower_bound_;
+    BenchItemSettingsDlg* settings_dlg_;
     QColor color;
-    ParamService* paramService;
+    ParamService* param_service_;
 private:
-    QString name;
-    QSharedPointer<ParamItem> item;
-    QVariant currentValue;
+    QString item_name_;
+    QSharedPointer<ParamItem> protos_item_;
+    QVariant currentValue_;
     QIcon iconDef, iconOK, iconError;
-    double currentValueDouble;
+    double current_value_double_;
     bool currentStatus;
     bool livePlot = true;
 

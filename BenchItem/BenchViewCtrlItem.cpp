@@ -97,7 +97,7 @@ void BenchViewCtrlItem::pidButtonClicked(){
 
 void BenchViewCtrlItem::managePIDStatus(bool state){
     if(targetValueItem.isNull()){
-        showMsgBox("Target Value not set!");
+        showMsgBox("Target value_ not set!");
         pidEnabledBtn->setChecked(false);
         return;
     }
@@ -149,9 +149,9 @@ void BenchViewCtrlItem::receiveItem(QSharedPointer<BenchViewItem>& item){
 bool BenchViewCtrlItem::isOKReceivedNewParam(const QSharedPointer<BenchViewItem>& item){
     if(!item->isProtosParamSelected()){
         if(targetValueItem.isNull())
-            showMsgBox(QString("No Protos Param selected in %1 item").arg(item->getName()));
+            showMsgBox(QString("No Protos Param selected in %1 protos_item_").arg(item->getName()));
         else{
-            showMsgBox(QString("No Protos Param selected in %1 item\nStill using %2").arg(item->getName(), targetValueItem->getName()));
+            showMsgBox(QString("No Protos Param selected in %1 protos_item_\nStill using %2").arg(item->getName(), targetValueItem->getName()));
             targetParamCombobox->setCurrentText(targetValueItem->getName());
         }
         return false;
@@ -171,8 +171,8 @@ void BenchViewCtrlItem::checkPIDTargetValue(){
     auto[min, max] = targetValueItem->getBounds();
     auto currentItemValue = targetValueItem->getCurrentValue().toDouble();
     if(pidTargetValue > max || pidTargetValue < min){
-        showMsgBox(QString("Target value out of range for this item (bounds in settings diag)\n"
-                           "Value is set with currently received value! Please check!"));
+        showMsgBox(QString("Target value out of range for this protos_item_ (bounds in settings diag)\n"
+                           "value_ is set with currently received value! Please check!"));
         targetValueEdit->setText(QString("%1").arg(currentItemValue));
         pidTargetValue = currentItemValue;
     }

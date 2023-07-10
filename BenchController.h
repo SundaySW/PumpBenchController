@@ -22,19 +22,19 @@ public:
 private:
     Ui::MainWindow *ui;
     QMainWindow* mainWindow;
-    QMap<QString, QSharedPointer<BenchViewItem>> updateItemsMap;
-    QSharedPointer<BenchViewCtrlItem> controlItem;
-    QSharedPointer<ParamService> paramService;
-    QSharedPointer<SocketAdapter> socketAdapter;
-    ServerConnectionDlg* serverConnectionDlg;
-    QJsonObject jsonSaved;
-    bool hasError;
+    QMap<QString, QSharedPointer<BenchViewItem>> updateItemsMap_;
+    QSharedPointer<BenchViewCtrlItem> controlItem_;
+    QSharedPointer<ParamService> paramService_;
+    QSharedPointer<SocketAdapter> socketAdapter_;
+    ServerConnectionDlg* serverConnectionDlg_;
+    QJsonObject jsonSaved_;
+    bool hasError_;
     QIcon logOkIcon, logErrorIcon;
     QIcon statusOkIcon, statusErrorIcon, statusDefIcon;
     QIcon serverConnectedIcon, serverDisconnectedIcon;
-    QTimer* serverReconnectionTimer;
-    QTimer* plotReDrawTimer;
-    QSharedPointer<ScenariosDock> scenariosDock;
+    QTimer* serverReconnectionTimer_;
+    QTimer* plotReDrawTimer_;
+    QSharedPointer<ScenariosDock> scenariosDock_;
 
     void makeConnections();
     void statusBtnClicked();

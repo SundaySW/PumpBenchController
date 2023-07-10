@@ -442,7 +442,7 @@ void QCPPainter::setMode(QCPPainter::PainterMode mode, bool enabled)
 }
 
 /*!
-  Saves the painter (see QPainter::save). Since QCPPainter adds some new internal state to
+  Saves the painter (see QPainter::save). Since QCPPainter adds some new internal state_ to
   QPainter, the save/restore functions are reimplemented to also save/restore those members.
   
   \note this function hides the non-virtual base class implementation.
@@ -456,7 +456,7 @@ void QCPPainter::save()
 }
 
 /*!
-  Restores the painter (see QPainter::restore). Since QCPPainter adds some new internal state to
+  Restores the painter (see QPainter::restore). Since QCPPainter adds some new internal state_ to
   QPainter, the save/restore functions are reimplemented to also save/restore those members.
   
   \note this function hides the non-virtual base class implementation.
@@ -1023,7 +1023,7 @@ void QCPPaintBufferGlFbo::reallocateBuffer()
   of all plottables/items on the "main" layer, just move it above "main" with
   QCustomPlot::moveLayer.
 
-  The rendering order within one layer is simply by order of creation or insertion. The item
+  The rendering order within one layer is simply by order of creation or insertion. The protos_item_
   created last (or added last to the layer), is drawn on top of all other objects on that layer.
 
   When a layer is deleted, the objects on it are not deleted with it, but fall on the layer below
@@ -1061,7 +1061,7 @@ void QCPPaintBufferGlFbo::reallocateBuffer()
   
   Normally you shouldn't directly instantiate layers, use \ref QCustomPlot::addLayer instead.
   
-  \warning It is not checked that \a layerName is actually a unique layer name in \a parentPlot.
+  \warning It is not checked that \a layerName is actually a unique layer item_name_ in \a parentPlot.
   This check is only performed by \ref QCustomPlot::addLayer.
 */
 QCPLayer::QCPLayer(QCustomPlot *parentPlot, const QString &layerName) :
@@ -1072,7 +1072,7 @@ QCPLayer::QCPLayer(QCustomPlot *parentPlot, const QString &layerName) :
   mVisible(true),
   mMode(lmLogical)
 {
-  // Note: no need to make sure layerName is unique, because layer
+  // note_: no need to make sure layerName is unique, because layer
   // management is done with QCustomPlot functions.
 }
 
@@ -1113,7 +1113,7 @@ void QCPLayer::setVisible(bool visible)
   Layers which are set to \ref lmLogical (the default) are used only to define the rendering order
   and can't be replotted individually.
 
-  Note that each layer which is set to \ref lmBuffered requires additional paint buffers for the
+  note_ that each layer which is set to \ref lmBuffered requires additional paint buffers for the
   layers below, above and for the layer itself. This increases the memory consumption and
   (slightly) decreases the repainting speed because multiple paint buffers need to be joined. So
   you should carefully choose which layers benefit from having their own paint buffer. A typical
@@ -1279,7 +1279,7 @@ void QCPLayer::removeChild(QCPLayerable *layerable)
   visibility hierarchies in conjunction with the method \ref realVisibility. This way, layerables
   only get drawn if their parent layerables are visible, too.
   
-  Note that a parent layerable is not necessarily also the QObject parent for memory management.
+  note_ that a parent layerable is not necessarily also the QObject parent for memory management.
   Further, a layerable doesn't always have a parent layerable, so this function may return \c
   nullptr.
   
@@ -1294,9 +1294,9 @@ void QCPLayer::removeChild(QCPLayerable *layerable)
   \internal
   
   This function applies the default antialiasing setting to the specified \a painter, using the
-  function \ref applyAntialiasingHint. It is the antialiasing state the painter is put in, when
+  function \ref applyAntialiasingHint. It is the antialiasing state_ the painter is put in, when
   \ref draw is called on the layerable. If the layerable has multiple entities whose antialiasing
-  setting may be specified individually, this function should set the antialiasing state of the
+  setting may be specified individually, this function should set the antialiasing state_ of the
   most prominent entity. In this case however, the \ref draw function usually calls the specialized
   versions of this function before drawing each entity, effectively overriding the setting of the
   default antialiasing hint.
@@ -1315,7 +1315,7 @@ void QCPLayer::removeChild(QCPLayerable *layerable)
   respective layerable subclass.) Consequently it only has the normal
   QCPItemLine::applyDefaultAntialiasingHint. The \ref QCPItemLine::draw function doesn't need to
   care about setting any antialiasing states, because the default antialiasing hint is already set
-  on the painter when the \ref draw function is called, and that's the state it wants to draw the
+  on the painter when the \ref draw function is called, and that's the state_ it wants to draw the
   line with.
 */
 
@@ -1325,7 +1325,7 @@ void QCPLayer::removeChild(QCPLayerable *layerable)
   This function draws the layerable with the specified \a painter. It is only called by
   QCustomPlot, if the layerable is visible (\ref setVisible).
   
-  Before this function is called, the painter's antialiasing state is set via \ref
+  Before this function is called, the painter's antialiasing state_ is set via \ref
   applyDefaultAntialiasingHint, see the documentation there. Further, the clipping rectangle was
   set to \ref clipRect.
 */
@@ -1358,7 +1358,7 @@ void QCPLayer::removeChild(QCPLayerable *layerable)
   
   The layerable's parent layerable is set to \a parentLayerable, if provided. Direct layerable
   parents are mainly used to control visibility in a hierarchy of layerables. This means a
-  layerable is only drawn, if all its ancestor layerables are also visible. Note that \a
+  layerable is only drawn, if all its ancestor layerables are also visible. note_ that \a
   parentLayerable does not become the QObject-parent (for memory management) of this layerable, \a
   plot does. It is not uncommon to set the QObject-parent to something else in the constructors of
   QCPLayerable subclasses, to guarantee a working destruction hierarchy.
@@ -1414,9 +1414,9 @@ bool QCPLayerable::setLayer(QCPLayer *layer)
 }
 
 /*! \overload
-  Sets the layer of this layerable object by name
+  Sets the layer of this layerable object by item_name_
   
-  Returns true on success, i.e. if \a layerName is a valid layer name.
+  Returns true on success, i.e. if \a layerName is a valid layer item_name_.
 */
 bool QCPLayerable::setLayer(const QString &layerName)
 {
@@ -1430,7 +1430,7 @@ bool QCPLayerable::setLayer(const QString &layerName)
     return setLayer(layer);
   } else
   {
-    qDebug() << Q_FUNC_INFO << "there is no layer with name" << layerName;
+    qDebug() << Q_FUNC_INFO << "there is no layer with item_name_" << layerName;
     return false;
   }
 }
@@ -1438,7 +1438,7 @@ bool QCPLayerable::setLayer(const QString &layerName)
 /*!
   Sets whether this object will be drawn antialiased or not.
   
-  Note that antialiasing settings may be overridden by QCustomPlot::setAntialiasedElements and
+  note_ that antialiasing settings may be overridden by QCustomPlot::setAntialiasedElements and
   QCustomPlot::setNotAntialiasedElements.
 */
 void QCPLayerable::setAntialiased(bool enabled)
@@ -1478,7 +1478,7 @@ bool QCPLayerable::realVisibility() const
   obscured by such area objects, by clicking close to the lines (i.e. closer than
   0.99*selectionTolerance).
   
-  The actual setting of the selection state is not done by this function. This is handled by the
+  The actual setting of the selection state_ is not done by this function. This is handled by the
   parent QCustomPlot when the mouseReleaseEvent occurs, and the finally selected object is notified
   via the \ref selectEvent/\ref deselectEvent methods.
   
@@ -1514,7 +1514,7 @@ double QCPLayerable::selectTest(const QPointF &pos, bool onlySelectable, QVarian
   passed \c nullptr in the constructor. It can not be used to move a layerable from one QCustomPlot
   to another one.
   
-  Note that, unlike when passing a non \c nullptr parent plot in the constructor, this function
+  note_ that, unlike when passing a non \c nullptr parent plot in the constructor, this function
   does not make \a parentPlot the QObject-parent of this layerable. If you want this, call
   QObject::setParent(\a parentPlot) in addition to this function.
   
@@ -1542,7 +1542,7 @@ void QCPLayerable::initializeParentPlot(QCustomPlot *parentPlot)
 
 /*! \internal
   
-  Sets the parent layerable of this layerable to \a parentLayerable. Note that \a parentLayerable does not
+  Sets the parent layerable of this layerable to \a parentLayerable. note_ that \a parentLayerable does not
   become the QObject-parent (for memory management) of this layerable.
   
   The parent layerable has influence on the return value of the \ref realVisibility method. Only
@@ -1590,7 +1590,7 @@ bool QCPLayerable::moveToLayer(QCPLayer *layer, bool prepend)
 
 /*! \internal
 
-  Sets the QCPainter::setAntialiasing state on the provided \a painter, depending on the \a
+  Sets the QCPainter::setAntialiasing state_ on the provided \a painter, depending on the \a
   localAntialiased value as well as the overrides \ref QCustomPlot::setAntialiasedElements and \ref
   QCustomPlot::setNotAntialiasedElements. Which override enum this function takes into account is
   controlled via \a overrideElement.
@@ -1662,12 +1662,12 @@ QRect QCPLayerable::clipRect() const
 /*! \internal
   
   This event is called when the layerable shall be selected, as a consequence of a click by the
-  user. Subclasses should react to it by setting their selection state appropriately. The default
+  user. Subclasses should react to it by setting their selection state_ appropriately. The default
   implementation does nothing.
   
   \a event is the mouse event that caused the selection. \a additive indicates, whether the user
   was holding the multi-select-modifier while performing the selection (see \ref
-  QCustomPlot::setMultiSelectModifier). if \a additive is true, the selection state must be toggled
+  QCustomPlot::setMultiSelectModifier). if \a additive is true, the selection state_ must be toggled
   (i.e. become selected when unselected and unselected when selected).
   
   Every selectEvent is preceded by a call to \ref selectTest, which has returned positively (i.e.
@@ -1679,11 +1679,11 @@ QRect QCPLayerable::clipRect() const
   to do the calculation again to find out which part was actually clicked.
   
   \a selectionStateChanged is an output parameter. If the pointer is non-null, this function must
-  set the value either to true or false, depending on whether the selection state of this layerable
+  set the value either to true or false, depending on whether the selection state_ of this layerable
   was actually changed. For layerables that only are selectable as a whole and not in parts, this
   is simple: if \a additive is true, \a selectionStateChanged must also be set to true, because the
   selection toggles. If \a additive is false, \a selectionStateChanged is only set to true, if the
-  layerable was previously unselected and now is switched to the selected state.
+  layerable was previously unselected and now is switched to the selected state_.
   
   \see selectTest, deselectEvent
 */
@@ -1702,7 +1702,7 @@ void QCPLayerable::selectEvent(QMouseEvent *event, bool additive, const QVariant
   unsetting their selection appropriately.
   
   just as in \ref selectEvent, the output parameter \a selectionStateChanged (if non-null), must
-  return true or false when the selection state of this layerable has changed or not changed,
+  return true or false when the selection state_ of this layerable has changed or not changed,
   respectively.
   
   \see selectTest, selectEvent
@@ -2365,7 +2365,7 @@ bool QCPDataRange::contains(const QCPDataRange &other) const
   iteration shall be avoided. In this case, you should make sure to call \ref simplify after
   completing the operation.
   
-  Use \ref enforceType to bring the data selection into a state complying with the constraints for
+  Use \ref enforceType to bring the data selection into a state_ complying with the constraints for
   selections defined in \ref QCP::SelectionType.
   
   %QCustomPlot's \ref dataselection "data selection mechanism" is based on QCPDataSelection and
@@ -2393,7 +2393,7 @@ bool QCPDataRange::contains(const QCPDataRange &other) const
 /*! \fn QList<QCPDataRange> QCPDataSelection::dataRanges() const
   
   Returns all data ranges that make up the data selection. If the data selection is simplified (the
-  usual state of the selection, see \ref simplify), the ranges are sorted by ascending data point
+  usual state_ of the selection, see \ref simplify), the ranges are sorted by ascending data point
   index.
   
   \see dataRange
@@ -2428,7 +2428,7 @@ QCPDataSelection::QCPDataSelection(const QCPDataRange &range)
   Returns true if this selection is identical (contains the same data ranges with the same begin
   and end indices) to \a other.
 
-  Note that both data selections must be in simplified state (the usual state of the selection, see
+  note_ that both data selections must be in simplified state_ (the usual state_ of the selection, see
   \ref simplify) for this operator to return correct results.
 */
 bool QCPDataSelection::operator==(const QCPDataSelection &other) const
@@ -2536,7 +2536,7 @@ int QCPDataSelection::dataPointCount() const
 /*!
   Returns the data range with the specified \a index.
   
-  If the data selection is simplified (the usual state of the selection, see \ref simplify), the
+  If the data selection is simplified (the usual state_ of the selection, see \ref simplify), the
   ranges are sorted by ascending data point index.
   
   \see dataRangeCount
@@ -2811,19 +2811,19 @@ QCPDataSelection QCPDataSelection::inverse(const QCPDataRange &outerRange) const
   This signal is emitted while the selection rect interaction is ongoing and the \a rect has
   changed its size due to the user moving the mouse.
   
-  Note that \a rect may have a negative width or height, if the selection is being dragged to the
+  note_ that \a rect may have a negative width or height, if the selection is being dragged to the
   upper or left side of the selection rect origin.
 */
 
 /*! \fn void QCPSelectionRect::canceled(const QRect &rect, QInputEvent *event);
   
-  This signal is emitted when the selection interaction was cancelled. Note that \a event is \c
+  This signal is emitted when the selection interaction was cancelled. note_ that \a event is \c
   nullptr if the selection interaction was cancelled programmatically, by a call to \ref cancel.
   
   The user may cancel the selection interaction by pressing the escape key. In this case, \a event
   holds the respective input event.
   
-  Note that \a rect may have a negative width or height, if the selection is being dragged to the
+  note_ that \a rect may have a negative width or height, if the selection is being dragged to the
   upper or left side of the selection rect origin.
 */
 
@@ -2832,7 +2832,7 @@ QCPDataSelection QCPDataSelection::inverse(const QCPDataRange &outerRange) const
   This signal is emitted when the selection interaction was completed by the user releasing the
   mouse button.
     
-  Note that \a rect may have a negative width or height, if the selection is being dragged to the
+  note_ that \a rect may have a negative width or height, if the selection is being dragged to the
   upper or left side of the selection rect origin.
 */
 
@@ -3388,7 +3388,7 @@ void QCPLayoutElement::setSizeConstraintRect(SizeConstraintRect constraintRect)
   
   To unset the margin group of \a sides, set \a group to \c nullptr.
   
-  Note that margin groups only work for margin sides that are set to automatic (\ref
+  note_ that margin groups only work for margin sides that are set to automatic (\ref
   setAutoMargins).
   
   \see QCP::MarginSide
@@ -3626,7 +3626,7 @@ void QCPLayoutElement::layoutChanged()
   Returns the element in the cell with the given \a index. If \a index is invalid, returns \c
   nullptr.
   
-  Note that even if \a index is valid, the respective cell may be empty in some layouts (e.g.
+  note_ that even if \a index is valid, the respective cell may be empty in some layouts (e.g.
   QCPLayoutGrid), so this function may return \c nullptr in those cases. You may use this function
   to check whether a cell is empty or not.
   
@@ -3639,7 +3639,7 @@ void QCPLayoutElement::layoutChanged()
   
   If the \a index is invalid or the cell with that index is empty, returns \c nullptr.
   
-  Note that some layouts don't remove the respective cell right away but leave an empty cell after
+  note_ that some layouts don't remove the respective cell right away but leave an empty cell after
   successful removal of the layout element. To collapse empty cells, use \ref simplify.
   
   \see elementAt, take
@@ -3651,7 +3651,7 @@ void QCPLayoutElement::layoutChanged()
   
   If the \a element isn't in this layout, returns false.
   
-  Note that some layouts don't remove the respective cell right away but leave an empty cell after
+  note_ that some layouts don't remove the respective cell right away but leave an empty cell after
   successful removal of the layout element. To collapse empty cells, use \ref simplify.
   
   \see takeAt
@@ -3660,7 +3660,7 @@ void QCPLayoutElement::layoutChanged()
 /* end documentation of pure virtual functions */
 
 /*!
-  Creates an instance of QCPLayout and sets default values. Note that since QCPLayout
+  Creates an instance of QCPLayout and sets default values. note_ that since QCPLayout
   is an abstract base class, it can't be instantiated directly.
 */
 QCPLayout::QCPLayout()
@@ -3730,7 +3730,7 @@ void QCPLayout::simplify()
   invalid or points to an empty cell, returns false.
   
   This function internally uses \ref takeAt to remove the element from the layout and then deletes
-  the returned element. Note that some layouts don't remove the respective cell right away but leave an
+  the returned element. note_ that some layouts don't remove the respective cell right away but leave an
   empty cell after successful removal of the layout element. To collapse empty cells, use \ref
   simplify.
   
@@ -3751,7 +3751,7 @@ bool QCPLayout::removeAt(int index)
   layout, returns false.
   
   This function internally uses \ref takeAt to remove the element from the layout and then deletes
-  the element. Note that some layouts don't remove the respective cell right away but leave an
+  the element. note_ that some layouts don't remove the respective cell right away but leave an
   empty cell after successful removal of the layout element. To collapse empty cells, use \ref
   simplify.
   
@@ -3824,7 +3824,7 @@ void QCPLayout::updateLayout()
   Further, if \a el didn't previously have a parent plot, calls \ref
   QCPLayerable::initializeParentPlot on \a el to set the paret plot.
   
-  This method is used by subclass specific methods that add elements to the layout. Note that this
+  This method is used by subclass specific methods that add elements to the layout. note_ that this
   method only changes properties in \a el. The removal from the old layout and the insertion into
   the new layout must be done additionally.
 */
@@ -3849,7 +3849,7 @@ void QCPLayout::adoptElement(QCPLayoutElement *el)
   QCustomPlot.
   
   This method is used by subclass specific methods that remove elements from the layout (e.g. \ref
-  take or \ref takeAt). Note that this method only changes properties in \a el. The removal from
+  take or \ref takeAt). note_ that this method only changes properties in \a el. The removal from
   the old layout must be done additionally.
 */
 void QCPLayout::releaseElement(QCPLayoutElement *el)
@@ -3859,7 +3859,7 @@ void QCPLayout::releaseElement(QCPLayoutElement *el)
     el->mParentLayout = nullptr;
     el->setParentLayerable(nullptr);
     el->setParent(mParentPlot);
-    // Note: Don't initializeParentPlot(0) here, because layout element will stay in same parent plot
+    // note_: Don't initializeParentPlot(0) here, because layout element will stay in same parent plot
   } else
     qDebug() << Q_FUNC_INFO << "Null element passed";
 }
@@ -4363,7 +4363,7 @@ void QCPLayoutGrid::setRowSpacing(int pixels)
   rearrange set to true (the actual fill order doesn't need to be changed for the rearranging to be
   done).
 
-  Note that the method \ref addElement(int row, int column, QCPLayoutElement *element) with
+  note_ that the method \ref addElement(int row, int column, QCPLayoutElement *element) with
   explicitly stated row and column is not subject to wrapping and can place elements even beyond
   the specified wrapping point.
 
@@ -4393,7 +4393,7 @@ void QCPLayoutGrid::setWrap(int count)
   If \a rearrange is false, the current element arrangement is not changed, which means the
   linear indexes change (because the linear index is dependent on the fill order).
 
-  Note that the method \ref addElement(int row, int column, QCPLayoutElement *element) with
+  note_ that the method \ref addElement(int row, int column, QCPLayoutElement *element) with
   explicitly stated row and column is not subject to wrapping and can place elements even beyond
   the specified wrapping point.
 
@@ -4433,7 +4433,7 @@ void QCPLayoutGrid::setFillOrder(FillOrder order, bool rearrange)
   
   Newly created cells are empty, new rows and columns have the stretch factor 1.
   
-  Note that upon a call to \ref addElement, the layout is expanded automatically to contain the
+  note_ that upon a call to \ref addElement, the layout is expanded automatically to contain the
   specified row and column, using this function.
   
   \see simplify
@@ -4617,7 +4617,7 @@ void QCPLayoutGrid::updateLayout()
 /*!
   \seebaseclassmethod
 
-  Note that the association of the linear \a index to the row/column based cells depends on the
+  note_ that the association of the linear \a index to the row/column based cells depends on the
   current setting of \ref setFillOrder.
 
   \see rowColToIndex
@@ -4636,7 +4636,7 @@ QCPLayoutElement *QCPLayoutGrid::elementAt(int index) const
 /*!
   \seebaseclassmethod
 
-  Note that the association of the linear \a index to the row/column based cells depends on the
+  note_ that the association of the linear \a index to the row/column based cells depends on the
   current setting of \ref setFillOrder.
 
   \see rowColToIndex
@@ -4980,7 +4980,7 @@ void QCPLayoutInset::setInsetAlignment(int index, Qt::Alignment alignment)
   will span the entire layout. An inset with rect (0.6, 0.1, 0.35, 0.35) will be in the top right
   corner of the layout, with 35% width and height of the parent layout.
   
-  Note that the minimum and maximum sizes of the embedded element (\ref
+  note_ that the minimum and maximum sizes of the embedded element (\ref
   QCPLayoutElement::setMinimumSize, \ref QCPLayoutElement::setMaximumSize) are enforced.
 */
 void QCPLayoutInset::setInsetRect(int index, const QRectF &rect)
@@ -5172,17 +5172,17 @@ void QCPLayoutInset::addElement(QCPLayoutElement *element, const QRectF &rect)
   
   \image html QCPLineEnding.png "The various ending styles currently supported"
   
-  For every ending a line-like item has, an instance of this class exists. For example, QCPItemLine
+  For every ending a line-like protos_item_ has, an instance of this class exists. For example, QCPItemLine
   has two endings which can be set with QCPItemLine::setHead and QCPItemLine::setTail.
  
   The styles themselves are defined via the enum QCPLineEnding::EndingStyle. Most decorations can
   be modified regarding width and length, see \ref setWidth and \ref setLength. The direction of
-  the ending decoration (e.g. direction an arrow is pointing) is controlled by the line-like item.
+  the ending decoration (e.g. direction an arrow is pointing) is controlled by the line-like protos_item_.
   For example, when both endings of a QCPItemLine are set to be arrows, they will point to opposite
   directions, e.g. "outward". This can be changed by \ref setInverted, which would make the
   respective arrow point inward.
   
-  Note that due to the overloaded QCPLineEnding constructor, you may directly specify a
+  note_ that due to the overloaded QCPLineEnding constructor, you may directly specify a
   QCPLineEnding::EndingStyle where actually a QCPLineEnding is expected, e.g.
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcplineending-sethead
 */
@@ -5243,7 +5243,7 @@ void QCPLineEnding::setLength(double length)
   Sets whether the ending decoration shall be inverted. For example, an arrow decoration will point
   inward when \a inverted is set to true.
 
-  Note that also the \a width direction is inverted. For symmetrical ending styles like arrows or
+  note_ that also the \a width direction is inverted. For symmetrical ending styles like arrows or
   discs, this doesn't make a difference. However, asymmetric styles like \ref esHalfBar are
   affected by it, which can be used to control to which side the half bar points to.
 */
@@ -5255,7 +5255,7 @@ void QCPLineEnding::setInverted(bool inverted)
 /*! \internal
   
   Returns the maximum pixel radius the ending decoration might cover, starting from the position
-  the decoration is drawn at (typically a line ending/\ref QCPItemPosition of an item).
+  the decoration is drawn at (typically a line ending/\ref QCPItemPosition of an protos_item_).
   
   This is relevant for clipping. Only omit painting of the decoration when the position where the
   decoration is supposed to be drawn is farther away from the clipping rect than the returned
@@ -6142,7 +6142,7 @@ void QCPAxisTicker::setTickStepStrategy(QCPAxisTicker::TickStepStrategy strategy
 }
 
 /*!
-  Sets how many ticks this ticker shall aim to generate across the axis range. Note that \a count
+  Sets how many ticks this ticker shall aim to generate across the axis range. note_ that \a count
   is not guaranteed to be matched exactly, as generating readable tick intervals may conflict with
   the requested number of ticks.
 
@@ -6229,7 +6229,7 @@ double QCPAxisTicker::getTickStep(const QCPRange &range)
   Takes the \a tickStep, i.e. the distance between two consecutive ticks, and returns
   an appropriate number of sub ticks for that specific tick step.
   
-  Note that a returned sub tick count of e.g. 4 will split each tick interval into 5 sections.
+  note_ that a returned sub tick count of e.g. 4 will split each tick interval into 5 sections.
 */
 int QCPAxisTicker::getSubTickCount(double tickStep)
 {
@@ -6540,12 +6540,12 @@ QCPAxisTickerDateTime::QCPAxisTickerDateTime() :
   <table>
     <tr><td>\c d</td><td>The day as a number without a leading zero (1 to 31)</td></tr>
     <tr><td>\c dd</td><td>The day as a number with a leading zero (01 to 31)</td></tr>
-    <tr><td>\c ddd</td><td>The abbreviated localized day name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name, i.e. QLocale::system().</td></tr>
-    <tr><td>\c dddd</td><td>The long localized day name (e.g. 'Monday' to 'Sunday'). Uses the system locale to localize the name, i.e. QLocale::system().</td></tr>
+    <tr><td>\c ddd</td><td>The abbreviated localized day item_name_ (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the item_name_, i.e. QLocale::system().</td></tr>
+    <tr><td>\c dddd</td><td>The long localized day item_name_ (e.g. 'Monday' to 'Sunday'). Uses the system locale to localize the item_name_, i.e. QLocale::system().</td></tr>
     <tr><td>\c M</td><td>The month as a number without a leading zero (1 to 12)</td></tr>
     <tr><td>\c MM</td><td>The month as a number with a leading zero (01 to 12)</td></tr>
-    <tr><td>\c MMM</td><td>The abbreviated localized month name (e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name, i.e. QLocale::system().</td></tr>
-    <tr><td>\c MMMM</td><td>The long localized month name (e.g. 'January' to 'December'). Uses the system locale to localize the name, i.e. QLocale::system().</td></tr>
+    <tr><td>\c MMM</td><td>The abbreviated localized month item_name_ (e.g. 'Jan' to 'Dec'). Uses the system locale to localize the item_name_, i.e. QLocale::system().</td></tr>
+    <tr><td>\c MMMM</td><td>The long localized month item_name_ (e.g. 'January' to 'December'). Uses the system locale to localize the item_name_, i.e. QLocale::system().</td></tr>
     <tr><td>\c yy</td><td>The year as a two digit number (00 to 99)</td></tr>
     <tr><td>\c yyyy</td><td>The year as a four digit number. If the year is negative, a minus sign is prepended, making five characters.</td></tr>
     <tr><td>\c h</td><td>The hour without a leading zero (0 to 23 or 1 to 12 if AM/PM display)</td></tr>
@@ -6582,7 +6582,7 @@ void QCPAxisTickerDateTime::setDateTimeFormat(const QString &format)
   to <tt>Qt::UTC</tt>.
   
   Tick labels corresponding to other time zones can be achieved with \ref setTimeZone (which sets
-  \a spec to \c Qt::TimeZone internally). Note that if \a spec is afterwards set to not be \c
+  \a spec to \c Qt::TimeZone internally). note_ that if \a spec is afterwards set to not be \c
   Qt::TimeZone again, the \ref setTimeZone setting will be ignored accordingly.
   
   \see setDateTimeFormat, setTimeZone
@@ -6637,7 +6637,7 @@ void QCPAxisTickerDateTime::setTickOrigin(const QDateTime &origin)
   Returns a sensible tick step with intervals appropriate for a date-time-display, such as weekly,
   monthly, bi-monthly, etc.
   
-  Note that this tick step isn't used exactly when generating the tick vector in \ref
+  note_ that this tick step isn't used exactly when generating the tick vector in \ref
   createTickVector, but only as a guiding value requiring some correction for each individual tick
   interval. Otherwise this would lead to unintuitive date displays, e.g. jumping between first day
   in the month to the last day in the previous month from tick to tick, due to the non-uniform
@@ -7103,7 +7103,7 @@ void QCPAxisTickerTime::replaceUnit(QString &text, QCPAxisTickerTime::TimeUnit u
   
   Another case is when a certain number has a special meaning and axis ticks should only appear at
   multiples of that value. In this case you might also want to consider \ref QCPAxisTickerPi
-  because despite the name it is not limited to only pi symbols/values.
+  because despite the item_name_ it is not limited to only pi symbols/values.
   
   The ticker can be created and assigned to an axis like this:
   \snippet documentation/doc-image-generator/mainwindow.cpp axistickerfixed-creation
@@ -7714,7 +7714,7 @@ QString QCPAxisTickerPi::unicodeSubscript(int number) const
   The ticker can be created and assigned to an axis like this:
   \snippet documentation/doc-image-generator/mainwindow.cpp axistickerlog-creation
   
-  Note that the nature of logarithmic ticks imply that there exists a smallest possible tick step,
+  note_ that the nature of logarithmic ticks imply that there exists a smallest possible tick step,
   corresponding to one multiplication by the log base. If the user zooms in further than that, no
   new ticks would appear, leading to very sparse or even no axis ticks on the axis. To prevent this
   situation, this ticker falls back to regular tick generation if the axis range would be covered
@@ -7751,7 +7751,7 @@ void QCPAxisTickerLog::setLogBase(double base)
   linearly to provide a better visual guide, so the sub tick density increases toward the higher
   tick.
   
-  Note that \a subTicks is the number of sub ticks (not sub intervals) in one tick interval. So in
+  note_ that \a subTicks is the number of sub ticks (not sub intervals) in one tick interval. So in
   the case of logarithm base 10 an intuitive sub tick spacing would be achieved with eight sub
   ticks (the default). This means e.g. between the ticks 10 and 100 there will be eight ticks,
   namely at 20, 30, 40, 50, 60, 70, 80 and 90.
@@ -7932,7 +7932,7 @@ void QCPGrid::setZeroLinePen(const QPen &pen)
   A convenience function to easily set the QPainter::Antialiased hint on the provided \a painter
   before drawing the major grid lines.
 
-  This is the antialiasing state the painter passed to the \ref draw method is in by default.
+  This is the antialiasing state_ the painter passed to the \ref draw method is in by default.
   
   This function takes into account the local setting of the antialiasing flag as well as the
   overrides set with \ref QCustomPlot::setAntialiasedElements and \ref
@@ -8179,7 +8179,7 @@ void QCPGrid::drawSubGridLines(QCPPainter *painter) const
 
 /*! \fn void QCPAxis::selectionChanged(QCPAxis::SelectableParts selection)
   
-  This signal is emitted when the selection state of this axis has changed, either by user interaction
+  This signal is emitted when the selection state_ of this axis has changed, either by user interaction
   or by a direct call to \ref setSelectedParts.
 */
 
@@ -8355,7 +8355,7 @@ QCPLineEnding QCPAxis::upperEnding() const
 /*!
   Sets whether the axis uses a linear scale or a logarithmic scale.
   
-  Note that this method controls the coordinate transformation. For logarithmic scales, you will
+  note_ that this method controls the coordinate transformation. For logarithmic scales, you will
   likely also want to use a logarithmic tick spacing and labeling, which can be achieved by setting
   the axis ticker to an instance of \ref QCPAxisTickerLog :
   
@@ -8424,16 +8424,16 @@ void QCPAxis::setSelectableParts(const SelectableParts &selectable)
 }
 
 /*!
-  Sets the selected state of the respective axis parts described by \ref SelectablePart. When a part
+  Sets the selected state_ of the respective axis parts described by \ref SelectablePart. When a part
   is selected, it uses a different pen/font.
   
   The entire selection mechanism for axes is handled automatically when \ref
   QCustomPlot::setInteractions contains iSelectAxes. You only need to call this function when you
-  wish to change the selection state manually.
+  wish to change the selection state_ manually.
   
-  This function can change the selection state of a part, independent of the \ref setSelectableParts setting.
+  This function can change the selection state_ of a part, independent of the \ref setSelectableParts setting.
   
-  emits the \ref selectionChanged signal when \a selected is different from the previous selection state.
+  emits the \ref selectionChanged signal when \a selected is different from the previous selection state_.
   
   \see SelectablePart, setSelectableParts, selectTest, setSelectedBasePen, setSelectedTickPen, setSelectedSubTickPen,
   setSelectedTickLabelFont, setSelectedLabelFont, setSelectedTickLabelColor, setSelectedLabelColor
@@ -8546,7 +8546,7 @@ void QCPAxis::setRangeUpper(double upper)
   axes increase left to right, on vertical axes bottom to top. When \a reversed is set to true, the
   direction of increasing values is inverted.
 
-  Note that the range and data interface stays the same for reversed axes, e.g. the \a lower part
+  note_ that the range and data interface stays the same for reversed axes, e.g. the \a lower part
   of the \ref setRange interface will still reference the mathematically smaller number than the \a
   upper part.
 */
@@ -8580,7 +8580,7 @@ void QCPAxis::setTicker(QSharedPointer<QCPAxisTicker> ticker)
 /*!
   Sets whether tick marks are displayed.
 
-  Note that setting \a show to false does not imply that tick labels are invisible, too. To achieve
+  note_ that setting \a show to false does not imply that tick labels are invisible, too. To achieve
   that, see \ref setTickLabels.
   
   \see setSubTicks
@@ -9080,7 +9080,7 @@ void QCPAxis::setSelectedSubTickPen(const QPen &pen)
   styles.
   
   For horizontal axes, this method refers to the left ending, for vertical axes the bottom ending.
-  Note that this meaning does not change when the axis range is reversed with \ref
+  note_ that this meaning does not change when the axis range is reversed with \ref
   setRangeReversed.
   
   \see setUpperEnding
@@ -9095,7 +9095,7 @@ void QCPAxis::setLowerEnding(const QCPLineEnding &ending)
   styles.
   
   For horizontal axes, this method refers to the right ending, for vertical axes the top ending.
-  Note that this meaning does not change when the axis range is reversed with \ref
+  note_ that this meaning does not change when the axis range is reversed with \ref
   setRangeReversed.
   
   \see setLowerEnding
@@ -9186,7 +9186,7 @@ void QCPAxis::scaleRange(double factor, double center)
   axis rect has.
 
   This is an operation that changes the range of this axis once, it doesn't fix the scale ratio
-  indefinitely. Note that calling this function in the constructor of the QCustomPlot's parent
+  indefinitely. note_ that calling this function in the constructor of the QCustomPlot's parent
   won't have the desired effect, since the widget dimensions aren't defined yet, and a resizeEvent
   will follow.
 */
@@ -9352,7 +9352,7 @@ double QCPAxis::coordToPixel(double value) const
 /*!
   Returns the part of the axis that is hit by \a pos (in pixels). The return value of this function
   is independent of the user-selectable parts defined with \ref setSelectableParts. Further, this
-  function does not change the current selection state of the axis.
+  function does not change the current selection state_ of the axis.
   
   If the axis is not visible (\ref setVisible), this function always returns \ref spNone.
   
@@ -9425,7 +9425,7 @@ QList<QCPGraph*> QCPAxis::graphs() const
 }
 
 /*!
-  Returns a list of all the items that are associated with this axis. An item is considered
+  Returns a list of all the items that are associated with this axis. An protos_item_ is considered
   associated with an axis if at least one of its positions uses the axis as key or value axis.
   
   \see plottables, graphs
@@ -9654,7 +9654,7 @@ void QCPAxis::wheelEvent(QWheelEvent *event)
   A convenience function to easily set the QPainter::Antialiased hint on the provided \a painter
   before drawing axis lines.
 
-  This is the antialiasing state the painter passed to the \ref draw method is in by default.
+  This is the antialiasing state_ the painter passed to the \ref draw method is in by default.
   
   This function takes into account the local setting of the antialiasing flag as well as the
   overrides set with \ref QCustomPlot::setAntialiasedElements and \ref
@@ -9702,7 +9702,7 @@ void QCPAxis::draw(QCPPainter *painter)
   }
   
   // transfer all properties of this axis to QCPAxisPainterPrivate which it needs to draw the axis.
-  // Note that some axis painter properties are already set by direct feed-through with QCPAxis setters
+  // note_ that some axis painter properties are already set by direct feed-through with QCPAxis setters
   mAxisPainter->type = mAxisType;
   mAxisPainter->basePen = getBasePen();
   mAxisPainter->labelFont = getLabelFont();
@@ -9743,7 +9743,7 @@ void QCPAxis::setupTickVectors()
 
 /*! \internal
   
-  Returns the pen that is used to draw the axis base line. Depending on the selection state, this
+  Returns the pen that is used to draw the axis base line. Depending on the selection state_, this
   is either mSelectedBasePen or mBasePen.
 */
 QPen QCPAxis::getBasePen() const
@@ -9753,7 +9753,7 @@ QPen QCPAxis::getBasePen() const
 
 /*! \internal
   
-  Returns the pen that is used to draw the (major) ticks. Depending on the selection state, this
+  Returns the pen that is used to draw the (major) ticks. Depending on the selection state_, this
   is either mSelectedTickPen or mTickPen.
 */
 QPen QCPAxis::getTickPen() const
@@ -9763,7 +9763,7 @@ QPen QCPAxis::getTickPen() const
 
 /*! \internal
   
-  Returns the pen that is used to draw the subticks. Depending on the selection state, this
+  Returns the pen that is used to draw the subticks. Depending on the selection state_, this
   is either mSelectedSubTickPen or mSubTickPen.
 */
 QPen QCPAxis::getSubTickPen() const
@@ -9773,7 +9773,7 @@ QPen QCPAxis::getSubTickPen() const
 
 /*! \internal
   
-  Returns the font that is used to draw the tick labels. Depending on the selection state, this
+  Returns the font that is used to draw the tick labels. Depending on the selection state_, this
   is either mSelectedTickLabelFont or mTickLabelFont.
 */
 QFont QCPAxis::getTickLabelFont() const
@@ -9783,7 +9783,7 @@ QFont QCPAxis::getTickLabelFont() const
 
 /*! \internal
   
-  Returns the font that is used to draw the axis label. Depending on the selection state, this
+  Returns the font that is used to draw the axis label. Depending on the selection state_, this
   is either mSelectedLabelFont or mLabelFont.
 */
 QFont QCPAxis::getLabelFont() const
@@ -9793,7 +9793,7 @@ QFont QCPAxis::getLabelFont() const
 
 /*! \internal
   
-  Returns the color that is used to draw the tick labels. Depending on the selection state, this
+  Returns the color that is used to draw the tick labels. Depending on the selection state_, this
   is either mSelectedTickLabelColor or mTickLabelColor.
 */
 QColor QCPAxis::getTickLabelColor() const
@@ -9803,7 +9803,7 @@ QColor QCPAxis::getTickLabelColor() const
 
 /*! \internal
   
-  Returns the color that is used to draw the axis label. Depending on the selection state, this
+  Returns the color that is used to draw the axis label. Depending on the selection state_, this
   is either mSelectedLabelColor or mLabelColor.
 */
 QColor QCPAxis::getLabelColor() const
@@ -9851,7 +9851,7 @@ int QCPAxis::calculateMargin()
     }
   }
   // transfer all properties of this axis to QCPAxisPainterPrivate which it needs to calculate the size.
-  // Note that some axis painter properties are already set by direct feed-through with QCPAxis setters
+  // note_ that some axis painter properties are already set by direct feed-through with QCPAxis setters
   mAxisPainter->type = mAxisType;
   mAxisPainter->labelFont = getLabelFont();
   mAxisPainter->label = mLabel;
@@ -10602,7 +10602,7 @@ void QCPAxisPainterPrivate::getMaxTickLabelSize(const QFont &font, const QString
   
   For pixmaps, you call \ref setPixmap with the desired QPixmap. Alternatively you can use the
   constructor that takes a QPixmap. The scatter shape will automatically be set to \ref ssPixmap.
-  Note that \ref setSize does not influence the appearance of the pixmap.
+  note_ that \ref setSize does not influence the appearance of the pixmap.
 */
 
 /* start documentation of inline functions */
@@ -10782,7 +10782,7 @@ void QCPScatterStyle::setSize(double size)
 /*!
   Sets the shape to \a shape.
   
-  Note that the calls \ref setPixmap and \ref setCustomPath automatically set the shape to \ref
+  note_ that the calls \ref setPixmap and \ref setCustomPath automatically set the shape to \ref
   ssPixmap and \ref ssCustom, respectively.
   
   \see setSize
@@ -10808,7 +10808,7 @@ void QCPScatterStyle::setPen(const QPen &pen)
 }
 
 /*!
-  Sets the brush that will be used to fill scatter points to \a brush. Note that not all scatter
+  Sets the brush that will be used to fill scatter points to \a brush. note_ that not all scatter
   shapes have fillable areas. For example, \ref ssPlus does not while \ref ssCircle does.
   
   \see setPen
@@ -10821,7 +10821,7 @@ void QCPScatterStyle::setBrush(const QBrush &brush)
 /*!
   Sets the pixmap that will be drawn as scatter point to \a pixmap.
   
-  Note that \ref setSize does not influence the appearance of the pixmap.
+  note_ that \ref setSize does not influence the appearance of the pixmap.
   
   The scatter shape is automatically set to \ref ssPixmap.
 */
@@ -11207,7 +11207,7 @@ bool QCPSelectionDecorator::registerWithPlottable(QCPAbstractPlottable *plottabl
 /*! \class QCPAbstractPlottable
   \brief The abstract base class for all data representing objects in a plot.
 
-  It defines a very basic interface like name, pen, brush, visibility etc. Since this class is
+  It defines a very basic interface like item_name_, pen, brush, visibility etc. Since this class is
   abstract, it can't be instantiated. Use one of the subclasses or create a subclass yourself to
   create new ways of displaying data (see "Creating own plottables" below). Plottables that display
   one-dimensional data (i.e. data points have a single key dimension and one or multiple values at
@@ -11255,7 +11255,7 @@ bool QCPSelectionDecorator::registerWithPlottable(QCPAbstractPlottable *plottabl
     <td>A pointer to the parent QCustomPlot instance. The parent plot is inferred from the axes that are passed in the constructor.</td>
   </tr><tr>
     <td>QString \b mName</td>
-    <td>The name of the plottable.</td>
+    <td>The item_name_ of the plottable.</td>
   </tr><tr>
     <td>QPen \b mPen</td>
     <td>The generic pen of the plottable. You should use this pen for the most prominent data representing lines in the plottable
@@ -11280,7 +11280,7 @@ bool QCPSelectionDecorator::registerWithPlottable(QCPAbstractPlottable *plottabl
         by QCPAbstractPlottable automatically.</td>
   </tr><tr>
     <td>\ref QCPDataSelection \b mSelection</td>
-    <td>Holds the current selection state of the plottable's data, i.e. the selected data ranges (\ref QCPDataRange).</td>
+    <td>Holds the current selection state_ of the plottable's data, i.e. the selected data ranges (\ref QCPDataRange).</td>
   </tr>
   </table>
 */
@@ -11328,7 +11328,7 @@ bool QCPSelectionDecorator::registerWithPlottable(QCPAbstractPlottable *plottabl
   \internal
   
   called by QCPLegend::draw (via QCPPlottableLegendItem::draw) to create a graphical representation
-  of this plottable inside \a rect, next to the plottable name.
+  of this plottable inside \a rect, next to the plottable item_name_.
   
   The passed \a painter has its cliprect set to \a rect, so painting outside of \a rect won't
   appear outside the legend icon border.
@@ -11344,7 +11344,7 @@ bool QCPSelectionDecorator::registerWithPlottable(QCPAbstractPlottable *plottabl
   QCP::sdBoth (default). \a foundRange is an output parameter that indicates whether a range could
   be found or not. If this is false, you shouldn't use the returned range (e.g. no points in data).
 
-  Note that \a foundRange is not the same as \ref QCPRange::validRange, since the range returned by
+  note_ that \a foundRange is not the same as \ref QCPRange::validRange, since the range returned by
   this function may have size zero (e.g. when there is only one data point). In this case \a
   foundRange would return true, but the returned range is not a valid range in terms of \ref
   QCPRange::validRange.
@@ -11366,7 +11366,7 @@ bool QCPSelectionDecorator::registerWithPlottable(QCPAbstractPlottable *plottabl
   If \a inKeyRange has both lower and upper bound set to zero (is equal to <tt>QCPRange()</tt>),
   all data points are considered, without any restriction on the keys.
 
-  Note that \a foundRange is not the same as \ref QCPRange::validRange, since the range returned by
+  note_ that \a foundRange is not the same as \ref QCPRange::validRange, since the range returned by
   this function may have size zero (e.g. when there is only one data point). In this case \a
   foundRange would return true, but the returned range is not a valid range in terms of \ref
   QCPRange::validRange.
@@ -11379,7 +11379,7 @@ bool QCPSelectionDecorator::registerWithPlottable(QCPAbstractPlottable *plottabl
 
 /*! \fn void QCPAbstractPlottable::selectionChanged(bool selected)
   
-  This signal is emitted when the selection state of this plottable has changed, either by user
+  This signal is emitted when the selection state_ of this plottable has changed, either by user
   interaction or by a direct call to \ref setSelection. The parameter \a selected indicates whether
   there are any points selected or not.
   
@@ -11388,7 +11388,7 @@ bool QCPSelectionDecorator::registerWithPlottable(QCPAbstractPlottable *plottabl
 
 /*! \fn void QCPAbstractPlottable::selectionChanged(const QCPDataSelection &selection)
   
-  This signal is emitted when the selection state of this plottable has changed, either by user
+  This signal is emitted when the selection state_ of this plottable has changed, either by user
   interaction or by a direct call to \ref setSelection. The parameter \a selection holds the
   currently selected data ranges.
   
@@ -11446,7 +11446,7 @@ QCPAbstractPlottable::~QCPAbstractPlottable()
 }
 
 /*!
-   The name is the textual representation of this plottable as it is displayed in the legend
+   The item_name_ is the textual representation of this plottable as it is displayed in the legend
    (\ref QCPLegend). It may contain any UTF-8 characters, including newlines.
 */
 void QCPAbstractPlottable::setName(const QString &name)
@@ -11457,7 +11457,7 @@ void QCPAbstractPlottable::setName(const QString &name)
 /*!
   Sets whether fills of this plottable are drawn antialiased or not.
   
-  Note that this setting may be overridden by \ref QCustomPlot::setAntialiasedElements and \ref
+  note_ that this setting may be overridden by \ref QCustomPlot::setAntialiasedElements and \ref
   QCustomPlot::setNotAntialiasedElements.
 */
 void QCPAbstractPlottable::setAntialiasedFill(bool enabled)
@@ -11468,7 +11468,7 @@ void QCPAbstractPlottable::setAntialiasedFill(bool enabled)
 /*!
   Sets whether the scatter symbols of this plottable are drawn antialiased or not.
   
-  Note that this setting may be overridden by \ref QCustomPlot::setAntialiasedElements and \ref
+  note_ that this setting may be overridden by \ref QCustomPlot::setAntialiasedElements and \ref
   QCustomPlot::setNotAntialiasedElements.
 */
 void QCPAbstractPlottable::setAntialiasedScatters(bool enabled)
@@ -11543,14 +11543,14 @@ void QCPAbstractPlottable::setValueAxis(QCPAxis *axis)
   
   The entire selection mechanism for plottables is handled automatically when \ref
   QCustomPlot::setInteractions contains iSelectPlottables. You only need to call this function when
-  you wish to change the selection state programmatically.
+  you wish to change the selection state_ programmatically.
   
   Using \ref setSelectable you can further specify for each plottable whether and to which
   granularity it is selectable. If \a selection is not compatible with the current \ref
   QCP::SelectionType set via \ref setSelectable, the resulting selection will be adjusted
   accordingly (see \ref QCPDataSelection::enforceType).
   
-  emits the \ref selectionChanged signal when \a selected is different from the previous selection state.
+  emits the \ref selectionChanged signal when \a selected is different from the previous selection state_.
   
   \see setSelectable, selectTest
 */
@@ -11798,7 +11798,7 @@ void QCPAbstractPlottable::rescaleValueAxis(bool onlyEnlarge, bool inKeyRange) c
   Adds this plottable to the specified \a legend.
 
   Creates a QCPPlottableLegendItem which is inserted into the legend. Returns true on success, i.e.
-  when the legend exists and a legend item associated with this plottable isn't already in the
+  when the legend exists and a legend protos_item_ associated with this plottable isn't already in the
   legend.
 
   If the plottable needs a more specialized representation in the legend, you can create a
@@ -11847,7 +11847,7 @@ bool QCPAbstractPlottable::addToLegend()
   Removes the plottable from the specifed \a legend. This means the \ref QCPPlottableLegendItem
   that is associated with this plottable is removed.
 
-  Returns true on success, i.e. if the legend exists and a legend item associated with this
+  Returns true on success, i.e. if the legend exists and a legend protos_item_ associated with this
   plottable was found and removed.
 
   \see addToLegend, QCPLegend::removeItem
@@ -11900,7 +11900,7 @@ QCP::Interaction QCPAbstractPlottable::selectionCategory() const
   A convenience function to easily set the QPainter::Antialiased hint on the provided \a painter
   before drawing plottable lines.
 
-  This is the antialiasing state the painter passed to the \ref draw method is in by default.
+  This is the antialiasing state_ the painter passed to the \ref draw method is in by default.
   
   This function takes into account the local setting of the antialiasing flag as well as the
   overrides set with \ref QCustomPlot::setAntialiasedElements and \ref
@@ -11992,7 +11992,7 @@ void QCPAbstractPlottable::deselectEvent(bool *selectionStateChanged)
 /* end of 'src/plottable.cpp' */
 
 
-/* including file 'src/item.cpp'            */
+/* including file 'src/protos_item_.cpp'            */
 /* modified 2022-11-06T12:45:56, size 49486 */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12000,10 +12000,10 @@ void QCPAbstractPlottable::deselectEvent(bool *selectionStateChanged)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*! \class QCPItemAnchor
-  \brief An anchor of an item to which positions can be attached to.
+  \brief An anchor of an protos_item_ to which positions can be attached to.
   
-  An item (QCPAbstractItem) may have one or more anchors. Unlike QCPItemPosition, an anchor doesn't
-  control anything on its item, but provides a way to tie other items via their positions to the
+  An protos_item_ (QCPAbstractItem) may have one or more anchors. Unlike QCPItemPosition, an anchor doesn't
+  control anything on its protos_item_, but provides a way to tie other items via their positions to the
   anchor.
 
   For example, a QCPItemRect is defined by its positions \a topLeft and \a bottomRight.
@@ -12011,12 +12011,12 @@ void QCPAbstractPlottable::deselectEvent(bool *selectionStateChanged)
   attach the \a start (which is a QCPItemPosition) of a QCPItemLine to one of the anchors by
   calling QCPItemPosition::setParentAnchor on \a start, passing the wanted anchor of the
   QCPItemRect. This way the start of the line will now always follow the respective anchor location
-  on the rect item.
+  on the rect protos_item_.
   
-  Note that QCPItemPosition derives from QCPItemAnchor, so every position can also serve as an
+  note_ that QCPItemPosition derives from QCPItemAnchor, so every position can also serve as an
   anchor to other positions.
   
-  To learn how to provide anchors in your own item subclasses, see the subclassing section of the
+  To learn how to provide anchors in your own protos_item_ subclasses, see the subclassing section of the
   QCPAbstractItem documentation.
 */
 
@@ -12036,7 +12036,7 @@ void QCPAbstractPlottable::deselectEvent(bool *selectionStateChanged)
 
 /*!
   Creates a new QCPItemAnchor. You shouldn't create QCPItemAnchor instances directly, even if
-  you want to make a new item subclass. Use \ref QCPAbstractItem::createAnchor instead, as
+  you want to make a new protos_item_ subclass. Use \ref QCPAbstractItem::createAnchor instead, as
   explained in the subclassing section of the QCPAbstractItem documentation.
 */
 QCPItemAnchor::QCPItemAnchor(QCustomPlot *parentPlot, QCPAbstractItem *parentItem, const QString &name, int anchorId) :
@@ -12066,7 +12066,7 @@ QCPItemAnchor::~QCPItemAnchor()
   Returns the final absolute pixel position of the QCPItemAnchor on the QCustomPlot surface.
   
   The pixel information is internally retrieved via QCPAbstractItem::anchorPixelPosition of the
-  parent item, QCPItemAnchor is just an intermediary.
+  parent protos_item_, QCPItemAnchor is just an intermediary.
 */
 QPointF QCPItemAnchor::pixelPosition() const
 {
@@ -12082,7 +12082,7 @@ QPointF QCPItemAnchor::pixelPosition() const
     }
   } else
   {
-    qDebug() << Q_FUNC_INFO << "no parent item set";
+    qDebug() << Q_FUNC_INFO << "no parent protos_item_ set";
     return {};
   }
 }
@@ -12093,7 +12093,7 @@ QPointF QCPItemAnchor::pixelPosition() const
   anchor as parent anchor for the respective coordinate. This is necessary to notify the children
   prior to destruction of the anchor.
   
-  Note that this function does not change the parent setting in \a pos.
+  note_ that this function does not change the parent setting in \a pos.
 */
 void QCPItemAnchor::addChildX(QCPItemPosition *pos)
 {
@@ -12107,7 +12107,7 @@ void QCPItemAnchor::addChildX(QCPItemPosition *pos)
 
   Removes \a pos from the childX list of this anchor.
   
-  Note that this function does not change the parent setting in \a pos.
+  note_ that this function does not change the parent setting in \a pos.
 */
 void QCPItemAnchor::removeChildX(QCPItemPosition *pos)
 {
@@ -12121,7 +12121,7 @@ void QCPItemAnchor::removeChildX(QCPItemPosition *pos)
   anchor as parent anchor for the respective coordinate. This is necessary to notify the children
   prior to destruction of the anchor.
   
-  Note that this function does not change the parent setting in \a pos.
+  note_ that this function does not change the parent setting in \a pos.
 */
 void QCPItemAnchor::addChildY(QCPItemPosition *pos)
 {
@@ -12135,7 +12135,7 @@ void QCPItemAnchor::addChildY(QCPItemPosition *pos)
 
   Removes \a pos from the childY list of this anchor.
   
-  Note that this function does not change the parent setting in \a pos.
+  note_ that this function does not change the parent setting in \a pos.
 */
 void QCPItemAnchor::removeChildY(QCPItemPosition *pos)
 {
@@ -12149,10 +12149,10 @@ void QCPItemAnchor::removeChildY(QCPItemPosition *pos)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*! \class QCPItemPosition
-  \brief Manages the position of an item.
+  \brief Manages the position of an protos_item_.
   
-  Every item has at least one public QCPItemPosition member pointer which provides ways to position the
-  item on the QCustomPlot surface. Some items have multiple positions, for example QCPItemRect has two:
+  Every protos_item_ has at least one public QCPItemPosition member pointer which provides ways to position the
+  protos_item_ on the QCustomPlot surface. Some items have multiple positions, for example QCPItemRect has two:
   \a topLeft and \a bottomRight.
 
   QCPItemPosition has a type (\ref PositionType) that can be set with \ref setType. This type
@@ -12160,7 +12160,7 @@ void QCPItemAnchor::removeChildY(QCPItemPosition *pos)
   coordinates, as plot coordinates of certain axes (\ref QCPItemPosition::setAxes), as fractions of
   the axis rect (\ref QCPItemPosition::setAxisRect), etc. For more advanced plots it is also
   possible to assign different types per X/Y coordinate of the position (see \ref setTypeX, \ref
-  setTypeY). This way an item could be positioned for example at a fixed pixel distance from the
+  setTypeY). This way an protos_item_ could be positioned for example at a fixed pixel distance from the
   top in the Y direction, while following a plot coordinate in the X direction.
 
   A QCPItemPosition may have a parent QCPItemAnchor, see \ref setParentAnchor. This way you can tie
@@ -12170,11 +12170,11 @@ void QCPItemAnchor::removeChildY(QCPItemPosition *pos)
   a QCPItemLine to the \a bottom anchor of a QCPItemText to make the starting point of the line
   always be centered under the text label, no matter where the text is moved to. For more advanced
   plots, it is possible to assign different parent anchors per X/Y coordinate of the position, see
-  \ref setParentAnchorX, \ref setParentAnchorY. This way an item could follow another item in the X
-  direction but stay at a fixed position in the Y direction. Or even follow item A in X, and item B
+  \ref setParentAnchorX, \ref setParentAnchorY. This way an protos_item_ could follow another protos_item_ in the X
+  direction but stay at a fixed position in the Y direction. Or even follow protos_item_ A in X, and protos_item_ B
   in Y.
 
-  Note that every QCPItemPosition inherits from QCPItemAnchor and thus can itself be used as parent
+  note_ that every QCPItemPosition inherits from QCPItemAnchor and thus can itself be used as parent
   anchor for other positions.
 
   To set the apparent pixel position on the QCustomPlot surface directly, use \ref setPixelPosition. This
@@ -12210,7 +12210,7 @@ void QCPItemAnchor::removeChildY(QCPItemPosition *pos)
 
 /*!
   Creates a new QCPItemPosition. You shouldn't create QCPItemPosition instances directly, even if
-  you want to make a new item subclass. Use \ref QCPAbstractItem::createPosition instead, as
+  you want to make a new protos_item_ subclass. Use \ref QCPAbstractItem::createPosition instead, as
   explained in the subclassing section of the QCPAbstractItem documentation.
 */
 QCPItemPosition::QCPItemPosition(QCustomPlot *parentPlot, QCPAbstractItem *parentItem, const QString &name) :
@@ -12227,7 +12227,7 @@ QCPItemPosition::QCPItemPosition(QCustomPlot *parentPlot, QCPAbstractItem *paren
 QCPItemPosition::~QCPItemPosition()
 {
   // unregister as parent at children:
-  // Note: this is done in ~QCPItemAnchor again, but it's important QCPItemPosition does it itself, because only then
+  // note_: this is done in ~QCPItemAnchor again, but it's important QCPItemPosition does it itself, because only then
   //       the setParentAnchor(0) call the correct QCPItemPosition::pixelPosition function instead of QCPItemAnchor::pixelPosition
   foreach (QCPItemPosition *child, mChildrenX.values())
   {
@@ -12268,7 +12268,7 @@ QCPAxisRect *QCPItemPosition::axisRect() const
   documentation of \ref PositionType for details. For \ref ptAxisRectRatio, note that you can specify
   the axis rect with \ref setAxisRect. By default this is set to the main axis rect.
   
-  Note that the position type \ref ptPlotCoords is only available (and sensible) when the position
+  note_ that the position type \ref ptPlotCoords is only available (and sensible) when the position
   has no parent anchor (\ref setParentAnchor).
   
   If the type is changed, the apparent pixel position on the plot is preserved. This means
@@ -12356,7 +12356,7 @@ void QCPItemPosition::setTypeY(QCPItemPosition::PositionType type)
   To remove this QCPItemPosition from any parent anchor, set \a parentAnchor to \c nullptr.
   
   If the QCPItemPosition previously had no parent and the type is \ref ptPlotCoords, the type is
-  set to \ref ptAbsolute, to keep the position in a valid state.
+  set to \ref ptAbsolute, to keep the position in a valid state_.
   
   This method sets the parent anchor for both X and Y directions. It is also possible to set
   different parents for X and Y, see \ref setParentAnchorX, \ref setParentAnchorY.
@@ -12400,7 +12400,7 @@ bool QCPItemPosition::setParentAnchorX(QCPItemAnchor *parentAnchor, bool keepPix
     {
       // is a QCPItemAnchor, can't have further parent. Now make sure the parent items aren't the
       // same, to prevent a position being child of an anchor which itself depends on the position,
-      // because they're both on the same item:
+      // because they're both on the same protos_item_:
       if (currentParent->mParentItem == mParentItem)
       {
         qDebug() << Q_FUNC_INFO << "can't set parent to be an anchor which itself depends on this position" << reinterpret_cast<quintptr>(parentAnchor);
@@ -12465,7 +12465,7 @@ bool QCPItemPosition::setParentAnchorY(QCPItemAnchor *parentAnchor, bool keepPix
     {
       // is a QCPItemAnchor, can't have further parent. Now make sure the parent items aren't the
       // same, to prevent a position being child of an anchor which itself depends on the position,
-      // because they're both on the same item:
+      // because they're both on the same protos_item_:
       if (currentParent->mParentItem == mParentItem)
       {
         qDebug() << Q_FUNC_INFO << "can't set parent to be an anchor which itself depends on this position" << reinterpret_cast<quintptr>(parentAnchor);
@@ -12766,7 +12766,7 @@ void QCPItemPosition::setPixelPosition(const QPointF &pixelPosition)
   In QCustomPlot, items are supplemental graphical elements that are neither plottables
   (QCPAbstractPlottable) nor axes (QCPAxis). While plottables are always tied to two axes and thus
   plot coordinates, items can also be placed in absolute coordinates independent of any axes. Each
-  specific item has at least one QCPItemPosition member which controls the positioning. Some items
+  specific protos_item_ has at least one QCPItemPosition member which controls the positioning. Some items
   are defined by more than one coordinate and thus have two or more QCPItemPosition members (For
   example, QCPItemRect has \a topLeft and \a bottomRight).
   
@@ -12784,26 +12784,26 @@ void QCPItemPosition::setPixelPosition(const QPointF &pixelPosition)
   <tr><td>QCPItemPixmap</td><td>An arbitrary pixmap</td></tr>
   <tr><td>QCPItemText</td><td>A text label</td></tr>
   <tr><td>QCPItemBracket</td><td>A bracket which may be used to reference/highlight certain parts in the plot.</td></tr>
-  <tr><td>QCPItemTracer</td><td>An item that can be attached to a QCPGraph and sticks to its data points, given a key coordinate.</td></tr>
+  <tr><td>QCPItemTracer</td><td>An protos_item_ that can be attached to a QCPGraph and sticks to its data points, given a key coordinate.</td></tr>
   </table>
   
   \section items-clipping Clipping
 
   Items are by default clipped to the main axis rect (they are only visible inside the axis rect).
-  To make an item visible outside that axis rect, disable clipping via \ref setClipToAxisRect
+  To make an protos_item_ visible outside that axis rect, disable clipping via \ref setClipToAxisRect
   "setClipToAxisRect(false)".
 
-  On the other hand if you want the item to be clipped to a different axis rect, specify it via
-  \ref setClipAxisRect. This clipAxisRect property of an item is only used for clipping behaviour, and
-  in principle is independent of the coordinate axes the item might be tied to via its position
+  On the other hand if you want the protos_item_ to be clipped to a different axis rect, specify it via
+  \ref setClipAxisRect. This clipAxisRect property of an protos_item_ is only used for clipping behaviour, and
+  in principle is independent of the coordinate axes the protos_item_ might be tied to via its position
   members (\ref QCPItemPosition::setAxes). However, it is common that the axis rect for clipping
-  also contains the axes used for the item positions.
+  also contains the axes used for the protos_item_ positions.
   
   \section items-using Using items
   
-  First you instantiate the item you want to use and add it to the plot:
+  First you instantiate the protos_item_ you want to use and add it to the plot:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpitemline-creation-1
-  by default, the positions of the item are bound to the x- and y-Axis of the plot. So we can just
+  by default, the positions of the protos_item_ are bound to the x- and y-Axis of the plot. So we can just
   set the plot coordinates where the line should start/end:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpitemline-creation-2
   If we don't want the line to be positioned in plot coordinates but a different coordinate system,
@@ -12815,31 +12815,31 @@ void QCPItemPosition::setPixelPosition(const QPointF &pixelPosition)
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpitemline-creation-5
   
   For more advanced plots, it is even possible to set different types and parent anchors per X/Y
-  coordinate of an item position, using for example \ref QCPItemPosition::setTypeX or \ref
+  coordinate of an protos_item_ position, using for example \ref QCPItemPosition::setTypeX or \ref
   QCPItemPosition::setParentAnchorX. For details, see the documentation of \ref QCPItemPosition.
   
   \section items-subclassing Creating own items
   
-  To create an own item, you implement a subclass of QCPAbstractItem. These are the pure
+  To create an own protos_item_, you implement a subclass of QCPAbstractItem. These are the pure
   virtual functions, you must implement:
   \li \ref selectTest
   \li \ref draw
   
   See the documentation of those functions for what they need to do.
   
-  \subsection items-positioning Allowing the item to be positioned
+  \subsection items-positioning Allowing the protos_item_ to be positioned
   
-  As mentioned, item positions are represented by QCPItemPosition members. Let's assume the new item shall
+  As mentioned, protos_item_ positions are represented by QCPItemPosition members. Let's assume the new protos_item_ shall
   have only one point as its position (as opposed to two like a rect or multiple like a polygon). You then add
   a public member of type QCPItemPosition like so:
   
   \code QCPItemPosition * const myPosition;\endcode
   
-  the const makes sure the pointer itself can't be modified from the user of your new item (the QCPItemPosition
+  the const makes sure the pointer itself can't be modified from the user of your new protos_item_ (the QCPItemPosition
   instance it points to, can be modified, of course).
   The initialization of this pointer is made easy with the \ref createPosition function. Just assign
-  the return value of this function to each QCPItemPosition in the constructor of your item. \ref createPosition
-  takes a string which is the name of the position, typically this is identical to the variable name.
+  the return value of this function to each QCPItemPosition in the constructor of your protos_item_. \ref createPosition
+  takes a string which is the item_name_ of the position, typically this is identical to the variable item_name_.
   For example, the constructor of QCPItemExample could look like this:
   
   \code
@@ -12853,12 +12853,12 @@ void QCPItemPosition::setPixelPosition(const QPointF &pixelPosition)
   
   \subsection items-drawing The draw function
   
-  To give your item a visual representation, reimplement the \ref draw function and use the passed
-  QCPPainter to draw the item. You can retrieve the item position in pixel coordinates from the
+  To give your protos_item_ a visual representation, reimplement the \ref draw function and use the passed
+  QCPPainter to draw the protos_item_. You can retrieve the protos_item_ position in pixel coordinates from the
   position member(s) via \ref QCPItemPosition::pixelPosition.
 
   To optimize performance you should calculate a bounding rect first (don't forget to take the pen
-  width into account), check whether it intersects the \ref clipRect, and only draw the item at all
+  width into account), check whether it intersects the \ref clipRect, and only draw the protos_item_ at all
   if this is the case.
   
   \subsection items-selection The selectTest function
@@ -12875,13 +12875,13 @@ void QCPItemPosition::setPixelPosition(const QPointF &pixelPosition)
   
   \code QCPItemAnchor * const bottom;\endcode
 
-  and create it in the constructor with the \ref createAnchor function, assigning it a name and an
-  anchor id (an integer enumerating all anchors on the item, you may create an own enum for this).
-  Since anchors can be placed anywhere, relative to the item's position(s), your item needs to
+  and create it in the constructor with the \ref createAnchor function, assigning it a item_name_ and an
+  anchor id (an integer enumerating all anchors on the protos_item_, you may create an own enum for this).
+  Since anchors can be placed anywhere, relative to the protos_item_'s position(s), your protos_item_ needs to
   provide the position of every anchor with the reimplementation of the \ref anchorPixelPosition(int
   anchorId) function.
   
-  In essence the QCPItemAnchor is merely an intermediary that itself asks your item for the pixel
+  In essence the QCPItemAnchor is merely an intermediary that itself asks your protos_item_ for the pixel
   position when anything attached to the anchor needs to know the coordinates.
 */
 
@@ -12889,15 +12889,15 @@ void QCPItemPosition::setPixelPosition(const QPointF &pixelPosition)
 
 /*! \fn QList<QCPItemPosition*> QCPAbstractItem::positions() const
   
-  Returns all positions of the item in a list.
+  Returns all positions of the protos_item_ in a list.
   
   \see anchors, position
 */
 
 /*! \fn QList<QCPItemAnchor*> QCPAbstractItem::anchors() const
   
-  Returns all anchors of the item in a list. Note that since a position (QCPItemPosition) is always
-  also an anchor, the list will also contain the positions of this item.
+  Returns all anchors of the protos_item_ in a list. note_ that since a position (QCPItemPosition) is always
+  also an anchor, the list will also contain the positions of this protos_item_.
   
   \see positions, anchor
 */
@@ -12908,7 +12908,7 @@ void QCPItemPosition::setPixelPosition(const QPointF &pixelPosition)
 /*! \fn void QCPAbstractItem::draw(QCPPainter *painter) = 0
   \internal
   
-  Draws this item with the provided \a painter.
+  Draws this protos_item_ with the provided \a painter.
   
   The cliprect of the provided painter is set to the rect returned by \ref clipRect before this
   function is called. The clipRect depends on the clipping settings defined by \ref
@@ -12919,7 +12919,7 @@ void QCPItemPosition::setPixelPosition(const QPointF &pixelPosition)
 /* start documentation of signals */
 
 /*! \fn void QCPAbstractItem::selectionChanged(bool selected)
-  This signal is emitted when the selection state of this item has changed, either by user interaction
+  This signal is emitted when the selection state_ of this protos_item_ has changed, either by user interaction
   or by a direct call to \ref setSelected.
 */
 
@@ -12957,7 +12957,7 @@ QCPAxisRect *QCPAbstractItem::clipAxisRect() const
 }
 
 /*!
-  Sets whether the item shall be clipped to an axis rect or whether it shall be visible on the
+  Sets whether the protos_item_ shall be clipped to an axis rect or whether it shall be visible on the
   entire QCustomPlot. The axis rect can be set with \ref setClipAxisRect.
   
   \see setClipAxisRect
@@ -12970,7 +12970,7 @@ void QCPAbstractItem::setClipToAxisRect(bool clip)
 }
 
 /*!
-  Sets the clip axis rect. It defines the rect that will be used to clip the item when \ref
+  Sets the clip axis rect. It defines the rect that will be used to clip the protos_item_ when \ref
   setClipToAxisRect is set to true.
   
   \see setClipToAxisRect
@@ -12983,7 +12983,7 @@ void QCPAbstractItem::setClipAxisRect(QCPAxisRect *rect)
 }
 
 /*!
-  Sets whether the user can (de-)select this item by clicking on the QCustomPlot surface.
+  Sets whether the user can (de-)select this protos_item_ by clicking on the QCustomPlot surface.
   (When \ref QCustomPlot::setInteractions contains QCustomPlot::iSelectItems.)
   
   However, even when \a selectable was set to false, it is possible to set the selection manually,
@@ -13001,16 +13001,16 @@ void QCPAbstractItem::setSelectable(bool selectable)
 }
 
 /*!
-  Sets whether this item is selected or not. When selected, it might use a different visual
-  appearance (e.g. pen and brush), this depends on the specific item though.
+  Sets whether this protos_item_ is selected or not. When selected, it might use a different visual
+  appearance (e.g. pen and brush), this depends on the specific protos_item_ though.
 
   The entire selection mechanism for items is handled automatically when \ref
   QCustomPlot::setInteractions contains QCustomPlot::iSelectItems. You only need to call this
-  function when you wish to change the selection state manually.
+  function when you wish to change the selection state_ manually.
   
-  This function can change the selection state even when \ref setSelectable was set to false.
+  This function can change the selection state_ even when \ref setSelectable was set to false.
   
-  emits the \ref selectionChanged signal when \a selected is different from the previous selection state.
+  emits the \ref selectionChanged signal when \a selected is different from the previous selection state_.
   
   \see setSelectable, selectTest
 */
@@ -13024,12 +13024,12 @@ void QCPAbstractItem::setSelected(bool selected)
 }
 
 /*!
-  Returns the QCPItemPosition with the specified \a name. If this item doesn't have a position by
-  that name, returns \c nullptr.
+  Returns the QCPItemPosition with the specified \a item_name_. If this protos_item_ doesn't have a position by
+  that item_name_, returns \c nullptr.
   
-  This function provides an alternative way to access item positions. Normally, you access
-  positions direcly by their member pointers (which typically have the same variable name as \a
-  name).
+  This function provides an alternative way to access protos_item_ positions. Normally, you access
+  positions direcly by their member pointers (which typically have the same variable item_name_ as \a
+  item_name_).
   
   \see positions, anchor
 */
@@ -13040,17 +13040,17 @@ QCPItemPosition *QCPAbstractItem::position(const QString &name) const
     if (position->name() == name)
       return position;
   }
-  qDebug() << Q_FUNC_INFO << "position with name not found:" << name;
+  qDebug() << Q_FUNC_INFO << "position with item_name_ not found:" << name;
   return nullptr;
 }
 
 /*!
-  Returns the QCPItemAnchor with the specified \a name. If this item doesn't have an anchor by
-  that name, returns \c nullptr.
+  Returns the QCPItemAnchor with the specified \a item_name_. If this protos_item_ doesn't have an anchor by
+  that item_name_, returns \c nullptr.
   
-  This function provides an alternative way to access item anchors. Normally, you access
-  anchors direcly by their member pointers (which typically have the same variable name as \a
-  name).
+  This function provides an alternative way to access protos_item_ anchors. Normally, you access
+  anchors direcly by their member pointers (which typically have the same variable item_name_ as \a
+  item_name_).
   
   \see anchors, position
 */
@@ -13061,14 +13061,14 @@ QCPItemAnchor *QCPAbstractItem::anchor(const QString &name) const
     if (anchor->name() == name)
       return anchor;
   }
-  qDebug() << Q_FUNC_INFO << "anchor with name not found:" << name;
+  qDebug() << Q_FUNC_INFO << "anchor with item_name_ not found:" << name;
   return nullptr;
 }
 
 /*!
-  Returns whether this item has an anchor with the specified \a name.
+  Returns whether this protos_item_ has an anchor with the specified \a item_name_.
   
-  Note that you can check for positions with this function, too. This is because every position is
+  note_ that you can check for positions with this function, too. This is because every position is
   also an anchor (QCPItemPosition inherits from QCPItemAnchor).
   
   \see anchor, position
@@ -13085,10 +13085,10 @@ bool QCPAbstractItem::hasAnchor(const QString &name) const
 
 /*! \internal
   
-  Returns the rect the visual representation of this item is clipped to. This depends on the
+  Returns the rect the visual representation of this protos_item_ is clipped to. This depends on the
   current setting of \ref setClipToAxisRect as well as the axis rect set with \ref setClipAxisRect.
   
-  If the item is not clipped to an axis rect, QCustomPlot's viewport rect is returned.
+  If the protos_item_ is not clipped to an axis rect, QCustomPlot's viewport rect is returned.
   
   \see draw
 */
@@ -13103,9 +13103,9 @@ QRect QCPAbstractItem::clipRect() const
 /*! \internal
 
   A convenience function to easily set the QPainter::Antialiased hint on the provided \a painter
-  before drawing item lines.
+  before drawing protos_item_ lines.
 
-  This is the antialiasing state the painter passed to the \ref draw method is in by default.
+  This is the antialiasing state_ the painter passed to the \ref draw method is in by default.
   
   This function takes into account the local setting of the antialiasing flag as well as the
   overrides set with \ref QCustomPlot::setAntialiasedElements and \ref
@@ -13127,7 +13127,7 @@ void QCPAbstractItem::applyDefaultAntialiasingHint(QCPPainter *painter) const
   This function may be used to help with the implementation of the \ref selectTest function for
   specific items.
   
-  For example, if your item consists of four rects, call this function four times, once for each
+  For example, if your protos_item_ consists of four rects, call this function four times, once for each
   rect, in your \ref selectTest reimplementation. Finally, return the minimum (non -1) of all four
   returned values.
 */
@@ -13160,37 +13160,37 @@ double QCPAbstractItem::rectDistance(const QRectF &rect, const QPointF &pos, boo
 /*! \internal
 
   Returns the pixel position of the anchor with Id \a anchorId. This function must be reimplemented in
-  item subclasses if they want to provide anchors (QCPItemAnchor).
+  protos_item_ subclasses if they want to provide anchors (QCPItemAnchor).
   
-  For example, if the item has two anchors with id 0 and 1, this function takes one of these anchor
+  For example, if the protos_item_ has two anchors with id 0 and 1, this function takes one of these anchor
   ids and returns the respective pixel points of the specified anchor.
   
   \see createAnchor
 */
 QPointF QCPAbstractItem::anchorPixelPosition(int anchorId) const
 {
-  qDebug() << Q_FUNC_INFO << "called on item which shouldn't have any anchors (this method not reimplemented). anchorId" << anchorId;
+  qDebug() << Q_FUNC_INFO << "called on protos_item_ which shouldn't have any anchors (this method not reimplemented). anchorId" << anchorId;
   return {};
 }
 
 /*! \internal
 
-  Creates a QCPItemPosition, registers it with this item and returns a pointer to it. The specified
-  \a name must be a unique string that is usually identical to the variable name of the position
-  member (This is needed to provide the name-based \ref position access to positions).
+  Creates a QCPItemPosition, registers it with this protos_item_ and returns a pointer to it. The specified
+  \a item_name_ must be a unique string that is usually identical to the variable item_name_ of the position
+  member (This is needed to provide the item_name_-based \ref position access to positions).
   
-  Don't delete positions created by this function manually, as the item will take care of it.
+  Don't delete positions created by this function manually, as the protos_item_ will take care of it.
   
-  Use this function in the constructor (initialization list) of the specific item subclass to
+  Use this function in the constructor (initialization list) of the specific protos_item_ subclass to
   create each position member. Don't create QCPItemPositions with \b new yourself, because they
-  won't be registered with the item properly.
+  won't be registered with the protos_item_ properly.
   
   \see createAnchor
 */
 QCPItemPosition *QCPAbstractItem::createPosition(const QString &name)
 {
   if (hasAnchor(name))
-    qDebug() << Q_FUNC_INFO << "anchor/position with name exists already:" << name;
+    qDebug() << Q_FUNC_INFO << "anchor/position with item_name_ exists already:" << name;
   QCPItemPosition *newPosition = new QCPItemPosition(mParentPlot, this, name);
   mPositions.append(newPosition);
   mAnchors.append(newPosition); // every position is also an anchor
@@ -13204,27 +13204,27 @@ QCPItemPosition *QCPAbstractItem::createPosition(const QString &name)
 
 /*! \internal
 
-  Creates a QCPItemAnchor, registers it with this item and returns a pointer to it. The specified
-  \a name must be a unique string that is usually identical to the variable name of the anchor
-  member (This is needed to provide the name based \ref anchor access to anchors).
+  Creates a QCPItemAnchor, registers it with this protos_item_ and returns a pointer to it. The specified
+  \a item_name_ must be a unique string that is usually identical to the variable item_name_ of the anchor
+  member (This is needed to provide the item_name_ based \ref anchor access to anchors).
   
   The \a anchorId must be a number identifying the created anchor. It is recommended to create an
-  enum (e.g. "AnchorIndex") for this on each item that uses anchors. This id is used by the anchor
+  enum (e.g. "AnchorIndex") for this on each protos_item_ that uses anchors. This id is used by the anchor
   to identify itself when it calls QCPAbstractItem::anchorPixelPosition. That function then returns
   the correct pixel coordinates for the passed anchor id.
   
-  Don't delete anchors created by this function manually, as the item will take care of it.
+  Don't delete anchors created by this function manually, as the protos_item_ will take care of it.
   
-  Use this function in the constructor (initialization list) of the specific item subclass to
+  Use this function in the constructor (initialization list) of the specific protos_item_ subclass to
   create each anchor member. Don't create QCPItemAnchors with \b new yourself, because then they
-  won't be registered with the item properly.
+  won't be registered with the protos_item_ properly.
   
   \see createPosition
 */
 QCPItemAnchor *QCPAbstractItem::createAnchor(const QString &name, int anchorId)
 {
   if (hasAnchor(name))
-    qDebug() << Q_FUNC_INFO << "anchor/position with name exists already:" << name;
+    qDebug() << Q_FUNC_INFO << "anchor/position with item_name_ exists already:" << name;
   QCPItemAnchor *newAnchor = new QCPItemAnchor(mParentPlot, this, name, anchorId);
   mAnchors.append(newAnchor);
   return newAnchor;
@@ -13261,7 +13261,7 @@ QCP::Interaction QCPAbstractItem::selectionCategory() const
 {
   return QCP::iSelectItems;
 }
-/* end of 'src/item.cpp' */
+/* end of 'src/protos_item_.cpp' */
 
 
 /* including file 'src/core.cpp'             */
@@ -13367,21 +13367,21 @@ QCP::Interaction QCPAbstractItem::selectionCategory() const
   \see plottableClick
 */
 
-/*! \fn void QCustomPlot::itemClick(QCPAbstractItem *item, QMouseEvent *event)
+/*! \fn void QCustomPlot::itemClick(QCPAbstractItem *protos_item_, QMouseEvent *event)
   
-  This signal is emitted when an item is clicked.
+  This signal is emitted when an protos_item_ is clicked.
 
-  \a event is the mouse event that caused the click and \a item is the item that received the
+  \a event is the mouse event that caused the click and \a protos_item_ is the protos_item_ that received the
   click.
   
   \see itemDoubleClick
 */
 
-/*! \fn void QCustomPlot::itemDoubleClick(QCPAbstractItem *item, QMouseEvent *event)
+/*! \fn void QCustomPlot::itemDoubleClick(QCPAbstractItem *protos_item_, QMouseEvent *event)
   
-  This signal is emitted when an item is double clicked.
+  This signal is emitted when an protos_item_ is double clicked.
   
-  \a event is the mouse event that caused the click and \a item is the item that received the
+  \a event is the mouse event that caused the click and \a protos_item_ is the protos_item_ that received the
   click.
   
   \see itemClick
@@ -13407,25 +13407,25 @@ QCP::Interaction QCPAbstractItem::selectionCategory() const
   \see axisClick
 */
 
-/*! \fn void QCustomPlot::legendClick(QCPLegend *legend, QCPAbstractLegendItem *item, QMouseEvent *event)
+/*! \fn void QCustomPlot::legendClick(QCPLegend *legend, QCPAbstractLegendItem *protos_item_, QMouseEvent *event)
 
-  This signal is emitted when a legend (item) is clicked.
+  This signal is emitted when a legend (protos_item_) is clicked.
   
   \a event is the mouse event that caused the click, \a legend is the legend that received the
-  click and \a item is the legend item that received the click. If only the legend and no item is
-  clicked, \a item is \c nullptr. This happens for a click inside the legend padding or the space
+  click and \a protos_item_ is the legend protos_item_ that received the click. If only the legend and no protos_item_ is
+  clicked, \a protos_item_ is \c nullptr. This happens for a click inside the legend padding or the space
   between two items.
   
   \see legendDoubleClick
 */
 
-/*! \fn void QCustomPlot::legendDoubleClick(QCPLegend *legend,  QCPAbstractLegendItem *item, QMouseEvent *event)
+/*! \fn void QCustomPlot::legendDoubleClick(QCPLegend *legend,  QCPAbstractLegendItem *protos_item_, QMouseEvent *event)
 
-  This signal is emitted when a legend (item) is double clicked.
+  This signal is emitted when a legend (protos_item_) is double clicked.
   
   \a event is the mouse event that caused the click, \a legend is the legend that received the
-  click and \a item is the legend item that received the click. If only the legend and no item is
-  clicked, \a item is \c nullptr. This happens for a click inside the legend padding or the space
+  click and \a protos_item_ is the legend protos_item_ that received the click. If only the legend and no protos_item_ is
+  clicked, \a protos_item_ is \c nullptr. This happens for a click inside the legend padding or the space
   between two items.
   
   \see legendClick
@@ -13434,13 +13434,13 @@ QCP::Interaction QCPAbstractItem::selectionCategory() const
 /*! \fn void QCustomPlot::selectionChangedByUser()
   
   This signal is emitted after the user has changed the selection in the QCustomPlot, e.g. by
-  clicking. It is not emitted when the selection state of an object has changed programmatically by
+  clicking. It is not emitted when the selection state_ of an object has changed programmatically by
   a direct call to <tt>setSelected()</tt>/<tt>setSelection()</tt> on an object or by calling \ref
   deselectAll.
   
   In addition to this signal, selectable objects also provide individual signals, for example \ref
-  QCPAxis::selectionChanged or \ref QCPAbstractPlottable::selectionChanged. Note that those signals
-  are emitted even if the selection state is changed programmatically.
+  QCPAxis::selectionChanged or \ref QCPAbstractPlottable::selectionChanged. note_ that those signals
+  are emitted even if the selection state_ is changed programmatically.
   
   See the documentation of \ref setInteractions for details about the selection mechanism.
   
@@ -13831,7 +13831,7 @@ void QCustomPlot::setAutoAddPlottableToLegend(bool on)
   
   <b>Item selection</b> is controlled by \ref QCP::iSelectItems. If \ref QCP::iSelectItems is set, the user
   may select items (QCPItemLine, QCPItemText,...) by clicking on them or in their vicinity. To find
-  out whether a specific item is selected, call QCPAbstractItem::selected(). To retrieve a list of
+  out whether a specific protos_item_ is selected, call QCPAbstractItem::selected(). To retrieve a list of
   all currently selected items, call \ref selectedItems.
   
   <b>Axis selection</b> is controlled with \ref QCP::iSelectAxes. If \ref QCP::iSelectAxes is set, the user
@@ -13849,11 +13849,11 @@ void QCustomPlot::setAutoAddPlottableToLegend(bool on)
   <b>All other selectable elements</b> The selection of all other selectable objects (e.g.
   QCPTextElement, or your own layerable subclasses) is controlled with \ref QCP::iSelectOther. If set, the
   user may select those objects by clicking on them. To find out which are currently selected, you
-  need to check their selected state explicitly.
+  need to check their selected state_ explicitly.
   
-  If the selection state has changed by user interaction, the \ref selectionChangedByUser signal is
+  If the selection state_ has changed by user interaction, the \ref selectionChangedByUser signal is
   emitted. Each selectable object additionally emits an individual selectionChanged signal whenever
-  their selection state has changed, i.e. not only by user interaction.
+  their selection state_ has changed, i.e. not only by user interaction.
   
   To allow multiple objects to be selected by holding the selection modifier (\ref
   setMultiSelectModifier), set the flag \ref QCP::iMultiSelect.
@@ -14143,7 +14143,7 @@ void QCustomPlot::setBufferDevicePixelRatio(double ratio)
     mBufferDevicePixelRatio = ratio;
     foreach (QSharedPointer<QCPAbstractPaintBuffer> buffer, mPaintBuffers)
       buffer->setDevicePixelRatio(mBufferDevicePixelRatio);
-    // Note: axis label cache has devicePixelRatio as part of cache hash, so no need to manually clear cache here
+    // note_: axis label cache has devicePixelRatio as part of cache hash, so no need to manually clear cache here
 #else
     qDebug() << Q_FUNC_INFO << "Device pixel ratios not supported for Qt versions before 5.4";
     mBufferDevicePixelRatio = 1.0;
@@ -14210,7 +14210,7 @@ void QCustomPlot::setBackground(const QPixmap &pm, bool scaled, Qt::AspectRatioM
   set to true, control whether and how the aspect ratio of the original pixmap is preserved with
   \ref setBackgroundScaledMode.
   
-  Note that the scaled version of the original pixmap is buffered, so there is no performance
+  note_ that the scaled version of the original pixmap is buffered, so there is no performance
   penalty on replots. (Except when the viewport dimensions are changed continuously.)
   
   \see setBackground, setBackgroundScaledMode
@@ -14269,7 +14269,7 @@ QCPAbstractPlottable *QCustomPlot::plottable()
 
 /*!
   Removes the specified plottable from the plot and deletes it. If necessary, the corresponding
-  legend item is also removed from the default legend (QCustomPlot::legend).
+  legend protos_item_ is also removed from the default legend (QCustomPlot::legend).
   
   Returns true on success.
   
@@ -14445,7 +14445,7 @@ QCPGraph *QCustomPlot::addGraph(QCPAxis *keyAxis, QCPAxis *valueAxis)
 
 /*!
   Removes the specified \a graph from the plot and deletes it. If necessary, the corresponding
-  legend item is also removed from the default legend (QCustomPlot::legend). If any other graphs in
+  legend protos_item_ is also removed from the default legend (QCustomPlot::legend). If any other graphs in
   the plot have a channel fill set towards the removed graph, the channel fill property of those
   graphs is reset to \c nullptr (no channel fill).
   
@@ -14516,10 +14516,10 @@ QList<QCPGraph*> QCustomPlot::selectedGraphs() const
 }
 
 /*!
-  Returns the item with \a index. If the index is invalid, returns \c nullptr.
+  Returns the protos_item_ with \a index. If the index is invalid, returns \c nullptr.
   
   There is an overloaded version of this function with no parameter which returns the last added
-  item, see QCustomPlot::item()
+  protos_item_, see QCustomPlot::protos_item_()
   
   \see itemCount
 */
@@ -14537,7 +14537,7 @@ QCPAbstractItem *QCustomPlot::item(int index) const
 
 /*! \overload
   
-  Returns the last item that was added to this plot. If there are no items in the plot,
+  Returns the last protos_item_ that was added to this plot. If there are no items in the plot,
   returns \c nullptr.
   
   \see itemCount
@@ -14552,7 +14552,7 @@ QCPAbstractItem *QCustomPlot::item() const
 }
 
 /*!
-  Removes the specified item from the plot and deletes it.
+  Removes the specified protos_item_ from the plot and deletes it.
   
   Returns true on success.
   
@@ -14567,14 +14567,14 @@ bool QCustomPlot::removeItem(QCPAbstractItem *item)
     return true;
   } else
   {
-    qDebug() << Q_FUNC_INFO << "item not in list:" << reinterpret_cast<quintptr>(item);
+    qDebug() << Q_FUNC_INFO << "protos_item_ not in list:" << reinterpret_cast<quintptr>(item);
     return false;
   }
 }
 
 /*! \overload
   
-  Removes and deletes the item by its \a index.
+  Removes and deletes the protos_item_ by its \a index.
 */
 bool QCustomPlot::removeItem(int index)
 {
@@ -14605,7 +14605,7 @@ int QCustomPlot::clearItems()
 /*!
   Returns the number of currently existing items in the plot
   
-  \see item
+  \see protos_item_
 */
 int QCustomPlot::itemCount() const
 {
@@ -14629,10 +14629,10 @@ QList<QCPAbstractItem*> QCustomPlot::selectedItems() const
 }
 
 /*!
-  Returns the item at the pixel position \a pos. Since it can capture all items, the
+  Returns the protos_item_ at the pixel position \a pos. Since it can capture all items, the
   return type is the abstract base class of all items, QCPAbstractItem.
   
-  For details, and if you wish to specify a certain item type (e.g. QCPItemLine), see the
+  For details, and if you wish to specify a certain protos_item_ type (e.g. QCPItemLine), see the
   template method itemAt<ItemType>()
   
   \see itemAt<ItemType>(), plottableAt, layoutElementAt
@@ -14643,9 +14643,9 @@ QCPAbstractItem *QCustomPlot::itemAt(const QPointF &pos, bool onlySelectable) co
 }
 
 /*!
-  Returns whether this QCustomPlot contains the \a item.
+  Returns whether this QCustomPlot contains the \a protos_item_.
   
-  \see item
+  \see protos_item_
 */
 bool QCustomPlot::hasItem(QCPAbstractItem *item) const
 {
@@ -14653,7 +14653,7 @@ bool QCustomPlot::hasItem(QCPAbstractItem *item) const
 }
 
 /*!
-  Returns the layer with the specified \a name. If there is no layer with the specified name, \c
+  Returns the layer with the specified \a item_name_. If there is no layer with the specified item_name_, \c
   nullptr is returned.
   
   Layer names are case-sensitive.
@@ -14697,10 +14697,10 @@ QCPLayer *QCustomPlot::currentLayer() const
 }
 
 /*!
-  Sets the layer with the specified \a name to be the current layer. All layerables (\ref
+  Sets the layer with the specified \a item_name_ to be the current layer. All layerables (\ref
   QCPLayerable), e.g. plottables and items, are created on the current layer.
   
-  Returns true on success, i.e. if there is a layer with the specified \a name in the QCustomPlot.
+  Returns true on success, i.e. if there is a layer with the specified \a item_name_ in the QCustomPlot.
   
   Layer names are case-sensitive.
   
@@ -14713,7 +14713,7 @@ bool QCustomPlot::setCurrentLayer(const QString &name)
     return setCurrentLayer(newCurrentLayer);
   } else
   {
-    qDebug() << Q_FUNC_INFO << "layer with name doesn't exist:" << name;
+    qDebug() << Q_FUNC_INFO << "layer with item_name_ doesn't exist:" << name;
     return false;
   }
 }
@@ -14749,10 +14749,10 @@ int QCustomPlot::layerCount() const
 }
 
 /*!
-  Adds a new layer to this QCustomPlot instance. The new layer will have the name \a name, which
+  Adds a new layer to this QCustomPlot instance. The new layer will have the item_name_ \a item_name_, which
   must be unique. Depending on \a insertMode, it is positioned either below or above \a otherLayer.
   
-  Returns true on success, i.e. if there is no other layer named \a name and \a otherLayer is a
+  Returns true on success, i.e. if there is no other layer named \a item_name_ and \a otherLayer is a
   valid layer inside this QCustomPlot.
   
   If \a otherLayer is 0, the highest layer in the QCustomPlot will be used.
@@ -14772,7 +14772,7 @@ bool QCustomPlot::addLayer(const QString &name, QCPLayer *otherLayer, QCustomPlo
   }
   if (layer(name))
   {
-    qDebug() << Q_FUNC_INFO << "A layer exists already with the name" << name;
+    qDebug() << Q_FUNC_INFO << "A layer exists already with the item_name_" << name;
     return false;
   }
     
@@ -15015,7 +15015,7 @@ QCPAxisRect *QCustomPlot::axisRectAt(const QPointF &pos) const
 }
 
 /*!
-  Returns the axes that currently have selected parts, i.e. whose selection state is not \ref
+  Returns the axes that currently have selected parts, i.e. whose selection state_ is not \ref
   QCPAxis::spNone.
   
   \see selectedPlottables, selectedLegends, setInteractions, QCPAxis::setSelectedParts,
@@ -15037,7 +15037,7 @@ QList<QCPAxis*> QCustomPlot::selectedAxes() const
 }
 
 /*!
-  Returns the legends that currently have selected parts, i.e. whose selection state is not \ref
+  Returns the legends that currently have selected parts, i.e. whose selection state_ is not \ref
   QCPLegend::spNone.
   
   \see selectedPlottables, selectedAxes, setInteractions, QCPLegend::setSelectedParts,
@@ -15209,7 +15209,7 @@ void QCustomPlot::rescaleAxes(bool onlyVisiblePlottables)
   a one pixel wide line, no matter what zoom factor is set in the PDF-Viewer. For more information
   about cosmetic pens, see the QPainter and QPen documentation.
 
-  The objects of the plot will appear in the current selection state. If you don't want any
+  The objects of the plot will appear in the current selection state_. If you don't want any
   selected objects to be painted in their selected look, deselect everything with \ref deselectAll
   before calling this function.
 
@@ -15326,7 +15326,7 @@ bool QCustomPlot::savePdf(const QString &fileName, int width, int height, QCP::E
   Returns true on success. If this function fails, most likely the PNG format isn't supported by
   the system, see Qt docs about QImageWriter::supportedImageFormats().
 
-  The objects of the plot will appear in the current selection state. If you don't want any selected
+  The objects of the plot will appear in the current selection state_. If you don't want any selected
   objects to be painted in their selected look, deselect everything with \ref deselectAll before calling
   this function.
 
@@ -15376,7 +15376,7 @@ bool QCustomPlot::savePng(const QString &fileName, int width, int height, double
   Returns true on success. If this function fails, most likely the JPEG format isn't supported by
   the system, see Qt docs about QImageWriter::supportedImageFormats().
 
-  The objects of the plot will appear in the current selection state. If you don't want any selected
+  The objects of the plot will appear in the current selection state_. If you don't want any selected
   objects to be painted in their selected look, deselect everything with \ref deselectAll before calling
   this function.
 
@@ -15420,7 +15420,7 @@ bool QCustomPlot::saveJpg(const QString &fileName, int width, int height, double
   Returns true on success. If this function fails, most likely the BMP format isn't supported by
   the system, see Qt docs about QImageWriter::supportedImageFormats().
 
-  The objects of the plot will appear in the current selection state. If you don't want any selected
+  The objects of the plot will appear in the current selection state_. If you don't want any selected
   objects to be painted in their selected look, deselect everything with \ref deselectAll before calling
   this function.
 
@@ -15561,7 +15561,7 @@ void QCustomPlot::mouseDoubleClickEvent(QMouseEvent *event)
       emit legendDoubleClick(li->parentLegend(), li, event);
   }
   
-  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state. In QWidget event system, QCustomPlot wants to accept the event.
+  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state_. In QWidget event system, QCustomPlot wants to accept the event.
 }
 
 /*! \internal
@@ -15576,7 +15576,7 @@ void QCustomPlot::mouseDoubleClickEvent(QMouseEvent *event)
 void QCustomPlot::mousePressEvent(QMouseEvent *event)
 {
   emit mousePress(event);
-  // save some state to tell in releaseEvent whether it was a click:
+  // save some state_ to tell in releaseEvent whether it was a click:
   mMouseHasMoved = false;
   mMousePressPos = event->pos();
   
@@ -15608,7 +15608,7 @@ void QCustomPlot::mousePressEvent(QMouseEvent *event)
     }
   }
   
-  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state. In QWidget event system, QCustomPlot wants to accept the event.
+  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state_. In QWidget event system, QCustomPlot wants to accept the event.
 }
 
 /*! \internal
@@ -15635,7 +15635,7 @@ void QCustomPlot::mouseMoveEvent(QMouseEvent *event)
   else if (mMouseEventLayerable) // call event of affected layerable:
     mMouseEventLayerable->mouseMoveEvent(event, mMousePressPos);
   
-  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state. In QWidget event system, QCustomPlot wants to accept the event.
+  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state_. In QWidget event system, QCustomPlot wants to accept the event.
 }
 
 /*! \internal
@@ -15681,7 +15681,7 @@ void QCustomPlot::mouseReleaseEvent(QMouseEvent *event)
     mMouseSignalLayerable = nullptr;
   }
   
-  if (mSelectionRect && mSelectionRect->isActive()) // Note: if a click was detected above, the selection rect is canceled there
+  if (mSelectionRect && mSelectionRect->isActive()) // note_: if a click was detected above, the selection rect is canceled there
   {
     // finish selection rect, the appropriate action will be taken via signal-slot connection:
     mSelectionRect->endSelection(event);
@@ -15698,7 +15698,7 @@ void QCustomPlot::mouseReleaseEvent(QMouseEvent *event)
   if (noAntialiasingOnDrag())
     replot(rpQueuedReplot);
   
-  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state. In QWidget event system, QCustomPlot wants to accept the event.
+  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state_. In QWidget event system, QCustomPlot wants to accept the event.
 }
 
 /*! \internal
@@ -15724,7 +15724,7 @@ void QCustomPlot::wheelEvent(QWheelEvent *event)
     if (event->isAccepted())
       break;
   }
-  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state. In QWidget event system, QCustomPlot wants to accept the event.
+  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state_. In QWidget event system, QCustomPlot wants to accept the event.
 }
 
 /*! \internal
@@ -15733,7 +15733,7 @@ void QCustomPlot::wheelEvent(QWheelEvent *event)
   It does not make use of the paint buffers like \ref replot, so this is the function typically
   used by saving/exporting methods such as \ref savePdf or \ref toPainter.
 
-  Note that it does not fill the background with the background brush (as the user may specify with
+  note_ that it does not fill the background with the background brush (as the user may specify with
   \ref setBackground(const QBrush &brush)), this is up to the respective functions calling this
   method.
 */
@@ -15790,14 +15790,14 @@ void QCustomPlot::updateLayout()
   dependent on the \ref setBackgroundScaledMode), or when a differend axis background pixmap was
   set.
   
-  Note that this function does not draw a fill with the background brush
+  note_ that this function does not draw a fill with the background brush
   (\ref setBackground(const QBrush &brush)) beneath the pixmap.
   
   \see setBackground, setBackgroundScaled, setBackgroundScaledMode
 */
 void QCustomPlot::drawBackground(QCPPainter *painter)
 {
-  // Note: background color is handled in individual replot/save functions
+  // note_: background color is handled in individual replot/save functions
 
   // draw background pixmap (on top of fill, if brush specified):
   if (!mBackgroundPixmap.isNull())
@@ -16015,7 +16015,7 @@ void QCustomPlot::axisRemoved(QCPAxis *axis)
   if (yAxis2 == axis)
     yAxis2 = nullptr;
   
-  // Note: No need to take care of range drag axes and range zoom axes, because they are stored in smart pointers
+  // note_: No need to take care of range drag axes and range zoom axes, because they are stored in smart pointers
 }
 
 /*! \internal
@@ -16261,10 +16261,10 @@ bool QCustomPlot::registerGraph(QCPGraph *graph)
 
 /*! \internal
 
-  Registers the specified item with this QCustomPlot. QCustomPlot takes ownership of the item.
+  Registers the specified protos_item_ with this QCustomPlot. QCustomPlot takes ownership of the protos_item_.
   
-  Returns true on success, i.e. when \a item wasn't already in the plot and the parent plot of \a
-  item is this QCustomPlot.
+  Returns true on success, i.e. when \a protos_item_ wasn't already in the plot and the parent plot of \a
+  protos_item_ is this QCustomPlot.
   
   This method is called automatically in the QCPAbstractItem base class constructor.
 */
@@ -16272,17 +16272,17 @@ bool QCustomPlot::registerItem(QCPAbstractItem *item)
 {
   if (mItems.contains(item))
   {
-    qDebug() << Q_FUNC_INFO << "item already added to this QCustomPlot:" << reinterpret_cast<quintptr>(item);
+    qDebug() << Q_FUNC_INFO << "protos_item_ already added to this QCustomPlot:" << reinterpret_cast<quintptr>(item);
     return false;
   }
   if (item->parentPlot() != this)
   {
-    qDebug() << Q_FUNC_INFO << "item not created with this QCustomPlot as parent:" << reinterpret_cast<quintptr>(item);
+    qDebug() << Q_FUNC_INFO << "protos_item_ not created with this QCustomPlot as parent:" << reinterpret_cast<quintptr>(item);
     return false;
   }
   
   mItems.append(item);
-  if (!item->layer()) // usually the layer is already set in the constructor of the item (via QCPLayerable constructor)
+  if (!item->layer()) // usually the layer is already set in the constructor of the protos_item_ (via QCPLayerable constructor)
     item->setLayer(currentLayer());
   return true;
 }
@@ -17912,7 +17912,7 @@ void QCPAxisRect::setupFullAxesBox(bool connectRanges)
 */
 QList<QCPAbstractPlottable*> QCPAxisRect::plottables() const
 {
-  // Note: don't append all QCPAxis::plottables() into a list, because we might get duplicate entries
+  // note_: don't append all QCPAxis::plottables() into a list, because we might get duplicate entries
   QList<QCPAbstractPlottable*> result;
   foreach (QCPAbstractPlottable *plottable, mParentPlot->mPlottables)
   {
@@ -17932,7 +17932,7 @@ QList<QCPAbstractPlottable*> QCPAxisRect::plottables() const
 */
 QList<QCPGraph*> QCPAxisRect::graphs() const
 {
-  // Note: don't append all QCPAxis::graphs() into a list, because we might get duplicate entries
+  // note_: don't append all QCPAxis::graphs() into a list, because we might get duplicate entries
   QList<QCPGraph*> result;
   foreach (QCPGraph *graph, mParentPlot->mGraphs)
   {
@@ -17945,7 +17945,7 @@ QList<QCPGraph*> QCPAxisRect::graphs() const
 /*!
   Returns a list of all the items that are associated with this axis rect.
   
-  An item is considered associated with an axis rect if any of its positions has key or value axis
+  An protos_item_ is considered associated with an axis rect if any of its positions has key or value axis
   set to an axis that is in this axis rect, or if any of its positions has \ref
   QCPItemPosition::setAxisRect set to the axis rect, or if the clip axis rect (\ref
   QCPAbstractItem::setClipAxisRect) is set to this axis rect.
@@ -17954,7 +17954,7 @@ QList<QCPGraph*> QCPAxisRect::graphs() const
 */
 QList<QCPAbstractItem *> QCPAxisRect::items() const
 {
-  // Note: don't just append all QCPAxis::items() into a list, because we might get duplicate entries
+  // note_: don't just append all QCPAxis::items() into a list, because we might get duplicate entries
   //       and miss those items that have this axis rect as clipAxisRect.
   QList<QCPAbstractItem*> result;
   foreach (QCPAbstractItem *item, mParentPlot->mItems)
@@ -18096,7 +18096,7 @@ void QCPAxisRect::setBackground(const QPixmap &pm, bool scaled, Qt::AspectRatioM
   is set to true, you may control whether and how the aspect ratio of the original pixmap is
   preserved with \ref setBackgroundScaledMode.
   
-  Note that the scaled version of the original pixmap is buffered, so there is no performance
+  note_ that the scaled version of the original pixmap is buffered, so there is no performance
   penalty on replots. (Except when the axis rect dimensions are changed continuously.)
   
   \see setBackground, setBackgroundScaledMode
@@ -18652,7 +18652,7 @@ void QCPAxisRect::mouseReleaseEvent(QMouseEvent *event, const QPointF &startPos)
   dependent on the mouse wheel delta (which direction the wheel was rotated) to provide a natural
   zooming feel. The Strength of the zoom can be controlled via \ref setRangeZoomFactor.
   
-  Note, that event->angleDelta() is usually +/-120 for single rotation steps. However, if the mouse
+  note_, that event->angleDelta() is usually +/-120 for single rotation steps. However, if the mouse
   wheel is turned rapidly, many steps may bunch up to one event, so the delta may then be multiples
   of 120. This is taken into account here, by calculating \a wheelSteps and using it as exponent of
   the range zoom factor. This takes care of the wheel direction automatically, by inverting the
@@ -18730,7 +18730,7 @@ void QCPAxisRect::wheelEvent(QWheelEvent *event)
       <td>A pointer to the parent QCPLegend.</td>
     </tr><tr>
       <td>QFont \b mFont</td>
-      <td>The generic font of the item. You should use this font for all or at least the most prominent text of the item.</td>
+      <td>The generic font of the protos_item_. You should use this font for all or at least the most prominent text of the protos_item_.</td>
     </tr>
   </table>
 */
@@ -18739,7 +18739,7 @@ void QCPAxisRect::wheelEvent(QWheelEvent *event)
 
 /*! \fn void QCPAbstractLegendItem::selectionChanged(bool selected)
   
-  This signal is emitted when the selection state of this legend item has changed, either by user
+  This signal is emitted when the selection state_ of this legend protos_item_ has changed, either by user
   interaction or by a direct call to \ref setSelected.
 */
 
@@ -18747,7 +18747,7 @@ void QCPAxisRect::wheelEvent(QWheelEvent *event)
 
 /*!
   Constructs a QCPAbstractLegendItem and associates it with the QCPLegend \a parent. This does not
-  cause the item to be added to \a parent, so \ref QCPLegend::addItem must be called separately.
+  cause the protos_item_ to be added to \a parent, so \ref QCPLegend::addItem must be called separately.
 */
 QCPAbstractLegendItem::QCPAbstractLegendItem(QCPLegend *parent) :
   QCPLayoutElement(parent->parentPlot()),
@@ -18764,7 +18764,7 @@ QCPAbstractLegendItem::QCPAbstractLegendItem(QCPLegend *parent) :
 }
 
 /*!
-  Sets the default font of this specific legend item to \a font.
+  Sets the default font of this specific legend protos_item_ to \a font.
   
   \see setTextColor, QCPLegend::setFont
 */
@@ -18774,7 +18774,7 @@ void QCPAbstractLegendItem::setFont(const QFont &font)
 }
 
 /*!
-  Sets the default text color of this specific legend item to \a color.
+  Sets the default text color of this specific legend protos_item_ to \a color.
   
   \see setFont, QCPLegend::setTextColor
 */
@@ -18784,7 +18784,7 @@ void QCPAbstractLegendItem::setTextColor(const QColor &color)
 }
 
 /*!
-  When this legend item is selected, \a font is used to draw generic text, instead of the normal
+  When this legend protos_item_ is selected, \a font is used to draw generic text, instead of the normal
   font set with \ref setFont.
   
   \see setFont, QCPLegend::setSelectedFont
@@ -18795,7 +18795,7 @@ void QCPAbstractLegendItem::setSelectedFont(const QFont &font)
 }
 
 /*!
-  When this legend item is selected, \a color is used to draw generic text, instead of the normal
+  When this legend protos_item_ is selected, \a color is used to draw generic text, instead of the normal
   color set with \ref setTextColor.
   
   \see setTextColor, QCPLegend::setSelectedTextColor
@@ -18806,7 +18806,7 @@ void QCPAbstractLegendItem::setSelectedTextColor(const QColor &color)
 }
 
 /*!
-  Sets whether this specific legend item is selectable.
+  Sets whether this specific legend protos_item_ is selectable.
   
   \see setSelectedParts, QCustomPlot::setInteractions
 */
@@ -18820,9 +18820,9 @@ void QCPAbstractLegendItem::setSelectable(bool selectable)
 }
 
 /*!
-  Sets whether this specific legend item is selected.
+  Sets whether this specific legend protos_item_ is selected.
   
-  It is possible to set the selection state of this item by calling this function directly, even if
+  It is possible to set the selection state_ of this protos_item_ by calling this function directly, even if
   setSelectable is set to false.
   
   \see setSelectableParts, QCustomPlot::setInteractions
@@ -18893,30 +18893,30 @@ void QCPAbstractLegendItem::deselectEvent(bool *selectionStateChanged)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*! \class QCPPlottableLegendItem
-  \brief A legend item representing a plottable with an icon and the plottable name.
+  \brief A legend protos_item_ representing a plottable with an icon and the plottable item_name_.
   
-  This is the standard legend item for plottables. It displays an icon of the plottable next to the
-  plottable name. The icon is drawn by the respective plottable itself (\ref
+  This is the standard legend protos_item_ for plottables. It displays an icon of the plottable next to the
+  plottable item_name_. The icon is drawn by the respective plottable itself (\ref
   QCPAbstractPlottable::drawLegendIcon), and tries to give an intuitive symbol for the plottable.
   For example, the QCPGraph draws a centered horizontal line and/or a single scatter point in the
   middle.
   
   Legend items of this type are always associated with one plottable (retrievable via the
   plottable() function and settable with the constructor). You may change the font of the plottable
-  name with \ref setFont. Icon padding and border pen is taken from the parent QCPLegend, see \ref
+  item_name_ with \ref setFont. Icon padding and border pen is taken from the parent QCPLegend, see \ref
   QCPLegend::setIconBorderPen and \ref QCPLegend::setIconTextPadding.
 
   The function \ref QCPAbstractPlottable::addToLegend/\ref QCPAbstractPlottable::removeFromLegend
   creates/removes legend items of this type.
   
-  Since QCPLegend is based on QCPLayoutGrid, a legend item itself is just a subclass of
+  Since QCPLegend is based on QCPLayoutGrid, a legend protos_item_ itself is just a subclass of
   QCPLayoutElement. While it could be added to a legend (or any other layout) via the normal layout
   interface, QCPLegend has specialized functions for handling legend items conveniently, see the
   documentation of \ref QCPLegend.
 */
 
 /*!
-  Creates a new legend item associated with \a plottable.
+  Creates a new legend protos_item_ associated with \a plottable.
   
   Once it's created, it can be added to the legend via \ref QCPLegend::addItem.
   
@@ -18933,7 +18933,7 @@ QCPPlottableLegendItem::QCPPlottableLegendItem(QCPLegend *parent, QCPAbstractPlo
 /*! \internal
   
   Returns the pen that shall be used to draw the icon border, taking into account the selection
-  state of this item.
+  state_ of this protos_item_.
 */
 QPen QCPPlottableLegendItem::getIconBorderPen() const
 {
@@ -18942,8 +18942,8 @@ QPen QCPPlottableLegendItem::getIconBorderPen() const
 
 /*! \internal
   
-  Returns the text color that shall be used to draw text, taking into account the selection state
-  of this item.
+  Returns the text color that shall be used to draw text, taking into account the selection state_
+  of this protos_item_.
 */
 QColor QCPPlottableLegendItem::getTextColor() const
 {
@@ -18952,8 +18952,8 @@ QColor QCPPlottableLegendItem::getTextColor() const
 
 /*! \internal
   
-  Returns the font that shall be used to draw text, taking into account the selection state of this
-  item.
+  Returns the font that shall be used to draw text, taking into account the selection state_ of this
+  protos_item_.
 */
 QFont QCPPlottableLegendItem::getFont() const
 {
@@ -18962,9 +18962,9 @@ QFont QCPPlottableLegendItem::getFont() const
 
 /*! \internal
   
-  Draws the item with \a painter. The size and position of the drawn legend item is defined by the
+  Draws the protos_item_ with \a painter. The size and position of the drawn legend protos_item_ is defined by the
   parent layout (typically a \ref QCPLegend) and the \ref minimumOuterSizeHint and \ref
-  maximumOuterSizeHint of this legend item.
+  maximumOuterSizeHint of this legend protos_item_.
 */
 void QCPPlottableLegendItem::draw(QCPPainter *painter)
 {
@@ -18994,7 +18994,7 @@ void QCPPlottableLegendItem::draw(QCPPainter *painter)
 
 /*! \internal
   
-  Calculates and returns the size of this item. This includes the icon, the text and the padding in
+  Calculates and returns the size of this protos_item_. This includes the icon, the text and the padding in
   between.
   
   \seebaseclassmethod
@@ -19022,15 +19022,15 @@ QSize QCPPlottableLegendItem::minimumOuterSizeHint() const
 /*! \class QCPLegend
   \brief Manages a legend inside a QCustomPlot.
 
-  A legend is a small box somewhere in the plot which lists plottables with their name and icon.
+  A legend is a small box somewhere in the plot which lists plottables with their item_name_ and icon.
 
   A legend is populated with legend items by calling \ref QCPAbstractPlottable::addToLegend on the
-  plottable, for which a legend item shall be created. In the case of the main legend (\ref
+  plottable, for which a legend protos_item_ shall be created. In the case of the main legend (\ref
   QCustomPlot::legend), simply adding plottables to the plot while \ref
   QCustomPlot::setAutoAddPlottableToLegend is set to true (the default) creates corresponding
-  legend items. The legend item associated with a certain plottable can be removed with \ref
+  legend items. The legend protos_item_ associated with a certain plottable can be removed with \ref
   QCPAbstractPlottable::removeFromLegend. However, QCPLegend also offers an interface to add and
-  manipulate legend items directly: \ref item, \ref itemWithPlottable, \ref itemCount, \ref
+  manipulate legend items directly: \ref protos_item_, \ref itemWithPlottable, \ref itemCount, \ref
   addItem, \ref removeItem, etc.
 
   Since \ref QCPLegend derives from \ref QCPLayoutGrid, it can be placed in any position a \ref
@@ -19057,7 +19057,7 @@ QSize QCPPlottableLegendItem::minimumOuterSizeHint() const
 
 /*! \fn void QCPLegend::selectionChanged(QCPLegend::SelectableParts selection);
 
-  This signal is emitted when the selection state of this legend has changed.
+  This signal is emitted when the selection state_ of this legend has changed.
   
   \see setSelectedParts, setSelectableParts
 */
@@ -19067,7 +19067,7 @@ QSize QCPPlottableLegendItem::minimumOuterSizeHint() const
 /*!
   Constructs a new QCPLegend instance with default values.
   
-  Note that by default, QCustomPlot already contains a legend ready to be used as \ref
+  note_ that by default, QCustomPlot already contains a legend ready to be used as \ref
   QCustomPlot::legend
 */
 QCPLegend::QCPLegend() :
@@ -19140,9 +19140,9 @@ void QCPLegend::setBrush(const QBrush &brush)
 }
 
 /*!
-  Sets the default font of legend text. Legend items that draw text (e.g. the name of a graph) will
-  use this font by default. However, a different font can be specified on a per-item-basis by
-  accessing the specific legend item.
+  Sets the default font of legend text. Legend items that draw text (e.g. the item_name_ of a graph) will
+  use this font by default. However, a different font can be specified on a per-protos_item_-basis by
+  accessing the specific legend protos_item_.
   
   This function will also set \a font on all already existing legend items.
   
@@ -19159,9 +19159,9 @@ void QCPLegend::setFont(const QFont &font)
 }
 
 /*!
-  Sets the default color of legend text. Legend items that draw text (e.g. the name of a graph)
-  will use this color by default. However, a different colors can be specified on a per-item-basis
-  by accessing the specific legend item.
+  Sets the default color of legend text. Legend items that draw text (e.g. the item_name_ of a graph)
+  will use this color by default. However, a different colors can be specified on a per-protos_item_-basis
+  by accessing the specific legend protos_item_.
   
   This function will also set \a color on all already existing legend items.
   
@@ -19197,7 +19197,7 @@ void QCPLegend::setIconSize(int width, int height)
 /*!
   Sets the horizontal space in pixels between the legend icon and the text next to it.
   Legend items that draw an icon (e.g. a visual representation of the graph) and text (e.g. the
-  name of the graph) will use this space by default.
+  item_name_ of the graph) will use this space by default.
 */
 void QCPLegend::setIconTextPadding(int padding)
 {
@@ -19235,22 +19235,22 @@ void QCPLegend::setSelectableParts(const SelectableParts &selectable)
 }
 
 /*!
-  Sets the selected state of the respective legend parts described by \ref SelectablePart. When a part
+  Sets the selected state_ of the respective legend parts described by \ref SelectablePart. When a part
   is selected, it uses a different pen/font and brush. If some legend items are selected and \a selected
   doesn't contain \ref spItems, those items become deselected.
   
   The entire selection mechanism is handled automatically when \ref QCustomPlot::setInteractions
   contains iSelectLegend. You only need to call this function when you wish to change the selection
-  state manually.
+  state_ manually.
   
-  This function can change the selection state of a part even when \ref setSelectableParts was set to a
+  This function can change the selection state_ of a part even when \ref setSelectableParts was set to a
   value that actually excludes the part.
   
-  emits the \ref selectionChanged signal when \a selected is different from the previous selection state.
+  emits the \ref selectionChanged signal when \a selected is different from the previous selection state_.
   
-  Note that it doesn't make sense to set the selected state \ref spItems here when it wasn't set
+  note_ that it doesn't make sense to set the selected state_ \ref spItems here when it wasn't set
   before, because there's no way to specify which exact items to newly select. Do this by calling
-  \ref QCPAbstractLegendItem::setSelected directly on the legend item you wish to select.
+  \ref QCPAbstractLegendItem::setSelected directly on the legend protos_item_ you wish to select.
   
   \see SelectablePart, setSelectableParts, selectTest, setSelectedBorderPen, setSelectedIconBorderPen, setSelectedBrush,
   setSelectedFont
@@ -19258,7 +19258,7 @@ void QCPLegend::setSelectableParts(const SelectableParts &selectable)
 void QCPLegend::setSelectedParts(const SelectableParts &selected)
 {
   SelectableParts newSelected = selected;
-  mSelectedParts = this->selectedParts(); // update mSelectedParts in case item selection changed
+  mSelectedParts = this->selectedParts(); // update mSelectedParts in case protos_item_ selection changed
 
   if (mSelectedParts != newSelected)
   {
@@ -19267,7 +19267,7 @@ void QCPLegend::setSelectedParts(const SelectableParts &selected)
       qDebug() << Q_FUNC_INFO << "spItems flag can not be set, it can only be unset with this function";
       newSelected &= ~spItems;
     }
-    if (mSelectedParts.testFlag(spItems) && !newSelected.testFlag(spItems)) // spItems flag was unset, so clear item selection
+    if (mSelectedParts.testFlag(spItems) && !newSelected.testFlag(spItems)) // spItems flag was unset, so clear protos_item_ selection
     {
       for (int i=0; i<itemCount(); ++i)
       {
@@ -19347,10 +19347,10 @@ void QCPLegend::setSelectedTextColor(const QColor &color)
 }
 
 /*!
-  Returns the item with index \a i. If non-legend items were added to the legend, and the element
+  Returns the protos_item_ with index \a i. If non-legend items were added to the legend, and the element
   at the specified cell index is not a QCPAbstractLegendItem, returns \c nullptr.
 
-  Note that the linear index depends on the current fill order (\ref setFillOrder).
+  note_ that the linear index depends on the current fill order (\ref setFillOrder).
 
   \see itemCount, addItem, itemWithPlottable
 */
@@ -19361,7 +19361,7 @@ QCPAbstractLegendItem *QCPLegend::item(int index) const
 
 /*!
   Returns the QCPPlottableLegendItem which is associated with \a plottable (e.g. a \ref QCPGraph*).
-  If such an item isn't in the legend, returns \c nullptr.
+  If such an protos_item_ isn't in the legend, returns \c nullptr.
   
   \see hasItemWithPlottable
 */
@@ -19380,13 +19380,13 @@ QCPPlottableLegendItem *QCPLegend::itemWithPlottable(const QCPAbstractPlottable 
 
 /*!
   Returns the number of items currently in the legend. It is identical to the base class
-  QCPLayoutGrid::elementCount(), and unlike the other "item" interface methods of QCPLegend,
+  QCPLayoutGrid::elementCount(), and unlike the other "protos_item_" interface methods of QCPLegend,
   doesn't only address elements which can be cast to QCPAbstractLegendItem.
 
-  Note that if empty cells are in the legend (e.g. by calling methods of the \ref QCPLayoutGrid
+  note_ that if empty cells are in the legend (e.g. by calling methods of the \ref QCPLayoutGrid
   base class which allows creating empty cells), they are included in the returned count.
 
-  \see item
+  \see protos_item_
 */
 int QCPLegend::itemCount() const
 {
@@ -19394,7 +19394,7 @@ int QCPLegend::itemCount() const
 }
 
 /*!
-  Returns whether the legend contains \a item.
+  Returns whether the legend contains \a protos_item_.
   
   \see hasItemWithPlottable
 */
@@ -19410,7 +19410,7 @@ bool QCPLegend::hasItem(QCPAbstractLegendItem *item) const
 
 /*!
   Returns whether the legend contains a QCPPlottableLegendItem which is associated with \a plottable (e.g. a \ref QCPGraph*).
-  If such an item isn't in the legend, returns false.
+  If such an protos_item_ isn't in the legend, returns false.
   
   \see itemWithPlottable
 */
@@ -19420,14 +19420,14 @@ bool QCPLegend::hasItemWithPlottable(const QCPAbstractPlottable *plottable) cons
 }
 
 /*!
-  Adds \a item to the legend, if it's not present already. The element is arranged according to the
+  Adds \a protos_item_ to the legend, if it's not present already. The element is arranged according to the
   current fill order (\ref setFillOrder) and wrapping (\ref setWrap).
 
-  Returns true on sucess, i.e. if the item wasn't in the list already and has been successfuly added.
+  Returns true on sucess, i.e. if the protos_item_ wasn't in the list already and has been successfuly added.
 
-  The legend takes ownership of the item.
+  The legend takes ownership of the protos_item_.
 
-  \see removeItem, item, hasItem
+  \see removeItem, protos_item_, hasItem
 */
 bool QCPLegend::addItem(QCPAbstractLegendItem *item)
 {
@@ -19436,10 +19436,10 @@ bool QCPLegend::addItem(QCPAbstractLegendItem *item)
 
 /*! \overload
 
-  Removes the item with the specified \a index from the legend and deletes it.
+  Removes the protos_item_ with the specified \a index from the legend and deletes it.
 
   After successful removal, the legend is reordered according to the current fill order (\ref
-  setFillOrder) and wrapping (\ref setWrap), so no empty cell remains where the removed \a item
+  setFillOrder) and wrapping (\ref setWrap), so no empty cell remains where the removed \a protos_item_
   was. If you don't want this, rather use the raw element interface of \ref QCPLayoutGrid.
 
   Returns true, if successful. Unlike \ref QCPLayoutGrid::removeAt, this method only removes
@@ -19461,10 +19461,10 @@ bool QCPLegend::removeItem(int index)
 
 /*! \overload
 
-  Removes \a item from the legend and deletes it.
+  Removes \a protos_item_ from the legend and deletes it.
 
   After successful removal, the legend is reordered according to the current fill order (\ref
-  setFillOrder) and wrapping (\ref setWrap), so no empty cell remains where the removed \a item
+  setFillOrder) and wrapping (\ref setWrap), so no empty cell remains where the removed \a protos_item_
   was. If you don't want this, rather use the raw element interface of \ref QCPLayoutGrid.
 
   Returns true, if successful.
@@ -19487,7 +19487,7 @@ void QCPLegend::clearItems()
   for (int i=elementCount()-1; i>=0; --i)
   {
     if (item(i))
-      removeAt(i); // don't use removeItem() because it would unnecessarily reorder the whole legend for each item
+      removeAt(i); // don't use removeItem() because it would unnecessarily reorder the whole legend for each protos_item_
   }
   setFillOrder(fillOrder(), true); // get rid of empty cells by reordering once after all items are removed
 }
@@ -19517,7 +19517,7 @@ QList<QCPAbstractLegendItem *> QCPLegend::selectedItems() const
   A convenience function to easily set the QPainter::Antialiased hint on the provided \a painter
   before drawing main legend elements.
 
-  This is the antialiasing state the painter passed to the \ref draw method is in by default.
+  This is the antialiasing state_ the painter passed to the \ref draw method is in by default.
   
   This function takes into account the local setting of the antialiasing flag as well as the
   overrides set with \ref QCustomPlot::setAntialiasedElements and \ref
@@ -19534,7 +19534,7 @@ void QCPLegend::applyDefaultAntialiasingHint(QCPPainter *painter) const
 
 /*! \internal
   
-  Returns the pen used to paint the border of the legend, taking into account the selection state
+  Returns the pen used to paint the border of the legend, taking into account the selection state_
   of the legend box.
 */
 QPen QCPLegend::getBorderPen() const
@@ -19545,7 +19545,7 @@ QPen QCPLegend::getBorderPen() const
 /*! \internal
   
   Returns the brush used to paint the background of the legend, taking into account the selection
-  state of the legend box.
+  state_ of the legend box.
 */
 QBrush QCPLegend::getBrush() const
 {
@@ -19584,7 +19584,7 @@ double QCPLegend::selectTest(const QPointF &pos, bool onlySelectable, QVariant *
 void QCPLegend::selectEvent(QMouseEvent *event, bool additive, const QVariant &details, bool *selectionStateChanged)
 {
   Q_UNUSED(event)
-  mSelectedParts = selectedParts(); // in case item selection has changed
+  mSelectedParts = selectedParts(); // in case protos_item_ selection has changed
   if (details.value<SelectablePart>() == spLegendBox && mSelectableParts.testFlag(spLegendBox))
   {
     SelectableParts selBefore = mSelectedParts;
@@ -19597,7 +19597,7 @@ void QCPLegend::selectEvent(QMouseEvent *event, bool additive, const QVariant &d
 /* inherits documentation from base class */
 void QCPLegend::deselectEvent(bool *selectionStateChanged)
 {
-  mSelectedParts = selectedParts(); // in case item selection has changed
+  mSelectedParts = selectedParts(); // in case protos_item_ selection has changed
   if (mSelectableParts.testFlag(spLegendBox))
   {
     SelectableParts selBefore = mSelectedParts;
@@ -19649,7 +19649,7 @@ void QCPLegend::parentPlotInitialized(QCustomPlot *parentPlot)
 
 /*! \fn void QCPTextElement::selectionChanged(bool selected)
   
-  This signal is emitted when the selection state has changed to \a selected, either by user
+  This signal is emitted when the selection state_ has changed to \a selected, either by user
   interaction or by a direct call to \ref setSelected.
   
   \see setSelected, setSelectable
@@ -19867,7 +19867,7 @@ void QCPTextElement::setSelectedTextColor(const QColor &color)
 /*!
   Sets whether the user may select this text element.
 
-  Note that even when \a selectable is set to <tt>false</tt>, the selection state may be changed
+  note_ that even when \a selectable is set to <tt>false</tt>, the selection state_ may be changed
   programmatically via \ref setSelected.
 */
 void QCPTextElement::setSelectable(bool selectable)
@@ -19880,11 +19880,11 @@ void QCPTextElement::setSelectable(bool selectable)
 }
 
 /*!
-  Sets the selection state of this text element to \a selected. If the selection has changed, \ref
+  Sets the selection state_ of this text element to \a selected. If the selection has changed, \ref
   selectionChanged is emitted.
   
-  Note that this function can change the selection state independently of the current \ref
-  setSelectable state.
+  note_ that this function can change the selection state_ independently of the current \ref
+  setSelectable state_.
 */
 void QCPTextElement::setSelected(bool selected)
 {
@@ -19957,7 +19957,7 @@ void QCPTextElement::deselectEvent(bool *selectionStateChanged)
 
 /*!
   Returns 0.99*selectionTolerance (see \ref QCustomPlot::setSelectionTolerance) when \a pos is
-  within the bounding box of the text element's text. Note that this bounding box is updated in the
+  within the bounding box of the text element's text. note_ that this bounding box is updated in the
   draw call.
 
   If \a pos is outside the text's bounding box or if \a onlySelectable is true and this text
@@ -20185,7 +20185,7 @@ bool QCPColorScale::rangeZoom() const
 /*!
   Sets at which side of the color scale the axis is placed, and thus also its orientation.
   
-  Note that after setting \a type to a different value, the axis returned by \ref axis() will
+  note_ that after setting \a type to a different value, the axis returned by \ref axis() will
   be a different one. The new axis will adopt the following properties from the previous axis: The
   range, scale type, label and ticker (the latter will be shared and not copied).
 */
@@ -20262,7 +20262,7 @@ void QCPColorScale::setDataRange(const QCPRange &dataRange)
   also equivalent to directly accessing the \ref axis and setting its scale type with \ref
   QCPAxis::setScaleType.
   
-  Note that this method controls the coordinate transformation. For logarithmic scales, you will
+  note_ that this method controls the coordinate transformation. For logarithmic scales, you will
   likely also want to use a logarithmic tick spacing and labeling, which can be achieved by setting
   the color scale's \ref axis ticker to an instance of \ref QCPAxisTickerLog :
   
@@ -20331,7 +20331,7 @@ void QCPColorScale::setBarWidth(int width)
 /*!
   Sets whether the user can drag the data range (\ref setDataRange).
   
-  Note that \ref QCP::iRangeDrag must be in the QCustomPlot's interactions (\ref
+  note_ that \ref QCP::iRangeDrag must be in the QCustomPlot's interactions (\ref
   QCustomPlot::setInteractions) to allow range dragging.
 */
 void QCPColorScale::setRangeDrag(bool enabled)
@@ -20358,7 +20358,7 @@ void QCPColorScale::setRangeDrag(bool enabled)
 /*!
   Sets whether the user can zoom the data range (\ref setDataRange) by scrolling the mouse wheel.
   
-  Note that \ref QCP::iRangeZoom must be in the QCustomPlot's interactions (\ref
+  note_ that \ref QCP::iRangeZoom must be in the QCustomPlot's interactions (\ref
   QCustomPlot::setInteractions) to allow range dragging.
 */
 void QCPColorScale::setRangeZoom(bool enabled)
@@ -20669,7 +20669,7 @@ void QCPColorScaleAxisRectPrivate::updateGradientImage()
 /*! \internal
 
   This slot is connected to the selectionChanged signals of the four axes in the constructor. It
-  synchronizes the selection state of the axes.
+  synchronizes the selection state_ of the axes.
 */
 void QCPColorScaleAxisRectPrivate::axisSelectionChanged(QCPAxis::SelectableParts selectedParts)
 {
@@ -21148,7 +21148,7 @@ void QCPGraph::draw(QCPPainter *painter)
     for (it = mDataContainer->constBegin(); it != mDataContainer->constEnd(); ++it)
     {
       if (QCP::isInvalidData(it->key, it->value))
-        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "invalid." << "Plottable name:" << name();
+        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "invalid." << "Plottable item_name_:" << name();
     }
 #endif
     
@@ -22251,7 +22251,7 @@ const QPolygonF QCPGraph::getChannelFillPolygon(const QVector<QPointF> *thisData
   if (!mChannelFillGraph.data()->mKeyAxis) { qDebug() << Q_FUNC_INFO << "channel fill target key axis invalid"; return QPolygonF(); }
   
   if (mChannelFillGraph.data()->mKeyAxis.data()->orientation() != keyAxis->orientation())
-    return QPolygonF(); // don't have same axis orientation, can't fill that (Note: if keyAxis fits, valueAxis will fit too, because it's always orthogonal to keyAxis)
+    return QPolygonF(); // don't have same axis orientation, can't fill that (note_: if keyAxis fits, valueAxis will fit too, because it's always orthogonal to keyAxis)
   
   if (thisData->isEmpty()) return QPolygonF();
   QVector<QPointF> thisSegmentData(thisSegment.size());
@@ -22412,7 +22412,7 @@ int QCPGraph::findIndexAboveY(const QVector<QPointF> *data, double y) const
   
   Calculates the minimum distance in pixels the graph's representation has from the given \a
   pixelPoint. This is used to determine whether the graph was clicked or not, e.g. in \ref
-  selectTest. The closest data point to \a pixelPoint is returned in \a closestData. Note that if
+  selectTest. The closest data point to \a pixelPoint is returned in \a closestData. note_ that if
   the graph has a line representation, the returned distance may be smaller than the distance to
   the \a closestData point, since the distance to the graph line is also taken into account.
   
@@ -22623,7 +22623,7 @@ QCPCurveData::QCPCurveData(double t, double key, double value) :
   
   Usually, you first create an instance:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpcurve-creation-1
-  which registers it with the QCustomPlot instance of the passed axes. Note that this QCustomPlot instance takes
+  which registers it with the QCustomPlot instance of the passed axes. note_ that this QCustomPlot instance takes
   ownership of the plottable, so do not delete it manually but use QCustomPlot::removePlottable() instead.
   The newly created plottable can be modified, e.g.:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpcurve-creation-2
@@ -22932,7 +22932,7 @@ void QCPCurve::draw(QCPPainter *painter)
     {
       if (QCP::isInvalidData(it->t) ||
           QCP::isInvalidData(it->key, it->value))
-        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "invalid." << "Plottable name:" << name();
+        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "invalid." << "Plottable item_name_:" << name();
     }
   #endif
     
@@ -23313,7 +23313,7 @@ int QCPCurve::getRegion(double key, double value, double keyMin, double valueMax
 QPointF QCPCurve::getOptimizedPoint(int otherRegion, double otherKey, double otherValue, double key, double value, double keyMin, double valueMax, double keyMax, double valueMin) const
 {
   // The intersection point interpolation here is done in pixel coordinates, so we don't need to
-  // differentiate between different axis scale types. Note that the nomenclature
+  // differentiate between different axis scale types. note_ that the nomenclature
   // top/left/bottom/right/min/max is with respect to the rect in plot coordinates, wich may be
   // different in pixel coordinates (horz/vert key axes, reversed ranges)
   
@@ -23696,7 +23696,7 @@ bool QCPCurve::mayTraverse(int prevRegion, int currentRegion) const
 bool QCPCurve::getTraverse(double prevKey, double prevValue, double key, double value, double keyMin, double valueMax, double keyMax, double valueMin, QPointF &crossA, QPointF &crossB) const
 {
   // The intersection point interpolation here is done in pixel coordinates, so we don't need to
-  // differentiate between different axis scale types. Note that the nomenclature
+  // differentiate between different axis scale types. note_ that the nomenclature
   // top/left/bottom/right/min/max is with respect to the rect in plot coordinates, wich may be
   // different in pixel coordinates (horz/vert key axes, reversed ranges)
   
@@ -23894,7 +23894,7 @@ void QCPCurve::getTraverseCornerPoints(int prevRegion, int currentRegion, double
   
   Calculates the (minimum) distance (in pixels) the curve's representation has from the given \a
   pixelPoint in pixels. This is used to determine whether the curve was clicked or not, e.g. in
-  \ref selectTest. The closest data point to \a pixelPoint is returned in \a closestData. Note that
+  \ref selectTest. The closest data point to \a pixelPoint is returned in \a closestData. note_ that
   if the curve has a line representation, the returned distance may be smaller than the distance to
   the \a closestData point, since the distance to the curve line is also taken into account.
   
@@ -24399,7 +24399,7 @@ QCPBarsData::QCPBarsData(double key, double value) :
   
   Usually, you first create an instance:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpbars-creation-1
-  which registers it with the QCustomPlot instance of the passed axes. Note that this QCustomPlot instance takes
+  which registers it with the QCustomPlot instance of the passed axes. note_ that this QCustomPlot instance takes
   ownership of the plottable, so do not delete it manually but use QCustomPlot::removePlottable() instead.
   The newly created plottable can be modified, e.g.:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpbars-creation-2
@@ -24633,7 +24633,7 @@ void QCPBars::moveBelow(QCPBars *bars)
     return;
   }
   // remove from stacking:
-  connectBars(mBarBelow.data(), mBarAbove.data()); // Note: also works if one (or both) of them is 0
+  connectBars(mBarBelow.data(), mBarAbove.data()); // note_: also works if one (or both) of them is 0
   // if new bar given, insert this bar below it:
   if (bars)
   {
@@ -24666,7 +24666,7 @@ void QCPBars::moveAbove(QCPBars *bars)
     return;
   }
   // remove from stacking:
-  connectBars(mBarBelow.data(), mBarAbove.data()); // Note: also works if one (or both) of them is 0
+  connectBars(mBarBelow.data(), mBarAbove.data()); // note_: also works if one (or both) of them is 0
   // if new bar given, insert this bar above it:
   if (bars)
   {
@@ -24739,7 +24739,7 @@ double QCPBars::selectTest(const QPointF &pos, bool onlySelectable, QVariant *de
 /* inherits documentation from base class */
 QCPRange QCPBars::getKeyRange(bool &foundRange, QCP::SignDomain inSignDomain) const
 {
-  /* Note: If this QCPBars uses absolute pixels as width (or is in a QCPBarsGroup with spacing in
+  /* note_: If this QCPBars uses absolute pixels as width (or is in a QCPBarsGroup with spacing in
   absolute pixels), using this method to adapt the key axis range to fit the bars into the
   currently visible axis range will not work perfectly. Because in the moment the axis range is
   changed to the new range, the fixed pixel widths/spacings will represent different coordinate
@@ -24778,7 +24778,7 @@ QCPRange QCPBars::getKeyRange(bool &foundRange, QCP::SignDomain inSignDomain) co
 /* inherits documentation from base class */
 QCPRange QCPBars::getValueRange(bool &foundRange, QCP::SignDomain inSignDomain, const QCPRange &inKeyRange) const
 {
-  // Note: can't simply use mDataContainer->valueRange here because we need to
+  // note_: can't simply use mDataContainer->valueRange here because we need to
   // take into account bar base value and possible stacking of multiple bars
   QCPRange range;
   range.lower = mBaseValue;
@@ -24865,7 +24865,7 @@ void QCPBars::draw(QCPPainter *painter)
       // check data validity if flag set:
 #ifdef QCUSTOMPLOT_CHECK_DATA
       if (QCP::isInvalidData(it->key, it->value))
-        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "of drawn range invalid." << "Plottable name:" << name();
+        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "of drawn range invalid." << "Plottable item_name_:" << name();
 #endif
       // draw bar:
       if (isSelectedSegment && mSelectionDecorator)
@@ -24905,7 +24905,7 @@ void QCPBars::drawLegendIcon(QCPPainter *painter, const QRectF &rect) const
   setting, so only that needs to be processed. It also takes into account the bar width.
   
   \a begin returns an iterator to the lowest data point that needs to be taken into account when
-  plotting. Note that in order to get a clean plot all the way to the edge of the axis rect, \a
+  plotting. note_ that in order to get a clean plot all the way to the edge of the axis rect, \a
   lower may still be just outside the visible range.
   
   \a end returns an iterator one higher than the highest visible data point. Same as before, \a end
@@ -25297,7 +25297,7 @@ QCPStatisticalBoxData::QCPStatisticalBoxData(double key, double minimum, double 
   
   Usually, you first create an instance:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpstatisticalbox-creation-1
-  which registers it with the QCustomPlot instance of the passed axes. Note that this QCustomPlot instance takes
+  which registers it with the QCustomPlot instance of the passed axes. note_ that this QCustomPlot instance takes
   ownership of the plottable, so do not delete it manually but use QCustomPlot::removePlottable() instead.
   The newly created plottable can be modified, e.g.:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpstatisticalbox-creation-2
@@ -25431,7 +25431,7 @@ void QCPStatisticalBox::setWhiskerBarPen(const QPen &pen)
 /*!
   Sets whether the statistical boxes whiskers are drawn with antialiasing or not.
 
-  Note that antialiasing settings may be overridden by QCustomPlot::setAntialiasedElements and
+  note_ that antialiasing settings may be overridden by QCustomPlot::setAntialiasedElements and
   QCustomPlot::setNotAntialiasedElements.
 */
 void QCPStatisticalBox::setWhiskerAntialiased(bool enabled)
@@ -25641,10 +25641,10 @@ void QCPStatisticalBox::draw(QCPPainter *painter)
       if (QCP::isInvalidData(it->key, it->minimum) ||
           QCP::isInvalidData(it->lowerQuartile, it->median) ||
           QCP::isInvalidData(it->upperQuartile, it->maximum))
-        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "of drawn range has invalid data." << "Plottable name:" << name();
+        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "of drawn range has invalid data." << "Plottable item_name_:" << name();
       for (int i=0; i<it->outliers.size(); ++i)
         if (QCP::isInvalidData(it->outliers.at(i)))
-          qDebug() << Q_FUNC_INFO << "Data point outlier at" << it->key << "of drawn range invalid." << "Plottable name:" << name();
+          qDebug() << Q_FUNC_INFO << "Data point outlier at" << it->key << "of drawn range invalid." << "Plottable item_name_:" << name();
 # endif
       
       if (isSelectedSegment && mSelectionDecorator)
@@ -25719,7 +25719,7 @@ void QCPStatisticalBox::drawStatisticalBox(QCPPainter *painter, QCPStatisticalBo
   setting, so only that needs to be processed. It also takes into account the bar width.
   
   \a begin returns an iterator to the lowest data point that needs to be taken into account when
-  plotting. Note that in order to get a clean plot all the way to the edge of the axis rect, \a
+  plotting. note_ that in order to get a clean plot all the way to the edge of the axis rect, \a
   lower may still be just outside the visible range.
   
   \a end returns an iterator one higher than the highest visible data point. Same as before, \a end
@@ -25880,7 +25880,7 @@ QCPColorMapData::QCPColorMapData(const QCPColorMapData &other) :
 }
 
 /*!
-  Overwrites this color map data instance with the data stored in \a other. The alpha map state is
+  Overwrites this color map data instance with the data stored in \a other. The alpha map state_ is
   transferred, too.
 */
 QCPColorMapData &QCPColorMapData::operator=(const QCPColorMapData &other)
@@ -26122,7 +26122,7 @@ void QCPColorMapData::setCell(int keyIndex, int valueIndex, double z)
   If an alpha map doesn't exist yet for this color map data, it will be created here. If you wish
   to restore full opacity and free any allocated memory of the alpha map, call \ref clearAlpha.
 
-  Note that the cell-wise alpha which can be configured here is independent of any alpha configured
+  note_ that the cell-wise alpha which can be configured here is independent of any alpha configured
   in the color map's gradient (\ref QCPColorGradient). If a cell is affected both by the cell-wise
   and gradient alpha, the alpha values will be blended accordingly during rendering of the color
   map.
@@ -26151,7 +26151,7 @@ void QCPColorMapData::setAlpha(int keyIndex, int valueIndex, unsigned char alpha
   updated the last time. Why this is the case is explained in the class description (\ref
   QCPColorMapData).
   
-  Note that the method \ref QCPColorMap::rescaleDataRange provides a parameter \a
+  note_ that the method \ref QCPColorMap::rescaleDataRange provides a parameter \a
   recalculateDataBounds for convenience. Setting this to true will call this method for you, before
   doing the rescale.
 */
@@ -26382,7 +26382,7 @@ bool QCPColorMapData::createAlpha(bool initializeOpaque)
   
   Usually, you first create an instance:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpcolormap-creation-1
-  which registers it with the QCustomPlot instance of the passed axes. Note that this QCustomPlot instance takes
+  which registers it with the QCustomPlot instance of the passed axes. note_ that this QCustomPlot instance takes
   ownership of the plottable, so do not delete it manually but use QCustomPlot::removePlottable() instead.
   The newly created plottable can be modified, e.g.:
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpcolormap-creation-2
@@ -26644,7 +26644,7 @@ void QCPColorMap::rescaleDataRange(bool recalculateDataBounds)
   
   The current color map appearance is scaled down to \a thumbSize. Ideally, this should be equal to
   the size of the legend icon (see \ref QCPLegend::setIconSize). If it isn't exactly the configured
-  legend icon size, the thumb will be rescaled during drawing of the legend item.
+  legend icon size, the thumb will be rescaled during drawing of the legend protos_item_.
   
   \see setDataRange
 */
@@ -27065,7 +27065,7 @@ QCPFinancialData::QCPFinancialData(double key, double open, double high, double 
   Usually, you first create an instance:
 
   \snippet documentation/doc-code-snippets/mainwindow.cpp qcpfinancial-creation-1
-  which registers it with the QCustomPlot instance of the passed axes. Note that this QCustomPlot
+  which registers it with the QCustomPlot instance of the passed axes. note_ that this QCustomPlot
   instance takes ownership of the plottable, so do not delete it manually but use
   QCustomPlot::removePlottable() instead. The newly created plottable can be modified, e.g.:
 
@@ -27837,7 +27837,7 @@ double QCPFinancial::candlestickSelectTest(const QPointF &pos, const QCPFinancia
   axis range setting, so only that needs to be processed.
   
   \a begin returns an iterator to the lowest data point that needs to be taken into account when
-  plotting. Note that in order to get a clean plot all the way to the edge of the axis rect, \a
+  plotting. note_ that in order to get a clean plot all the way to the edge of the axis rect, \a
   begin may still be just outside the visible range.
   
   \a end returns the iterator just above the highest data point that needs to be taken into
@@ -28372,7 +28372,7 @@ void QCPErrorBars::draw(QCPPainter *painter)
   for (it = mDataContainer->constBegin(); it != mDataContainer->constEnd(); ++it)
   {
     if (QCP::isInvalidData(it->errorMinus, it->errorPlus))
-      qDebug() << Q_FUNC_INFO << "Data point at index" << it-mDataContainer->constBegin() << "invalid." << "Plottable name:" << name();
+      qDebug() << Q_FUNC_INFO << "Data point at index" << it-mDataContainer->constBegin() << "invalid." << "Plottable item_name_:" << name();
   }
 #endif
   
@@ -28619,7 +28619,7 @@ void QCPErrorBars::getErrorBarLines(QCPErrorBarsDataContainer::const_iterator it
   QCPAxis *orthoAxis = mErrorType == etValueError ? mKeyAxis.data() : mValueAxis.data();
   const double centerErrorAxisPixel = errorAxis->orientation() == Qt::Horizontal ? centerPixel.x() : centerPixel.y();
   const double centerOrthoAxisPixel = orthoAxis->orientation() == Qt::Horizontal ? centerPixel.x() : centerPixel.y();
-  const double centerErrorAxisCoord = errorAxis->pixelToCoord(centerErrorAxisPixel); // depending on plottable, this might be different from just mDataPlottable->interface1D()->dataMainKey/Value
+  const double centerErrorAxisCoord = errorAxis->pixelToCoord(centerErrorAxisPixel); // depending on plottable, this might be different from just mDataPlottable->interface1D()->dataMainKey/value_
   const double symbolGap = mSymbolGap*0.5*errorAxis->pixelOrientation();
   // plus error:
   double errorStart, errorEnd;
@@ -28849,7 +28849,7 @@ bool QCPErrorBars::rectIntersectsLine(const QRectF &pixelRect, const QLineF &lin
 /* end of 'src/plottables/plottable-errorbar.cpp' */
 
 
-/* including file 'src/items/item-straightline.cpp' */
+/* including file 'src/items/protos_item_-straightline.cpp' */
 /* modified 2022-11-06T12:45:56, size 7596          */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28865,10 +28865,10 @@ bool QCPErrorBars::rectIntersectsLine(const QRectF &pixelRect, const QLineF &lin
 */
 
 /*!
-  Creates a straight line item and sets default values.
+  Creates a straight line protos_item_ and sets default values.
   
-  The created item is automatically registered with \a parentPlot. This QCustomPlot instance takes
-  ownership of the item, so do not delete it manually but use QCustomPlot::removeItem() instead.
+  The created protos_item_ is automatically registered with \a parentPlot. This QCustomPlot instance takes
+  ownership of the protos_item_, so do not delete it manually but use QCustomPlot::removeItem() instead.
 */
 QCPItemStraightLine::QCPItemStraightLine(QCustomPlot *parentPlot) :
   QCPAbstractItem(parentPlot),
@@ -29021,16 +29021,16 @@ QLineF QCPItemStraightLine::getRectClippedStraightLine(const QCPVector2D &base, 
 /*! \internal
 
   Returns the pen that should be used for drawing lines. Returns mPen when the
-  item is not selected and mSelectedPen when it is.
+  protos_item_ is not selected and mSelectedPen when it is.
 */
 QPen QCPItemStraightLine::mainPen() const
 {
   return mSelected ? mSelectedPen : mPen;
 }
-/* end of 'src/items/item-straightline.cpp' */
+/* end of 'src/items/protos_item_-straightline.cpp' */
 
 
-/* including file 'src/items/item-line.cpp' */
+/* including file 'src/items/protos_item_-line.cpp' */
 /* modified 2022-11-06T12:45:56, size 8525  */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29048,10 +29048,10 @@ QPen QCPItemStraightLine::mainPen() const
 */
 
 /*!
-  Creates a line item and sets default values.
+  Creates a line protos_item_ and sets default values.
   
-  The created item is automatically registered with \a parentPlot. This QCustomPlot instance takes
-  ownership of the item, so do not delete it manually but use QCustomPlot::removeItem() instead.
+  The created protos_item_ is automatically registered with \a parentPlot. This QCustomPlot instance takes
+  ownership of the protos_item_, so do not delete it manually but use QCustomPlot::removeItem() instead.
 */
 QCPItemLine::QCPItemLine(QCustomPlot *parentPlot) :
   QCPAbstractItem(parentPlot),
@@ -29092,7 +29092,7 @@ void QCPItemLine::setSelectedPen(const QPen &pen)
 /*!
   Sets the line ending style of the head. The head corresponds to the \a end position.
   
-  Note that due to the overloaded QCPLineEnding constructor, you may directly specify
+  note_ that due to the overloaded QCPLineEnding constructor, you may directly specify
   a QCPLineEnding::EndingStyle here, e.g. \code setHead(QCPLineEnding::esSpikeArrow) \endcode
   
   \see setTail
@@ -29105,7 +29105,7 @@ void QCPItemLine::setHead(const QCPLineEnding &head)
 /*!
   Sets the line ending style of the tail. The tail corresponds to the \a start position.
   
-  Note that due to the overloaded QCPLineEnding constructor, you may directly specify
+  note_ that due to the overloaded QCPLineEnding constructor, you may directly specify
   a QCPLineEnding::EndingStyle here, e.g. \code setTail(QCPLineEnding::esSpikeArrow) \endcode
   
   \see setHead
@@ -29252,16 +29252,16 @@ QLineF QCPItemLine::getRectClippedLine(const QCPVector2D &start, const QCPVector
 /*! \internal
 
   Returns the pen that should be used for drawing lines. Returns mPen when the
-  item is not selected and mSelectedPen when it is.
+  protos_item_ is not selected and mSelectedPen when it is.
 */
 QPen QCPItemLine::mainPen() const
 {
   return mSelected ? mSelectedPen : mPen;
 }
-/* end of 'src/items/item-line.cpp' */
+/* end of 'src/items/protos_item_-line.cpp' */
 
 
-/* including file 'src/items/item-curve.cpp' */
+/* including file 'src/items/protos_item_-curve.cpp' */
 /* modified 2022-11-06T12:45:56, size 7273   */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29286,10 +29286,10 @@ QPen QCPItemLine::mainPen() const
 */
 
 /*!
-  Creates a curve item and sets default values.
+  Creates a curve protos_item_ and sets default values.
   
-  The created item is automatically registered with \a parentPlot. This QCustomPlot instance takes
-  ownership of the item, so do not delete it manually but use QCustomPlot::removeItem() instead.
+  The created protos_item_ is automatically registered with \a parentPlot. This QCustomPlot instance takes
+  ownership of the protos_item_, so do not delete it manually but use QCustomPlot::removeItem() instead.
 */
 QCPItemCurve::QCPItemCurve(QCustomPlot *parentPlot) :
   QCPAbstractItem(parentPlot),
@@ -29334,7 +29334,7 @@ void QCPItemCurve::setSelectedPen(const QPen &pen)
 /*!
   Sets the line ending style of the head. The head corresponds to the \a end position.
   
-  Note that due to the overloaded QCPLineEnding constructor, you may directly specify
+  note_ that due to the overloaded QCPLineEnding constructor, you may directly specify
   a QCPLineEnding::EndingStyle here, e.g. \code setHead(QCPLineEnding::esSpikeArrow) \endcode
   
   \see setTail
@@ -29347,7 +29347,7 @@ void QCPItemCurve::setHead(const QCPLineEnding &head)
 /*!
   Sets the line ending style of the tail. The tail corresponds to the \a start position.
   
-  Note that due to the overloaded QCPLineEnding constructor, you may directly specify
+  note_ that due to the overloaded QCPLineEnding constructor, you may directly specify
   a QCPLineEnding::EndingStyle here, e.g. \code setTail(QCPLineEnding::esSpikeArrow) \endcode
   
   \see setHead
@@ -29421,16 +29421,16 @@ void QCPItemCurve::draw(QCPPainter *painter)
 /*! \internal
 
   Returns the pen that should be used for drawing lines. Returns mPen when the
-  item is not selected and mSelectedPen when it is.
+  protos_item_ is not selected and mSelectedPen when it is.
 */
 QPen QCPItemCurve::mainPen() const
 {
   return mSelected ? mSelectedPen : mPen;
 }
-/* end of 'src/items/item-curve.cpp' */
+/* end of 'src/items/protos_item_-curve.cpp' */
 
 
-/* including file 'src/items/item-rect.cpp' */
+/* including file 'src/items/protos_item_-rect.cpp' */
 /* modified 2022-11-06T12:45:56, size 6472  */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29446,10 +29446,10 @@ QPen QCPItemCurve::mainPen() const
 */
 
 /*!
-  Creates a rectangle item and sets default values.
+  Creates a rectangle protos_item_ and sets default values.
   
-  The created item is automatically registered with \a parentPlot. This QCustomPlot instance takes
-  ownership of the item, so do not delete it manually but use QCustomPlot::removeItem() instead.
+  The created protos_item_ is automatically registered with \a parentPlot. This QCustomPlot instance takes
+  ownership of the protos_item_, so do not delete it manually but use QCustomPlot::removeItem() instead.
 */
 QCPItemRect::QCPItemRect(QCustomPlot *parentPlot) :
   QCPAbstractItem(parentPlot),
@@ -29539,7 +29539,7 @@ void QCPItemRect::draw(QCPPainter *painter)
   QRectF rect = QRectF(p1, p2).normalized();
   double clipPad = mainPen().widthF();
   QRectF boundingRect = rect.adjusted(-clipPad, -clipPad, clipPad, clipPad);
-  if (boundingRect.intersects(clipRect())) // only draw if bounding rect of rect item is visible in cliprect
+  if (boundingRect.intersects(clipRect())) // only draw if bounding rect of rect protos_item_ is visible in cliprect
   {
     painter->setPen(mainPen());
     painter->setBrush(mainBrush());
@@ -29567,7 +29567,7 @@ QPointF QCPItemRect::anchorPixelPosition(int anchorId) const
 
 /*! \internal
 
-  Returns the pen that should be used for drawing lines. Returns mPen when the item is not selected
+  Returns the pen that should be used for drawing lines. Returns mPen when the protos_item_ is not selected
   and mSelectedPen when it is.
 */
 QPen QCPItemRect::mainPen() const
@@ -29577,17 +29577,17 @@ QPen QCPItemRect::mainPen() const
 
 /*! \internal
 
-  Returns the brush that should be used for drawing fills of the item. Returns mBrush when the item
+  Returns the brush that should be used for drawing fills of the protos_item_. Returns mBrush when the protos_item_
   is not selected and mSelectedBrush when it is.
 */
 QBrush QCPItemRect::mainBrush() const
 {
   return mSelected ? mSelectedBrush : mBrush;
 }
-/* end of 'src/items/item-rect.cpp' */
+/* end of 'src/items/protos_item_-rect.cpp' */
 
 
-/* including file 'src/items/item-text.cpp' */
+/* including file 'src/items/protos_item_-text.cpp' */
 /* modified 2022-11-06T12:45:56, size 13335 */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29609,10 +29609,10 @@ QBrush QCPItemRect::mainBrush() const
 */
 
 /*!
-  Creates a text item and sets default values.
+  Creates a text protos_item_ and sets default values.
   
-  The created item is automatically registered with \a parentPlot. This QCustomPlot instance takes
-  ownership of the item, so do not delete it manually but use QCustomPlot::removeItem() instead.
+  The created protos_item_ is automatically registered with \a parentPlot. This QCustomPlot instance takes
+  ownership of the protos_item_, so do not delete it manually but use QCustomPlot::removeItem() instead.
 */
 QCPItemText::QCPItemText(QCustomPlot *parentPlot) :
   QCPAbstractItem(parentPlot),
@@ -29653,7 +29653,7 @@ void QCPItemText::setColor(const QColor &color)
 }
 
 /*!
-  Sets the color of the text that will be used when the item is selected.
+  Sets the color of the text that will be used when the protos_item_ is selected.
 */
 void QCPItemText::setSelectedColor(const QColor &color)
 {
@@ -29672,7 +29672,7 @@ void QCPItemText::setPen(const QPen &pen)
 }
 
 /*!
-  Sets the pen that will be used do draw a rectangular border around the text, when the item is
+  Sets the pen that will be used do draw a rectangular border around the text, when the protos_item_ is
   selected. To disable the border, set \a pen to Qt::NoPen.
   
   \see setPen
@@ -29694,7 +29694,7 @@ void QCPItemText::setBrush(const QBrush &brush)
 }
 
 /*!
-  Sets the brush that will be used do fill the background of the text, when the item is selected. To disable the
+  Sets the brush that will be used do fill the background of the text, when the protos_item_ is selected. To disable the
   background, set \a brush to Qt::NoBrush.
   
   \see setBrush
@@ -29715,7 +29715,7 @@ void QCPItemText::setFont(const QFont &font)
 }
 
 /*!
-  Sets the font of the text that will be used when the item is selected.
+  Sets the font of the text that will be used when the protos_item_ is selected.
   
   \see setFont
 */
@@ -29895,7 +29895,7 @@ QPointF QCPItemText::getTextDrawPoint(const QPointF &pos, const QRectF &rect, Qt
 
 /*! \internal
 
-  Returns the font that should be used for drawing text. Returns mFont when the item is not selected
+  Returns the font that should be used for drawing text. Returns mFont when the protos_item_ is not selected
   and mSelectedFont when it is.
 */
 QFont QCPItemText::mainFont() const
@@ -29905,7 +29905,7 @@ QFont QCPItemText::mainFont() const
 
 /*! \internal
 
-  Returns the color that should be used for drawing text. Returns mColor when the item is not
+  Returns the color that should be used for drawing text. Returns mColor when the protos_item_ is not
   selected and mSelectedColor when it is.
 */
 QColor QCPItemText::mainColor() const
@@ -29915,7 +29915,7 @@ QColor QCPItemText::mainColor() const
 
 /*! \internal
 
-  Returns the pen that should be used for drawing lines. Returns mPen when the item is not selected
+  Returns the pen that should be used for drawing lines. Returns mPen when the protos_item_ is not selected
   and mSelectedPen when it is.
 */
 QPen QCPItemText::mainPen() const
@@ -29925,17 +29925,17 @@ QPen QCPItemText::mainPen() const
 
 /*! \internal
 
-  Returns the brush that should be used for drawing fills of the item. Returns mBrush when the item
+  Returns the brush that should be used for drawing fills of the protos_item_. Returns mBrush when the protos_item_
   is not selected and mSelectedBrush when it is.
 */
 QBrush QCPItemText::mainBrush() const
 {
   return mSelected ? mSelectedBrush : mBrush;
 }
-/* end of 'src/items/item-text.cpp' */
+/* end of 'src/items/protos_item_-text.cpp' */
 
 
-/* including file 'src/items/item-ellipse.cpp' */
+/* including file 'src/items/protos_item_-ellipse.cpp' */
 /* modified 2022-11-06T12:45:56, size 7881     */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29951,10 +29951,10 @@ QBrush QCPItemText::mainBrush() const
 */
 
 /*!
-  Creates an ellipse item and sets default values.
+  Creates an ellipse protos_item_ and sets default values.
   
-  The created item is automatically registered with \a parentPlot. This QCustomPlot instance takes
-  ownership of the item, so do not delete it manually but use QCustomPlot::removeItem() instead.
+  The created protos_item_ is automatically registered with \a parentPlot. This QCustomPlot instance takes
+  ownership of the protos_item_, so do not delete it manually but use QCustomPlot::removeItem() instead.
 */
 QCPItemEllipse::QCPItemEllipse(QCustomPlot *parentPlot) :
   QCPAbstractItem(parentPlot),
@@ -30104,7 +30104,7 @@ QPointF QCPItemEllipse::anchorPixelPosition(int anchorId) const
 
 /*! \internal
 
-  Returns the pen that should be used for drawing lines. Returns mPen when the item is not selected
+  Returns the pen that should be used for drawing lines. Returns mPen when the protos_item_ is not selected
   and mSelectedPen when it is.
 */
 QPen QCPItemEllipse::mainPen() const
@@ -30114,17 +30114,17 @@ QPen QCPItemEllipse::mainPen() const
 
 /*! \internal
 
-  Returns the brush that should be used for drawing fills of the item. Returns mBrush when the item
+  Returns the brush that should be used for drawing fills of the protos_item_. Returns mBrush when the protos_item_
   is not selected and mSelectedBrush when it is.
 */
 QBrush QCPItemEllipse::mainBrush() const
 {
   return mSelected ? mSelectedBrush : mBrush;
 }
-/* end of 'src/items/item-ellipse.cpp' */
+/* end of 'src/items/protos_item_-ellipse.cpp' */
 
 
-/* including file 'src/items/item-pixmap.cpp' */
+/* including file 'src/items/protos_item_-pixmap.cpp' */
 /* modified 2022-11-06T12:45:56, size 10622   */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30146,10 +30146,10 @@ QBrush QCPItemEllipse::mainBrush() const
 */
 
 /*!
-  Creates a rectangle item and sets default values.
+  Creates a rectangle protos_item_ and sets default values.
   
-  The created item is automatically registered with \a parentPlot. This QCustomPlot instance takes
-  ownership of the item, so do not delete it manually but use QCustomPlot::removeItem() instead.
+  The created protos_item_ is automatically registered with \a parentPlot. This QCustomPlot instance takes
+  ownership of the protos_item_, so do not delete it manually but use QCustomPlot::removeItem() instead.
 */
 QCPItemPixmap::QCPItemPixmap(QCustomPlot *parentPlot) :
   QCPAbstractItem(parentPlot),
@@ -30259,7 +30259,7 @@ QPointF QCPItemPixmap::anchorPixelPosition(int anchorId) const
   bool flipVert = false;
   QRect rect = getFinalRect(&flipHorz, &flipVert);
   // we actually want denormal rects (negative width/height) here, so restore
-  // the flipped state:
+  // the flipped state_:
   if (flipHorz)
     rect.adjust(rect.width(), 0, -rect.width(), 0);
   if (flipVert)
@@ -30322,17 +30322,17 @@ void QCPItemPixmap::updateScaledPixmap(QRect finalRect, bool flipHorz, bool flip
 
 /*! \internal
   
-  Returns the final (tight) rect the pixmap is drawn in, depending on the current item positions
+  Returns the final (tight) rect the pixmap is drawn in, depending on the current protos_item_ positions
   and scaling settings.
   
   The output parameters \a flippedHorz and \a flippedVert return whether the pixmap should be drawn
   flipped horizontally or vertically in the returned rect. (The returned rect itself is always
   normalized, i.e. the top left corner of the rect is actually further to the top/left than the
-  bottom right corner). This is the case when the item position \a topLeft is further to the
+  bottom right corner). This is the case when the protos_item_ position \a topLeft is further to the
   bottom/right than \a bottomRight.
   
   If scaling is disabled, returns a rect with size of the original pixmap and the top left corner
-  aligned with the item position \a topLeft. The position \a bottomRight is ignored.
+  aligned with the protos_item_ position \a topLeft. The position \a bottomRight is ignored.
 */
 QRect QCPItemPixmap::getFinalRect(bool *flippedHorz, bool *flippedVert) const
 {
@@ -30384,17 +30384,17 @@ QRect QCPItemPixmap::getFinalRect(bool *flippedHorz, bool *flippedVert) const
 
 /*! \internal
 
-  Returns the pen that should be used for drawing lines. Returns mPen when the item is not selected
+  Returns the pen that should be used for drawing lines. Returns mPen when the protos_item_ is not selected
   and mSelectedPen when it is.
 */
 QPen QCPItemPixmap::mainPen() const
 {
   return mSelected ? mSelectedPen : mPen;
 }
-/* end of 'src/items/item-pixmap.cpp' */
+/* end of 'src/items/protos_item_-pixmap.cpp' */
 
 
-/* including file 'src/items/item-tracer.cpp' */
+/* including file 'src/items/protos_item_-tracer.cpp' */
 /* modified 2022-11-06T12:45:56, size 14645   */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30409,7 +30409,7 @@ QPen QCPItemPixmap::mainPen() const
   The tracer can be connected with a QCPGraph via \ref setGraph. Then it will automatically adopt
   the coordinate axes of the graph and update its \a position to be on the graph's data. This means
   the key stays controllable via \ref setGraphKey, but the value will follow the graph data. If a
-  QCPGraph is connected, note that setting the coordinates of the tracer item directly via \a
+  QCPGraph is connected, note that setting the coordinates of the tracer protos_item_ directly via \a
   position will have no effect because they will be overriden in the next redraw (this is when the
   coordinate update happens).
   
@@ -30421,7 +30421,7 @@ QPen QCPItemPixmap::mainPen() const
   points of the graph.
   
   The tracer has different visual styles, see \ref setStyle. It is also possible to make the tracer
-  have no own visual appearance (set the style to \ref tsNone), and just connect other item
+  have no own visual appearance (set the style to \ref tsNone), and just connect other protos_item_
   positions to the tracer \a position (used as an anchor) via \ref
   QCPItemPosition::setParentAnchor.
   
@@ -30432,10 +30432,10 @@ QPen QCPItemPixmap::mainPen() const
 */
 
 /*!
-  Creates a tracer item and sets default values.
+  Creates a tracer protos_item_ and sets default values.
   
-  The created item is automatically registered with \a parentPlot. This QCustomPlot instance takes
-  ownership of the item, so do not delete it manually but use QCustomPlot::removeItem() instead.
+  The created protos_item_ is automatically registered with \a parentPlot. This QCustomPlot instance takes
+  ownership of the protos_item_, so do not delete it manually but use QCustomPlot::removeItem() instead.
 */
 QCPItemTracer::QCPItemTracer(QCustomPlot *parentPlot) :
   QCPAbstractItem(parentPlot),
@@ -30523,7 +30523,7 @@ void QCPItemTracer::setStyle(QCPItemTracer::TracerStyle style)
   QCPItemPosition::ptPlotCoords and the axes will be set to the axes of \a graph.
   
   To free the tracer from any graph, set \a graph to \c nullptr. The tracer \a position can then be
-  placed freely like any other item position. This is the state the tracer will assume when its
+  placed freely like any other protos_item_ position. This is the state_ the tracer will assume when its
   graph gets deleted while still attached to it.
   
   \see setGraphKey
@@ -30539,7 +30539,7 @@ void QCPItemTracer::setGraph(QCPGraph *graph)
       mGraph = graph;
       updatePosition();
     } else
-      qDebug() << Q_FUNC_INFO << "graph isn't in same QCustomPlot instance as this item";
+      qDebug() << Q_FUNC_INFO << "graph isn't in same QCustomPlot instance as this protos_item_";
   } else
   {
     mGraph = nullptr;
@@ -30744,7 +30744,7 @@ void QCPItemTracer::updatePosition()
 
 /*! \internal
 
-  Returns the pen that should be used for drawing lines. Returns mPen when the item is not selected
+  Returns the pen that should be used for drawing lines. Returns mPen when the protos_item_ is not selected
   and mSelectedPen when it is.
 */
 QPen QCPItemTracer::mainPen() const
@@ -30754,17 +30754,17 @@ QPen QCPItemTracer::mainPen() const
 
 /*! \internal
 
-  Returns the brush that should be used for drawing fills of the item. Returns mBrush when the item
+  Returns the brush that should be used for drawing fills of the protos_item_. Returns mBrush when the protos_item_
   is not selected and mSelectedBrush when it is.
 */
 QBrush QCPItemTracer::mainBrush() const
 {
   return mSelected ? mSelectedBrush : mBrush;
 }
-/* end of 'src/items/item-tracer.cpp' */
+/* end of 'src/items/protos_item_-tracer.cpp' */
 
 
-/* including file 'src/items/item-bracket.cpp' */
+/* including file 'src/items/protos_item_-bracket.cpp' */
 /* modified 2022-11-06T12:45:56, size 10705    */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30792,10 +30792,10 @@ QBrush QCPItemTracer::mainBrush() const
 */
 
 /*!
-  Creates a bracket item and sets default values.
+  Creates a bracket protos_item_ and sets default values.
   
-  The created item is automatically registered with \a parentPlot. This QCustomPlot instance takes
-  ownership of the item, so do not delete it manually but use QCustomPlot::removeItem() instead.
+  The created protos_item_ is automatically registered with \a parentPlot. This QCustomPlot instance takes
+  ownership of the protos_item_, so do not delete it manually but use QCustomPlot::removeItem() instead.
 */
 QCPItemBracket::QCPItemBracket(QCustomPlot *parentPlot) :
   QCPAbstractItem(parentPlot),
@@ -30819,7 +30819,7 @@ QCPItemBracket::~QCPItemBracket()
 /*!
   Sets the pen that will be used to draw the bracket.
   
-  Note that when the style is \ref bsCalligraphic, only the color will be taken from the pen, the
+  note_ that when the style is \ref bsCalligraphic, only the color will be taken from the pen, the
   stroke and width are ignored. To change the apparent stroke width of a calligraphic bracket, use
   \ref setLength, which has a similar effect.
   
@@ -30996,13 +30996,13 @@ QPointF QCPItemBracket::anchorPixelPosition(int anchorId) const
 /*! \internal
 
   Returns the pen that should be used for drawing lines. Returns mPen when the
-  item is not selected and mSelectedPen when it is.
+  protos_item_ is not selected and mSelectedPen when it is.
 */
 QPen QCPItemBracket::mainPen() const
 {
     return mSelected ? mSelectedPen : mPen;
 }
-/* end of 'src/items/item-bracket.cpp' */
+/* end of 'src/items/protos_item_-bracket.cpp' */
 
 
 /* including file 'src/polar/radialaxis.cpp' */
@@ -31076,7 +31076,7 @@ QPen QCPItemBracket::mainPen() const
 
 /*! \fn void QCPPolarAxisRadial::selectionChanged(QCPPolarAxisRadial::SelectableParts selection)
   
-  This signal is emitted when the selection state of this axis has changed, either by user interaction
+  This signal is emitted when the selection state_ of this axis has changed, either by user interaction
   or by a direct call to \ref setSelectedParts.
 */
 
@@ -31233,7 +31233,7 @@ void QCPPolarAxisRadial::setRangeZoomFactor(double factor)
 /*!
   Sets whether the axis uses a linear scale or a logarithmic scale.
   
-  Note that this method controls the coordinate transformation. For logarithmic scales, you will
+  note_ that this method controls the coordinate transformation. For logarithmic scales, you will
   likely also want to use a logarithmic tick spacing and labeling, which can be achieved by setting
   the axis ticker to an instance of \ref QCPAxisTickerLog :
   
@@ -31302,16 +31302,16 @@ void QCPPolarAxisRadial::setSelectableParts(const SelectableParts &selectable)
 }
 
 /*!
-  Sets the selected state of the respective axis parts described by \ref SelectablePart. When a part
+  Sets the selected state_ of the respective axis parts described by \ref SelectablePart. When a part
   is selected, it uses a different pen/font.
   
   The entire selection mechanism for axes is handled automatically when \ref
   QCustomPlot::setInteractions contains iSelectAxes. You only need to call this function when you
-  wish to change the selection state manually.
+  wish to change the selection state_ manually.
   
-  This function can change the selection state of a part, independent of the \ref setSelectableParts setting.
+  This function can change the selection state_ of a part, independent of the \ref setSelectableParts setting.
   
-  emits the \ref selectionChanged signal when \a selected is different from the previous selection state.
+  emits the \ref selectionChanged signal when \a selected is different from the previous selection state_.
   
   \see SelectablePart, setSelectableParts, selectTest, setSelectedBasePen, setSelectedTickPen, setSelectedSubTickPen,
   setSelectedTickLabelFont, setSelectedLabelFont, setSelectedTickLabelColor, setSelectedLabelColor
@@ -31424,7 +31424,7 @@ void QCPPolarAxisRadial::setRangeUpper(double upper)
   axes increase left to right, on vertical axes bottom to top. When \a reversed is set to true, the
   direction of increasing values is inverted.
 
-  Note that the range and data interface stays the same for reversed axes, e.g. the \a lower part
+  note_ that the range and data interface stays the same for reversed axes, e.g. the \a lower part
   of the \ref setRange interface will still reference the mathematically smaller number than the \a
   upper part.
 */
@@ -31468,7 +31468,7 @@ void QCPPolarAxisRadial::setTicker(QSharedPointer<QCPAxisTicker> ticker)
 /*!
   Sets whether tick marks are displayed.
 
-  Note that setting \a show to false does not imply that tick labels are invisible, too. To achieve
+  note_ that setting \a show to false does not imply that tick labels are invisible, too. To achieve
   that, see \ref setTickLabels.
   
   \see setSubTicks
@@ -32101,7 +32101,7 @@ double QCPPolarAxisRadial::radiusToCoord(double radius) const
 /*!
   Returns the part of the axis that is hit by \a pos (in pixels). The return value of this function
   is independent of the user-selectable parts defined with \ref setSelectableParts. Further, this
-  function does not change the current selection state of the axis.
+  function does not change the current selection state_ of the axis.
   
   If the axis is not visible (\ref setVisible), this function always returns \ref spNone.
   
@@ -32305,7 +32305,7 @@ void QCPPolarAxisRadial::updateGeometry(const QPointF &center, double radius)
   A convenience function to easily set the QPainter::Antialiased hint on the provided \a painter
   before drawing axis lines.
 
-  This is the antialiasing state the painter passed to the \ref draw method is in by default.
+  This is the antialiasing state_ the painter passed to the \ref draw method is in by default.
   
   This function takes into account the local setting of the antialiasing flag as well as the
   overrides set with \ref QCustomPlot::setAntialiasedElements and \ref
@@ -32389,7 +32389,7 @@ void QCPPolarAxisRadial::setupTickVectors()
 
 /*! \internal
   
-  Returns the pen that is used to draw the axis base line. Depending on the selection state, this
+  Returns the pen that is used to draw the axis base line. Depending on the selection state_, this
   is either mSelectedBasePen or mBasePen.
 */
 QPen QCPPolarAxisRadial::getBasePen() const
@@ -32399,7 +32399,7 @@ QPen QCPPolarAxisRadial::getBasePen() const
 
 /*! \internal
   
-  Returns the pen that is used to draw the (major) ticks. Depending on the selection state, this
+  Returns the pen that is used to draw the (major) ticks. Depending on the selection state_, this
   is either mSelectedTickPen or mTickPen.
 */
 QPen QCPPolarAxisRadial::getTickPen() const
@@ -32409,7 +32409,7 @@ QPen QCPPolarAxisRadial::getTickPen() const
 
 /*! \internal
   
-  Returns the pen that is used to draw the subticks. Depending on the selection state, this
+  Returns the pen that is used to draw the subticks. Depending on the selection state_, this
   is either mSelectedSubTickPen or mSubTickPen.
 */
 QPen QCPPolarAxisRadial::getSubTickPen() const
@@ -32419,7 +32419,7 @@ QPen QCPPolarAxisRadial::getSubTickPen() const
 
 /*! \internal
   
-  Returns the font that is used to draw the tick labels. Depending on the selection state, this
+  Returns the font that is used to draw the tick labels. Depending on the selection state_, this
   is either mSelectedTickLabelFont or mTickLabelFont.
 */
 QFont QCPPolarAxisRadial::getTickLabelFont() const
@@ -32429,7 +32429,7 @@ QFont QCPPolarAxisRadial::getTickLabelFont() const
 
 /*! \internal
   
-  Returns the font that is used to draw the axis label. Depending on the selection state, this
+  Returns the font that is used to draw the axis label. Depending on the selection state_, this
   is either mSelectedLabelFont or mLabelFont.
 */
 QFont QCPPolarAxisRadial::getLabelFont() const
@@ -32439,7 +32439,7 @@ QFont QCPPolarAxisRadial::getLabelFont() const
 
 /*! \internal
   
-  Returns the color that is used to draw the tick labels. Depending on the selection state, this
+  Returns the color that is used to draw the tick labels. Depending on the selection state_, this
   is either mSelectedTickLabelColor or mTickLabelColor.
 */
 QColor QCPPolarAxisRadial::getTickLabelColor() const
@@ -32449,7 +32449,7 @@ QColor QCPPolarAxisRadial::getTickLabelColor() const
 
 /*! \internal
   
-  Returns the color that is used to draw the axis label. Depending on the selection state, this
+  Returns the color that is used to draw the axis label. Depending on the selection state_, this
   is either mSelectedLabelColor or mLabelColor.
 */
 QColor QCPPolarAxisRadial::getLabelColor() const
@@ -32920,7 +32920,7 @@ QPointF QCPPolarAxisAngular::coordToPixel(double angleCoord, double radiusCoord)
 /*!
   Returns the part of the axis that is hit by \a pos (in pixels). The return value of this function
   is independent of the user-selectable parts defined with \ref setSelectableParts. Further, this
-  function does not change the current selection state of the axis.
+  function does not change the current selection state_ of the axis.
   
   If the axis is not visible (\ref setVisible), this function always returns \ref spNone.
   
@@ -33161,7 +33161,7 @@ void QCPPolarAxisAngular::setBackground(const QPixmap &pm, bool scaled, Qt::Aspe
   is set to true, you may control whether and how the aspect ratio of the original pixmap is
   preserved with \ref setBackgroundScaledMode.
   
-  Note that the scaled version of the original pixmap is buffered, so there is no performance
+  note_ that the scaled version of the original pixmap is buffered, so there is no performance
   penalty on replots. (Except when the axis rect dimensions are changed continuously.)
   
   \see setBackground, setBackgroundScaledMode
@@ -33242,16 +33242,16 @@ void QCPPolarAxisAngular::setSelectableParts(const SelectableParts &selectable)
 }
 
 /*!
-  Sets the selected state of the respective axis parts described by \ref SelectablePart. When a part
+  Sets the selected state_ of the respective axis parts described by \ref SelectablePart. When a part
   is selected, it uses a different pen/font.
   
   The entire selection mechanism for axes is handled automatically when \ref
   QCustomPlot::setInteractions contains iSelectAxes. You only need to call this function when you
-  wish to change the selection state manually.
+  wish to change the selection state_ manually.
   
-  This function can change the selection state of a part, independent of the \ref setSelectableParts setting.
+  This function can change the selection state_ of a part, independent of the \ref setSelectableParts setting.
   
-  emits the \ref selectionChanged signal when \a selected is different from the previous selection state.
+  emits the \ref selectionChanged signal when \a selected is different from the previous selection state_.
   
   \see SelectablePart, setSelectableParts, selectTest, setSelectedBasePen, setSelectedTickPen, setSelectedSubTickPen,
   setSelectedTickLabelFont, setSelectedLabelFont, setSelectedTickLabelColor, setSelectedLabelColor
@@ -33346,7 +33346,7 @@ void QCPPolarAxisAngular::setRangeUpper(double upper)
   axes increase left to right, on vertical axes bottom to top. When \a reversed is set to true, the
   direction of increasing values is inverted.
 
-  Note that the range and data interface stays the same for reversed axes, e.g. the \a lower part
+  note_ that the range and data interface stays the same for reversed axes, e.g. the \a lower part
   of the \ref setRange interface will still reference the mathematically smaller number than the \a
   upper part.
 */
@@ -33386,7 +33386,7 @@ void QCPPolarAxisAngular::setTicker(QSharedPointer<QCPAxisTicker> ticker)
 /*!
   Sets whether tick marks are displayed.
 
-  Note that setting \a show to false does not imply that tick labels are invisible, too. To achieve
+  note_ that setting \a show to false does not imply that tick labels are invisible, too. To achieve
   that, see \ref setTickLabels.
   
   \see setSubTicks
@@ -33906,7 +33906,7 @@ void QCPPolarAxisAngular::setupTickVectors()
 
 /*! \internal
   
-  Returns the pen that is used to draw the axis base line. Depending on the selection state, this
+  Returns the pen that is used to draw the axis base line. Depending on the selection state_, this
   is either mSelectedBasePen or mBasePen.
 */
 QPen QCPPolarAxisAngular::getBasePen() const
@@ -33916,7 +33916,7 @@ QPen QCPPolarAxisAngular::getBasePen() const
 
 /*! \internal
   
-  Returns the pen that is used to draw the (major) ticks. Depending on the selection state, this
+  Returns the pen that is used to draw the (major) ticks. Depending on the selection state_, this
   is either mSelectedTickPen or mTickPen.
 */
 QPen QCPPolarAxisAngular::getTickPen() const
@@ -33926,7 +33926,7 @@ QPen QCPPolarAxisAngular::getTickPen() const
 
 /*! \internal
   
-  Returns the pen that is used to draw the subticks. Depending on the selection state, this
+  Returns the pen that is used to draw the subticks. Depending on the selection state_, this
   is either mSelectedSubTickPen or mSubTickPen.
 */
 QPen QCPPolarAxisAngular::getSubTickPen() const
@@ -33936,7 +33936,7 @@ QPen QCPPolarAxisAngular::getSubTickPen() const
 
 /*! \internal
   
-  Returns the font that is used to draw the tick labels. Depending on the selection state, this
+  Returns the font that is used to draw the tick labels. Depending on the selection state_, this
   is either mSelectedTickLabelFont or mTickLabelFont.
 */
 QFont QCPPolarAxisAngular::getTickLabelFont() const
@@ -33946,7 +33946,7 @@ QFont QCPPolarAxisAngular::getTickLabelFont() const
 
 /*! \internal
   
-  Returns the font that is used to draw the axis label. Depending on the selection state, this
+  Returns the font that is used to draw the axis label. Depending on the selection state_, this
   is either mSelectedLabelFont or mLabelFont.
 */
 QFont QCPPolarAxisAngular::getLabelFont() const
@@ -33956,7 +33956,7 @@ QFont QCPPolarAxisAngular::getLabelFont() const
 
 /*! \internal
   
-  Returns the color that is used to draw the tick labels. Depending on the selection state, this
+  Returns the color that is used to draw the tick labels. Depending on the selection state_, this
   is either mSelectedTickLabelColor or mTickLabelColor.
 */
 QColor QCPPolarAxisAngular::getTickLabelColor() const
@@ -33966,7 +33966,7 @@ QColor QCPPolarAxisAngular::getTickLabelColor() const
 
 /*! \internal
   
-  Returns the color that is used to draw the axis label. Depending on the selection state, this
+  Returns the color that is used to draw the axis label. Depending on the selection state_, this
   is either mSelectedLabelColor or mLabelColor.
 */
 QColor QCPPolarAxisAngular::getLabelColor() const
@@ -34087,7 +34087,7 @@ void QCPPolarAxisAngular::mouseReleaseEvent(QMouseEvent *event, const QPointF &s
   dependent on the mouse wheel delta (which direction the wheel was rotated) to provide a natural
   zooming feel. The Strength of the zoom can be controlled via \ref setRangeZoomFactor.
   
-  Note, that event->delta() is usually +/-120 for single rotation steps. However, if the mouse
+  note_, that event->delta() is usually +/-120 for single rotation steps. However, if the mouse
   wheel is turned rapidly, many steps may bunch up to one event, so the event->delta() may then be
   multiples of 120. This is taken into account here, by calculating \a wheelSteps and using it as
   exponent of the range zoom factor. This takes care of the wheel direction automatically, by
@@ -34267,7 +34267,7 @@ void QCPPolarGrid::setRadialZeroLinePen(const QPen &pen)
   A convenience function to easily set the QPainter::Antialiased hint on the provided \a painter
   before drawing the major grid lines.
 
-  This is the antialiasing state the painter passed to the \ref draw method is in by default.
+  This is the antialiasing state_ the painter passed to the \ref draw method is in by default.
   
   This function takes into account the local setting of the antialiasing flag as well as the
   overrides set with \ref QCustomPlot::setAntialiasedElements and \ref
@@ -34354,7 +34354,7 @@ void QCPPolarGrid::drawAngularGrid(QCPPainter *painter, const QPointF &center, d
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*! \class QCPPolarLegendItem
-  \brief A legend item for polar plots
+  \brief A legend protos_item_ for polar plots
 
   \warning In this QCustomPlot version, polar plots are a tech preview. Expect documentation and
   functionality to be incomplete, as well as changing public interfaces in the future.
@@ -34491,7 +34491,7 @@ QCPPolarGraph::~QCPPolarGraph()
 }
 
 /*!
-   The name is the textual representation of this plottable as it is displayed in the legend
+   The item_name_ is the textual representation of this plottable as it is displayed in the legend
    (\ref QCPLegend). It may contain any UTF-8 characters, including newlines.
 */
 void QCPPolarGraph::setName(const QString &name)
@@ -34502,7 +34502,7 @@ void QCPPolarGraph::setName(const QString &name)
 /*!
   Sets whether fills of this plottable are drawn antialiased or not.
   
-  Note that this setting may be overridden by \ref QCustomPlot::setAntialiasedElements and \ref
+  note_ that this setting may be overridden by \ref QCustomPlot::setAntialiasedElements and \ref
   QCustomPlot::setNotAntialiasedElements.
 */
 void QCPPolarGraph::setAntialiasedFill(bool enabled)
@@ -34513,7 +34513,7 @@ void QCPPolarGraph::setAntialiasedFill(bool enabled)
 /*!
   Sets whether the scatter symbols of this plottable are drawn antialiased or not.
   
-  Note that this setting may be overridden by \ref QCustomPlot::setAntialiasedElements and \ref
+  note_ that this setting may be overridden by \ref QCustomPlot::setAntialiasedElements and \ref
   QCustomPlot::setNotAntialiasedElements.
 */
 void QCPPolarGraph::setAntialiasedScatters(bool enabled)
@@ -34618,14 +34618,14 @@ void QCPPolarGraph::setSelectable(QCP::SelectionType selectable)
   
   The entire selection mechanism for plottables is handled automatically when \ref
   QCustomPlot::setInteractions contains iSelectPlottables. You only need to call this function when
-  you wish to change the selection state programmatically.
+  you wish to change the selection state_ programmatically.
   
   Using \ref setSelectable you can further specify for each plottable whether and to which
   granularity it is selectable. If \a selection is not compatible with the current \ref
   QCP::SelectionType set via \ref setSelectable, the resulting selection will be adjusted
   accordingly (see \ref QCPDataSelection::enforceType).
   
-  emits the \ref selectionChanged signal when \a selected is different from the previous selection state.
+  emits the \ref selectionChanged signal when \a selected is different from the previous selection state_.
   
   \see setSelectable, selectTest
 */
@@ -34992,7 +34992,7 @@ void QCPPolarGraph::draw(QCPPainter *painter)
     for (it = mDataContainer->constBegin(); it != mDataContainer->constEnd(); ++it)
     {
       if (QCP::isInvalidData(it->key, it->value))
-        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "invalid." << "Plottable name:" << name();
+        qDebug() << Q_FUNC_INFO << "Data point at" << it->key << "invalid." << "Plottable item_name_:" << name();
     }
 #endif
     
