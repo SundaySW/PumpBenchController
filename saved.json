@@ -13,7 +13,7 @@
             "valueMax": 5000,
             "valueMin": 0
         },
-        "pidTargetValue": 4200,
+        "pidTargetValue": 0,
         "requestedValue": 282,
         "setParamHost": 5,
         "setParamId": 5,
@@ -234,7 +234,7 @@
             "ItemName": "valve_feedback",
             "LastStatus": true,
             "LastValue": "0",
-            "NormalLowerBoundValue": 0,
+            "NormalLowerBoundValue": -10,
             "NormalUpperBoundValue": 5000,
             "paramTableName": "param_0x35_host_0x10"
         }

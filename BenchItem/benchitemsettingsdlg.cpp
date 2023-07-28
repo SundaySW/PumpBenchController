@@ -29,8 +29,8 @@ BenchItemSettingsDlg::BenchItemSettingsDlg(QString name, ParamService* ps, bool 
 }
 
 void BenchItemSettingsDlg::updateParamConnections(){
-    ui->lowerBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
-    ui->upperBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
+    ui->lowerBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
+    ui->upperBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
     connect(ui->refresh_button, &QPushButton::clicked, [this](){ refreshParamList(); });
     connect(ui->unbindParam_button, &QPushButton::clicked, [this](){ unbindProtosParam(); });
     connect(ui->updateParam_comboBox, &QComboBox::currentTextChanged, [this](const QString& s){ newParamRequested(s);});
@@ -60,8 +60,8 @@ void BenchItemSettingsDlg::unbindProtosParam(){
 void BenchItemSettingsDlg::setParamConnections(){
     ui->setParamID_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9a-fA-F]{1,2}")));
     ui->setParamHost_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9a-fA-F]{1,2}")));
-    ui->setValueMin_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
-    ui->setValueMax_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
+    ui->setValueMin_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
+    ui->setValueMax_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
     connect(ui->setParamHost_lineEdit, &QLineEdit::editingFinished, [this](){
         short newHost = ui->setParamHost_lineEdit->text().toShort(nullptr,16);
         short ID = ui->setParamID_lineEdit->text().toShort(nullptr,16);
@@ -91,8 +91,8 @@ void BenchItemSettingsDlg::setParamConnections(){
 }
 
 void BenchItemSettingsDlg::paramSettingsConnection(){
-    ui->offset_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
-    ui->mult_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
+    ui->offset_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+.[0-9]+")));
+    ui->mult_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+.[0-9]+")));
     ui->updateRate_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     ui->controlRate_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     ui->sendRate_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
@@ -103,8 +103,8 @@ void BenchItemSettingsDlg::paramSettingsConnection(){
 }
 
 void BenchItemSettingsDlg::pidValuesConnection(){
-    ui->pidMin_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
-    ui->pidMax_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
+    ui->pidMin_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+.[0-9]+")));
+    ui->pidMax_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+.[0-9]+")));
     ui->pidKp_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
     ui->pidKi_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
     ui->pidKd_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));

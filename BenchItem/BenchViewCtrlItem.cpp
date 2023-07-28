@@ -21,7 +21,7 @@ BenchViewCtrlItem::BenchViewCtrlItem(QString _name, ParamService* ps, QPushButto
     pidControl()
 {
     settingsDlg = new BenchItemSettingsDlg(name, paramService, false, parent);
-    itemValueEdit->setValidator(new QRegExpValidator(QRegExp("[0-9a-FA-F]+")));
+    itemValueEdit->setValidator(new QRegExpValidator(QRegExp("[+-][0-9a-FA-F]+")));
 //    targetValueEdit->setValidator(new QRegExpValidator(QRegExp(R"([0-9a-fA-F]{1,8}\.[0-9a-fA-F]{1,8})")));
 
     connect(itemValueEdit, &QLineEdit::editingFinished, [this]() { textValueEdited();});
