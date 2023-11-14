@@ -242,6 +242,6 @@
     "serverConnection": {
         "IP": "192.168.1.99",
         "Port": "3699",
-        "autoConnect": true
+        "autoConnect": false
     }
 }

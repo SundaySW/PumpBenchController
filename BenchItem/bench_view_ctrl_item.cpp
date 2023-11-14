@@ -1,7 +1,7 @@
 //
 // Created by user on 17.05.2023.
 //
-#include "BenchViewCtrlItem.h"
+#include "bench_view_ctrl_item.h"
 #include <utility>
 #include <QMessageBox>
 

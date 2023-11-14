@@ -2,15 +2,15 @@
 // Created by user on 17.05.2023.
 //
 
-#ifndef PUMPBENCHCONTROLLER_BENCHVIEWCTRLITEM_H
-#define PUMPBENCHCONTROLLER_BENCHVIEWCTRLITEM_H
+#ifndef PUMPBENCHCONTROLLER_BENCH_VIEW_CTRL_ITEM_H
+#define PUMPBENCHCONTROLLER_BENCH_VIEW_CTRL_ITEM_H
 
 #include <QSlider>
 #include <QLineEdit>
 #include <QComboBox>
 #include <optional>
 #include "ParamService.h"
-#include "BenchViewItem.h"
+#include "bench_view_item.h"
 #include "QColor"
 #include "QPushButton"
 #include "PID/PIDControl.h"
@@ -67,4 +67,4 @@ private:
     void managePIDStatus(bool state);
 };
 
-#endif //PUMPBENCHCONTROLLER_BENCHVIEWCTRLITEM_H
+#endif //PUMPBENCHCONTROLLER_BENCH_VIEW_CTRL_ITEM_H

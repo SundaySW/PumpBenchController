@@ -2,7 +2,7 @@
 #define SCENARIOSITEMBOX_H
 
 #include <QGroupBox>
-#include "BenchViewItem.h"
+#include "bench_view_item.h"
 #include "optional"
 
 namespace Ui {

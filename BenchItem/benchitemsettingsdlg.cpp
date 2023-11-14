@@ -178,7 +178,7 @@ void BenchItemSettingsDlg::getRates(){
     unsetActualValue(ui->updateRate_actualValue_label);
     unsetActualValue(ui->sendRate_actualValue_label);
     unsetActualValue(ui->controlRate_actualValue_label);
-//        param.getParamType() == kUpdate ? makeMsg(ProtosMessage::UPDATE_RATE) : makeMsg(ProtosMessage::CTRL_RATE);
+//        protos_param_name.getParamType() == kUpdate ? makeMsg(ProtosMessage::UPDATE_RATE) : makeMsg(ProtosMessage::CTRL_RATE);
     paramService->sendServiceMsgReq(paramItem.get(), ProtosMessage::UPDATE_RATE);
     paramService->sendServiceMsgReq(paramItem.get(), ProtosMessage::CTRL_RATE);
     paramService->sendServiceMsgReq(paramItem.get(), ProtosMessage::SEND_RATE);
@@ -206,7 +206,7 @@ void BenchItemSettingsDlg::setRates(){
     bool ok;
     if(updateRateText.length()){
         short updateRateValue = updateRateText.toShort(&ok);
-//            if(ok) param.getParamType() == kUpdate ?
+//            if(ok) protos_param_name.getParamType() == kUpdate ?
 //                makeMsg(ProtosMessage::UPDATE_RATE, updateRateValue, true)
 //                    : makeMsg(ProtosMessage::CTRL_RATE, updateRateValue, true);
         if(ok) paramService->sendServiceMsgSet(paramItem.get(), updateRateValue, ProtosMessage::UPDATE_RATE);

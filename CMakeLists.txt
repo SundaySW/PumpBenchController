@@ -38,9 +38,11 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/PID/*.*
         ${CMAKE_CURRENT_SOURCE_DIR}/Dialogs/*.*
         ${CMAKE_CURRENT_SOURCE_DIR}/Scenarios/*.*
+        ${CMAKE_CURRENT_SOURCE_DIR}/Experiments/*.*
         )
 
 set(PROJECT_SOURCES
+        ${SOURCES}
         main.cpp
         mainwindow.cpp
         mainwindow.h
@@ -49,8 +51,8 @@ set(PROJECT_SOURCES
         BenchController.cpp
         BenchController.h
         colors.h
-        ${SOURCES}
-        config.h.in)
+        config.h.in
+        )
 
 configure_file(
         config.h.in config.h)
@@ -73,6 +75,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/PID
         ${CMAKE_CURRENT_SOURCE_DIR}/Dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/Scenarios
+        ${CMAKE_CURRENT_SOURCE_DIR}/Experiments
         ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot
         )
 

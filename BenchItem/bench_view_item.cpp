@@ -2,7 +2,7 @@
 // Created by user on 12.05.2023.
 //
 
-#include "BenchViewItem.h"
+#include "bench_view_item.h"
 #include <QGraphicsItem>
 #include <QGraphicsColorizeEffect>
 #include <utility>

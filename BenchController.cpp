@@ -15,6 +15,7 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
         ui(_ui),
         mainWindow(mw),
         serverConnectionDlg_(new ServerConnectionDlg(socketAdapter_, mw)),
+        experimentSettingsDlg_(new ExperimentSettings(mw)),
         plotReDrawTimer_(new QTimer(this)),
         serverReconnectionTimer_(new QTimer(this)),
         scenariosDock_(new ScenariosDock(mw))
@@ -132,10 +133,13 @@ void BenchController::makeConnections(){
             onItemNewValue(name);
         });
     }
-    connect(ui->server_button, &QPushButton::clicked, [this](){ serverBtnClicked();});
-    connect(serverConnectionDlg_, &ServerConnectionDlg::eventInServerConnection, [this](const QString& s, bool b){ eventServerConnectionHandler(s, b);});
     connect(ui->status_button, &QPushButton::clicked, [this](){ statusBtnClicked(); });
+    connect(ui->server_button, &QPushButton::clicked, [this](){ serverBtnClicked(); });
     connect(ui->save_button, &QPushButton::clicked, [this](){ saveToJson(); });
+    connect(ui->experiment_button, &QPushButton::clicked, [this](){ experimentBtnClicked(); });
+
+    connect(serverConnectionDlg_, &ServerConnectionDlg::eventInServerConnection,
+            [this](const QString& s, bool b){ eventServerConnectionHandler(s, b);});
     connect(ui->log_listWidget, &QListWidget::itemDoubleClicked, [this](){ ui->log_listWidget->clear(); });
 }
 
@@ -152,6 +156,11 @@ void BenchController::serverConnectionHandler(){
 void BenchController::serverBtnClicked(){
     serverConnectionDlg_->show();
     serverConnectionDlg_->raise();
+}
+
+void BenchController::experimentBtnClicked(){
+    experimentSettingsDlg_->show();
+    experimentSettingsDlg_->raise();
 }
 
 void BenchController::statusBtnClicked(){

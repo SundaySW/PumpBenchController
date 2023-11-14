@@ -6,12 +6,13 @@
 #define PUMPBENCHCONTROLLER_BENCHCONTROLLER_H
 
 #include "ParamService.h"
-#include "BenchItem/BenchViewItem.h"
-#include "BenchViewCtrlItem.h"
+#include "BenchItem/bench_view_item.h"
+#include "bench_view_ctrl_item.h"
 #include "Dialogs/serverconnectiondlg.h"
 #include "ui_mainwindow.h"
 #include <utility>
 #include "Scenarios/scenariosdock.h"
+#include "experimentsettings.h"
 
 class BenchController: public QObject{
     Q_OBJECT
@@ -27,6 +28,7 @@ private:
     QSharedPointer<ParamService> paramService_;
     QSharedPointer<SocketAdapter> socketAdapter_;
     ServerConnectionDlg* serverConnectionDlg_;
+    ExperimentSettings* experimentSettingsDlg_;
     QJsonObject jsonSaved_;
     bool hasError_;
     QIcon logOkIcon, logErrorIcon;
@@ -52,6 +54,8 @@ private:
     void sendItemFromName(const QString &itemName, T *customer);
     template<typename T>
     void sendItemsNameLogoListToComboBoxes(T *customer);
+
+    void experimentBtnClicked();
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHCONTROLLER_H
