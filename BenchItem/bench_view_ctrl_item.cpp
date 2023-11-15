@@ -57,7 +57,7 @@ void BenchViewCtrlItem::sliderMoved(int position){
 
 void BenchViewCtrlItem::textValueEdited(){
     bool ok;
-    auto newValue = itemValueEdit->text().toInt(&ok);
+    auto newValue = itemValueEdit->text().toDouble(&ok);
     if(!ok){
         itemValueEdit->clear();
         return;
@@ -69,7 +69,7 @@ template<typename T>
 bool BenchViewCtrlItem::setRequestedValue(T val){
     if(checkValue(val)){
         requestedValue = val;
-        valueSlider->setValue(requestedValue);
+        valueSlider->setValue((int)requestedValue);
         itemValueEdit->setText(QString("%1").arg(requestedValue));
         return true;
     }
@@ -196,7 +196,7 @@ void BenchViewCtrlItem::newTargetValueItemUpdate(){
         return;
     auto processValue = targetValueItem->getParamPtr()->getValue().toDouble();
     auto dT = double(targetValueItem->getParamPtr()->getUpdateRate()) / 10000;
-    auto newVal = (int)pidControl.calculate(pidTargetValue.value(), processValue, dT);
+    auto newVal = pidControl.calculate(pidTargetValue.value(), processValue, dT);
     if(setRequestedValue(newVal))
         sendValue();
 }
@@ -207,9 +207,9 @@ void BenchViewCtrlItem::loadDataFromJson(const QJsonObject& jsonObject) {
     name = jsonObject["ItemName"].toString();
     setParamId = (uchar) jsonObject["setParamId"].toInt();
     setParamHost = (uchar) jsonObject["setParamHost"].toInt();
-    requestedValue = jsonObject["requestedValue"].toInt();
-    minSetValueBound = jsonObject["minSetValueBound"].toInt();
-    maxSetValueBound = jsonObject["maxSetValueBound"].toInt();
+    requestedValue = jsonObject["requestedValue"].toDouble();
+    minSetValueBound = jsonObject["minSetValueBound"].toDouble();
+    maxSetValueBound = jsonObject["maxSetValueBound"].toDouble();
     pidTargetValue = jsonObject["pidTargetValue"].toDouble();
     pidEnabled = jsonObject["pidEnabled"].toBool();
     pidControl.fromJson(jsonObject["pidSettings"].toObject());

@@ -17,7 +17,7 @@ public:
     explicit ExperimentPoint(QWidget *parent = nullptr);
     ~ExperimentPoint();
     double GetTargetValue();
-    unsigned int GetCount();
+    unsigned int GetQuantity();
     double GetSpread();
     PointEntity GetPointEntity();
 signals:

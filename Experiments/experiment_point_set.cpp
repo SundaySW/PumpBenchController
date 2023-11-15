@@ -11,13 +11,13 @@ ExperimentPoint::ExperimentPoint(QWidget *parent) :
         bool ok;
         double new_target_value = ui->target_edit->text().toDouble(&ok);
         if(ok)
-            point_.target_value = new_target_value;
+            point_.target_value_ = new_target_value;
     });
     connect(ui->count_edit, &QLineEdit::editingFinished, [this](){
         bool ok;
         int new_count = ui->count_edit->text().toInt(&ok);
         if(ok)
-            point_.count = new_count;
+            point_.quantity_ = new_count;
     });
     connect(ui->spread_edit, &QLineEdit::editingFinished, [this](){
         bool ok;
@@ -37,11 +37,11 @@ PointEntity ExperimentPoint::GetPointEntity(){
 }
 
 double ExperimentPoint::GetTargetValue() {
-    return point_.target_value;
+    return point_.target_value_;
 }
 
-unsigned int ExperimentPoint::GetCount() {
-    return point_.count;
+unsigned int ExperimentPoint::GetQuantity() {
+    return point_.quantity_;
 }
 
 double ExperimentPoint::GetSpread() {

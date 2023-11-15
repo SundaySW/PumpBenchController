@@ -25,6 +25,8 @@ public:
                       QWidget *parent = nullptr);
     void loadDataFromJson(const QJsonObject&);
     QJsonObject saveDataToJson();
+    template<typename T>
+    bool setRequestedValue(T val);
 
 signals:
     void requestParamKeyByName(const QString&);
@@ -46,7 +48,7 @@ private:
     PIDControl pidControl;
     QSharedPointer<BenchViewItem> targetValueItem;
     std::optional<uchar> setParamId, setParamHost;
-    int requestedValue, minSetValueBound, maxSetValueBound;
+    double requestedValue, minSetValueBound, maxSetValueBound;
     std::optional<double> pidTargetValue;
     bool pidEnabled = false;
     void sendValue();
@@ -59,8 +61,6 @@ private:
         bool checkValue(T val);
     void newTargetValueItemUpdate();
     void configBtnClicked();
-        template<typename T>
-        bool setRequestedValue(T val);
     void checkPIDTargetValue();
     bool isOKReceivedNewParam(const QSharedPointer<BenchViewItem> &item);
     void showMsgBox(const QString &msg);

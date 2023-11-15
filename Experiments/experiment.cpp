@@ -14,4 +14,14 @@ void Experiment::MakeConnections(){
 
 }
 
+void Experiment::UpdateExperiment(){
+    if(stable_reached){
 
+    }else{
+
+    }
+}
+
+void StartStabilization(){
+
+}
