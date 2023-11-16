@@ -48,6 +48,10 @@
         <file>add_set_scenario.svg</file>
         <file>bee.svg</file>
         <file>bees.gif</file>
+        <file>add.svg</file>
+        <file>experiment.svg</file>
+        <file>stop_experiment.svg</file>
+        <file>start_experiment.svg</file>
     </qresource>
     <qresource prefix="/css">
         <file>css/dbsettings.css</file>

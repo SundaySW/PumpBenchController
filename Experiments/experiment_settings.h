@@ -17,21 +17,27 @@ class ExperimentSettings : public QDialog
     Q_OBJECT
 
 public:
-    explicit ExperimentSettings(QSharedPointer<BenchViewCtrlItem> ctrlItem,
-                                QSharedPointer<ParamService> ps,
-                                QWidget *parent = nullptr);
+    explicit ExperimentSettings(QWidget *parent = nullptr);
     ~ExperimentSettings();
-
+    void LoadPtrs(QSharedPointer<BenchViewCtrlItem> ctrlItem,
+                  QSharedPointer<ParamService> ps);
+    void LoadDataFromJson(const QJsonObject&);
+    QJsonObject SaveDataToJson();
+    void receiveItemsNameList(const QVector<BenchViewItem::ViewItemData>& data);
+    void NewFeedBackParamName(const QString&);
 private:
     Ui::ExperimentSettings *ui;
     QMap<ExperimentPoint*, QSharedPointer<ExperimentPoint>> points_map_;
     QMap<ExperimentParam*, QSharedPointer<ExperimentParam>> params_map_;
     QSharedPointer<ParamService> param_service_;
-    Experiment experiment_;
+    QSharedPointer<BenchViewCtrlItem> ctrlItem_;
+    Experiment* experiment_ {nullptr};
     void MakeConnections();
     ExperimentPoint *addExpPoint();
     ExperimentParam *addExpParam();
     void StartExperiment();
+    void UpdateExperiment();
+    void StopExperiment();
 };
 
 #endif // EXPERIMENTSETTINGS_H

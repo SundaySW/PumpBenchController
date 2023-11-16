@@ -172,7 +172,7 @@ void BenchViewItem::loadDataFromJson(const QJsonObject& jsonObject){
         settings_dlg_->setUpdateParamFromController(jsonObject["paramTableName"].toString());
 }
 
-QJsonObject BenchViewItem::saveDataToJSon(){
+QJsonObject BenchViewItem::SaveDataToJSon(){
     QJsonObject jsonObject;
     if(!protos_item_.isNull())
         jsonObject["paramTableName"] = protos_item_->getTableName();

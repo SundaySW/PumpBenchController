@@ -24,13 +24,14 @@ public:
                       QComboBox* tpc,QSlider* vs,
                       QWidget *parent = nullptr);
     void loadDataFromJson(const QJsonObject&);
-    QJsonObject saveDataToJson();
+    QJsonObject SaveDataToJson();
     template<typename T>
     bool setRequestedValue(T val);
-
+    ParamItem* getFeedBackParamRawPtr();
 signals:
     void requestParamKeyByName(const QString&);
     void requestItemsList();
+    void newFeedBackItem(const QString&);
 public slots:
     void receiveItem(QSharedPointer<BenchViewItem>& item);
     void receiveItemsNameList(const QVector<BenchViewItem::ViewItemData> &data);
@@ -65,6 +66,8 @@ private:
     bool isOKReceivedNewParam(const QSharedPointer<BenchViewItem> &item);
     void showMsgBox(const QString &msg);
     void managePIDStatus(bool state);
+
+    void resetFeedBackItemComboBox(const QString& newName);
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCH_VIEW_CTRL_ITEM_H

@@ -17,7 +17,7 @@ public:
     ~ServerConnectionDlg();
     void loadDataFromJson(const QJsonObject&);
     void connectToServer();
-    QJsonObject saveDataToJson();
+    QJsonObject SaveDataToJson();
     bool reconnectIsOn() const;
 signals:
     void autoConnectStateChanged(bool);

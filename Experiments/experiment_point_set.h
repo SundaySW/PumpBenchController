@@ -3,8 +3,6 @@
 
 #include <QWidget>
 
-#include "experiment.hpp"
-
 namespace Ui {
 class ExperimentPoint;
 }
@@ -16,15 +14,19 @@ class ExperimentPoint : public QWidget
 public:
     explicit ExperimentPoint(QWidget *parent = nullptr);
     ~ExperimentPoint();
-    double GetTargetValue();
-    unsigned int GetQuantity();
-    double GetSpread();
-    PointEntity GetPointEntity();
+    QPair<double, double> GetTargetValueSpreadPair() const;
+    double GetTargetValue() const;
+    int GetQuantity() const;
+    double GetSpread() const;
+    void LoadDataFromJson(const QJsonObject&);
+    QJsonObject SaveDataToJson();
 signals:
     void deleteMe();
 private:
     Ui::ExperimentPoint *ui;
-    PointEntity point_;
+    double target_value_ {100};
+    int qty_ {20};
+    double spread_ {10};
 };
 
 #endif // EXPERIMENT_POINT_SET_H

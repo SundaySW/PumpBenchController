@@ -58,7 +58,7 @@ void ScenariosDock::loadDataFromJson(const QJsonObject& scenarioArr){
     }
 }
 
-QJsonObject ScenariosDock::saveDataToJson(){
+QJsonObject ScenariosDock::SaveDataToJson(){
     auto retVal = QJsonObject();
     QJsonArray paramArr;
     for(auto& s: msgItemsMap)

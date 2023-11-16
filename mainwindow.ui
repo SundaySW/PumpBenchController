@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1104</width>
-    <height>894</height>
+    <height>949</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1298,7 +1298,7 @@ QScrollBar::sub-line:vertical {
          </property>
          <property name="icon">
           <iconset resource="Resources/files.qrc">
-           <normaloff>:/icons/graph_icon.svg</normaloff>:/icons/graph_icon.svg</iconset>
+           <normaloff>:/icons/experiment.svg</normaloff>:/icons/experiment.svg</iconset>
          </property>
          <property name="iconSize">
           <size>

@@ -152,15 +152,20 @@ bool BenchViewCtrlItem::isOKReceivedNewParam(const QSharedPointer<BenchViewItem>
             showMsgBox(QString("No Protos Param selected in %1 protos_item_").arg(item->getName()));
         else{
             showMsgBox(QString("No Protos Param selected in %1 protos_item_\nStill using %2").arg(item->getName(), targetValueItem->getName()));
-            targetParamCombobox->setCurrentText(targetValueItem->getName());
+            resetFeedBackItemComboBox(targetValueItem->getName());
         }
         return false;
     }else if(item == targetValueItem){
-        targetParamCombobox->setCurrentText(targetValueItem->getName());
+        resetFeedBackItemComboBox(targetValueItem->getName());
         return false;
     }else
-        targetParamCombobox->setCurrentText(item->getName());
+        resetFeedBackItemComboBox(item->getName());
     return true;
+}
+
+void BenchViewCtrlItem::resetFeedBackItemComboBox(const QString& newName){
+    targetParamCombobox->setCurrentText(newName);
+    emit newFeedBackItem(newName);
 }
 
 void BenchViewCtrlItem::checkPIDTargetValue(){
@@ -227,7 +232,7 @@ void BenchViewCtrlItem::loadDataFromJson(const QJsonObject& jsonObject) {
     pidEnabledBtn->setChecked(pidEnabled);
 }
 
-QJsonObject BenchViewCtrlItem::saveDataToJson(){
+QJsonObject BenchViewCtrlItem::SaveDataToJson(){
     QJsonObject jsonObject;
     jsonObject["ItemName"] = name;
     if(!targetValueItem.isNull())
@@ -246,3 +251,9 @@ QJsonObject BenchViewCtrlItem::saveDataToJson(){
     jsonObject["pidSettings"] = pidControl.toJson();
     return jsonObject;
 }
+
+ParamItem *BenchViewCtrlItem::getFeedBackParamRawPtr() {
+    return targetValueItem->getParamPtr();
+}
+
+

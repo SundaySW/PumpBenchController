@@ -19,6 +19,39 @@
         "setParamId": 5,
         "targetValueItemName": "rpm"
     },
+    "Experiment": {
+        "Params": [
+            {
+                "param_comboBox": "param_0x5_host_0x5",
+                "param_name_lineEdit": "DFdf"
+            },
+            {
+                "param_comboBox": "param_0x35_host_0x10",
+                "param_name_lineEdit": "ytrYT"
+            }
+        ],
+        "Points": [
+            {
+                "count_edit": "20",
+                "spread_edit": "100",
+                "target_edit": "1000"
+            },
+            {
+                "count_edit": "20",
+                "spread_edit": "100",
+                "target_edit": "3000"
+            },
+            {
+                "count_edit": "20",
+                "spread_edit": "100",
+                "target_edit": "2000"
+            }
+        ],
+        "count_stable": "20",
+        "device_n_edit": "43893",
+        "stable_value_spread": "1",
+        "stable_value_target": "10"
+    },
     "Params": [
         {
             "DestID": 255,
@@ -65,10 +98,10 @@
             "UpdateRate": 1,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Ср июл 5 15:22:44 2023",
+            "dateTime": "Чт ноя 16 19:28:39 2023",
             "note_": "",
-            "state_": 1,
-            "value_": "2095.85498046875",
+            "state_": 0,
+            "value_": "9.77265369653924e-37",
             "write_to_DB_": false
         },
         {
@@ -82,10 +115,10 @@
             "UpdateRate": 0,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Ср июл 5 15:22:44 2023",
+            "dateTime": "Чт ноя 16 19:28:39 2023",
             "note_": "",
-            "state_": 1,
-            "value_": "4316",
+            "state_": 0,
+            "value_": "0",
             "write_to_DB_": false
         },
         {
@@ -99,10 +132,10 @@
             "UpdateRate": 1000,
             "ViewUpdateRate": 4000,
             "alt_name_": "",
-            "dateTime": "Ср июл 5 15:22:44 2023",
+            "dateTime": "Чт ноя 16 19:28:39 2023",
             "note_": "",
-            "state_": 1,
-            "value_": "3685.5",
+            "state_": 0,
+            "value_": "0",
             "write_to_DB_": false
         },
         {
@@ -176,12 +209,6 @@
     ],
     "Scenarios": {
         "MsgScenarios": [
-            {
-                "ScenarioName": "Scenario №1",
-                "scenarioComparisonType": 0,
-                "scenarioEnabled": false,
-                "scenarioMsg": ""
-            }
         ]
     },
     "UpdateItems": [
@@ -240,7 +267,7 @@
         }
     ],
     "serverConnection": {
-        "IP": "192.168.1.99",
+        "IP": "127.0.0.5",
         "Port": "3699",
         "autoConnect": false
     }

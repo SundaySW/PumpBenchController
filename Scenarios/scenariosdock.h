@@ -16,7 +16,7 @@ public:
     explicit ScenariosDock(QWidget *parent = nullptr);
     ~ScenariosDock();
     void loadDataFromJson(const QJsonObject&);
-    QJsonObject saveDataToJson();
+    QJsonObject SaveDataToJson();
 signals:
     void reqNewItemFromScenario(const QString&, ScenariosItemBox*);
     void reqViewItemsList(ScenariosItemBox*);

@@ -1,5 +1,6 @@
 #include "experiment_point_set.h"
 #include "ui_experiment_point_set.h"
+#include "QJsonObject"
 
 ExperimentPoint::ExperimentPoint(QWidget *parent) :
     QWidget(parent),
@@ -11,19 +12,19 @@ ExperimentPoint::ExperimentPoint(QWidget *parent) :
         bool ok;
         double new_target_value = ui->target_edit->text().toDouble(&ok);
         if(ok)
-            point_.target_value_ = new_target_value;
+            target_value_ = new_target_value;
     });
     connect(ui->count_edit, &QLineEdit::editingFinished, [this](){
         bool ok;
         int new_count = ui->count_edit->text().toInt(&ok);
         if(ok)
-            point_.quantity_ = new_count;
+            qty_ = new_count;
     });
     connect(ui->spread_edit, &QLineEdit::editingFinished, [this](){
         bool ok;
         double new_spread = ui->spread_edit->text().toDouble(&ok);
         if(ok)
-            point_.spread = new_spread;
+            spread_ = new_spread;
     });
 }
 
@@ -32,18 +33,32 @@ ExperimentPoint::~ExperimentPoint()
     delete ui;
 }
 
-PointEntity ExperimentPoint::GetPointEntity(){
-    return point_;
+QPair<double, double> ExperimentPoint::GetTargetValueSpreadPair() const {
+    return {target_value_, spread_};
 }
 
-double ExperimentPoint::GetTargetValue() {
-    return point_.target_value_;
+double ExperimentPoint::GetTargetValue() const {
+    return target_value_;
 }
 
-unsigned int ExperimentPoint::GetQuantity() {
-    return point_.quantity_;
+int ExperimentPoint::GetQuantity() const {
+    return qty_;
 }
 
-double ExperimentPoint::GetSpread() {
-    return point_.spread;
+double ExperimentPoint::GetSpread() const {
+    return spread_;
+}
+
+void ExperimentPoint::LoadDataFromJson(const QJsonObject& jsonObject) {
+    ui->target_edit->setText(jsonObject["target_edit"].toString());
+    ui->count_edit->setText(jsonObject["count_edit"].toString());
+    ui->spread_edit->setText(jsonObject["spread_edit"].toString());
+}
+
+QJsonObject ExperimentPoint::SaveDataToJson(){
+    QJsonObject retVal;
+    retVal["target_edit"] = ui->target_edit->text();
+    retVal["count_edit"] = ui->count_edit->text();
+    retVal["spread_edit"] = ui->spread_edit->text();
+    return retVal;
 }

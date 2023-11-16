@@ -24,14 +24,23 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
     jsonSaved_ = QJsonObject();
     paramService_->setSocketAdapter(socketAdapter_);
     paramService_->loadParams(jsonSaved_);
-    setView();
-    setViewMap();
+    setViewIcons();
+    makeItems();
     makeConnections();
-    loadScenarioDock();
+    makeScenarioDock();
+    makeExperimentDLg();
     loadFromJson();
 }
 
-void BenchController::loadScenarioDock(){
+void BenchController::makeExperimentDLg(){
+    experimentSettingsDlg_->LoadPtrs(controlItem_, paramService_);
+    sendItemsNameLogoListToComboBoxes(experimentSettingsDlg_);
+    connect(controlItem_.get(), &BenchViewCtrlItem::newFeedBackItem, [this](const QString& s){
+        experimentSettingsDlg_->NewFeedBackParamName(s);
+    });
+}
+
+void BenchController::makeScenarioDock(){
     mainWindow->addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, scenariosDock_.get());
     connect(scenariosDock_.get(), &ScenariosDock::reqViewItemsList, [this](ScenariosItemBox* item){
         sendItemsNameLogoListToComboBoxes(item);
@@ -45,7 +54,7 @@ void BenchController::loadScenarioDock(){
     });
 }
 
-void BenchController::setView(){
+void BenchController::setViewIcons(){
     logOkIcon = QIcon(":/icons/ok_circle.svg");
     logErrorIcon = QIcon(":/icons/error_circle.svg");
     statusDefIcon = QIcon(":/item_icons/item_svg/sktb_logo_def.svg");
@@ -75,6 +84,7 @@ void BenchController::loadFromJson(){
     controlItem_->loadDataFromJson(jsonSaved_["ControlItem"].toObject());
     serverConnectionDlg_->loadDataFromJson(jsonSaved_["serverConnection"].toObject());
     scenariosDock_->loadDataFromJson(jsonSaved_["Scenarios"].toObject());
+    experimentSettingsDlg_->LoadDataFromJson(jsonSaved_["Experiment"].toObject());
 }
 
 void BenchController::saveToJson() {
@@ -82,11 +92,12 @@ void BenchController::saveToJson() {
 
     QJsonArray paramArr;
     for(auto& p: updateItemsMap_)
-        paramArr.append(p->saveDataToJSon());
+        paramArr.append(p->SaveDataToJSon());
     jsonSaved_["UpdateItems"] = paramArr;
-    jsonSaved_["ControlItem"] = controlItem_->saveDataToJson();
-    jsonSaved_["serverConnection"] = serverConnectionDlg_->saveDataToJson();
-    jsonSaved_["Scenarios"] = scenariosDock_->saveDataToJson();
+    jsonSaved_["ControlItem"] = controlItem_->SaveDataToJson();
+    jsonSaved_["serverConnection"] = serverConnectionDlg_->SaveDataToJson();
+    jsonSaved_["Scenarios"] = scenariosDock_->SaveDataToJson();
+    jsonSaved_["Experiment"] = experimentSettingsDlg_->SaveDataToJson();
 
     QJsonDocument doc;
     doc.setObject(jsonSaved_);
@@ -98,7 +109,7 @@ void BenchController::saveToJson() {
     configFile->close();
 }
 
-void BenchController::setViewMap(){
+void BenchController::makeItems(){
     updateItemsMap_.insert("rpm", QSharedPointer<BenchViewItem>(
             new BenchViewItem("rpm", ui->rpm_plot, ui->rpm_label, ui->rpm_button, paramService_.get(), mainWindow)));
     updateItemsMap_.insert("flow", QSharedPointer<BenchViewItem>(
@@ -118,12 +129,13 @@ void BenchController::setViewMap(){
                                   ui->setParamValue_lineEdit, ui->pidTargetValue_lineEdit, ui->pidEnable_pushButton,
                                   ui->sendParamValue_button, ui->pidValue_comboBox, ui->valveSet_slider, mainWindow));
     sendItemsNameLogoListToComboBoxes(controlItem_.get());
-}
 
-void BenchController::makeConnections(){
     connect(controlItem_.get(), &BenchViewCtrlItem::requestItemsList, [this](){
         sendItemsNameLogoListToComboBoxes(controlItem_.get());});
     connect(controlItem_.get(), &BenchViewCtrlItem::requestParamKeyByName, [this](const QString& s){ sendItemFromName(s, controlItem_.get());});
+}
+
+void BenchController::makeConnections(){
     connect(serverReconnectionTimer_, &QTimer::timeout, [this]() { serverConnectionHandler(); });
     serverReconnectionTimer_->start(kServerReconnectionTime);
     connect(plotReDrawTimer_, &QTimer::timeout, [this]() { plotReDrawTimerHandler();});

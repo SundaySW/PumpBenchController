@@ -17,6 +17,8 @@ public:
     explicit ExperimentParam(const QStringList& params, QWidget *parent = nullptr);
     ~ExperimentParam();
     ParamEntity GetParamEntity();
+    void LoadDataFromJson(const QJsonObject&);
+    QJsonObject SaveDataToJson();
 signals:
     void deleteMe();
 private:

@@ -27,4 +27,16 @@ ParamEntity ExperimentParam::GetParamEntity() {
     return param_entity_;
 }
 
+void ExperimentParam::LoadDataFromJson(const QJsonObject& jsonObject) {
+    ui->param_comboBox->setCurrentText(jsonObject["param_comboBox"].toString());
+    ui->param_name_lineEdit->setText(jsonObject["param_name_lineEdit"].toString());
+}
+
+QJsonObject ExperimentParam::SaveDataToJson() {
+    QJsonObject retVal;
+    retVal["param_comboBox"] = ui->param_comboBox->currentText();
+    retVal["param_name_lineEdit"] = ui->param_name_lineEdit->text();
+    return retVal;
+}
+
 

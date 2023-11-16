@@ -29,8 +29,8 @@ BenchItemSettingsDlg::BenchItemSettingsDlg(QString name, ParamService* ps, bool 
 }
 
 void BenchItemSettingsDlg::updateParamConnections(){
-    ui->lowerBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
-    ui->upperBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
+//    ui->lowerBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
+//    ui->upperBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
     connect(ui->refresh_button, &QPushButton::clicked, [this](){ refreshParamList(); });
     connect(ui->unbindParam_button, &QPushButton::clicked, [this](){ unbindProtosParam(); });
     connect(ui->updateParam_comboBox, &QComboBox::currentTextChanged, [this](const QString& s){ newParamRequested(s);});

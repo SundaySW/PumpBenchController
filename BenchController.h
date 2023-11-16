@@ -12,13 +12,13 @@
 #include "ui_mainwindow.h"
 #include <utility>
 #include "Scenarios/scenariosdock.h"
-#include "experimentsettings.h"
+#include "experiment_settings.h"
 
 class BenchController: public QObject{
     Q_OBJECT
 public:
     explicit BenchController(Ui::MainWindow *_ui, QMainWindow* mw);
-    void setViewMap();
+    void makeItems();
     ~BenchController() = default;
 private:
     Ui::MainWindow *ui;
@@ -41,21 +41,21 @@ private:
     void makeConnections();
     void statusBtnClicked();
     void serverBtnClicked();
+    void experimentBtnClicked();
     void onItemNewValue(const QString &name);
     void updateErrorStatusList(BenchViewItem *item);
     void eventServerConnectionHandler(const QString &eventStr, bool isError);
-    void setView();
+    void setViewIcons();
     void loadFromJson();
     void saveToJson();
     void serverConnectionHandler();
     void plotReDrawTimerHandler();
-    void loadScenarioDock();
+    void makeScenarioDock();
+    void makeExperimentDLg();
     template<typename T>
     void sendItemFromName(const QString &itemName, T *customer);
     template<typename T>
     void sendItemsNameLogoListToComboBoxes(T *customer);
-
-    void experimentBtnClicked();
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHCONTROLLER_H

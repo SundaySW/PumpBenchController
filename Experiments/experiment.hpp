@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "QMap"
 
 #include "BenchItem/bench_view_ctrl_item.h"
@@ -12,12 +14,12 @@ struct ParamEntity{
 class PointEntity{
 public:
     PointEntity() = delete;
-    explicit PointEntity(double tg, int qty, double spread, QVector<ParamEntity> params)
-        : target_value_(tg),
+    explicit PointEntity(QPair<double, double> tg_spread, int qty, QVector<ParamEntity> params)
+        : target_value_(tg_spread.first),
           quantity_(qty),
           params_(std::move(params))
     {
-        bounds_ = {target_value_ - spread, target_value_ + spread};
+        bounds_ = {target_value_ - tg_spread.second, target_value_ + tg_spread.second};
         try{
             for(auto& param : params_)
                 param_results_.insert(param.protos_param_name, QVector<double>(quantity_));
@@ -29,8 +31,8 @@ public:
     void IncCnt(){ count_++; }
     [[nodiscard]] int GetCnt() const{ return count_; }
     auto& GetResultsStorage() { return param_results_; }
-    double TargetValue() const { return target_value_; }
-    bool isInBounds(double value) const { return value > bounds_.first && value < bounds_.second; }
+    [[nodiscard]] double TargetValue() const { return target_value_; }
+    [[nodiscard]] bool isInBounds(double value) const { return value > bounds_.first && value < bounds_.second; }
     void SetFinished() {finished_ = true;}
 private:
     QPair<double,double> bounds_;
@@ -44,17 +46,42 @@ private:
 
 class Experiment {
 public:
-    Experiment(QSharedPointer<BenchViewCtrlItem>&& ctrlItem, QSharedPointer<ParamService>&& ps);
-private:
-    QSharedPointer<BenchViewCtrlItem> control_item_;
-    QSharedPointer<ParamService> param_service_;
-
+    Experiment() = delete;
+    Experiment(QSharedPointer<BenchViewCtrlItem> ctrlItem,
+               QSharedPointer<ParamService> ps,
+               QPair<double, double> target_value_spread,
+               int cnt,
+               QVector<ParamEntity>&& params)
+        : control_item_(std::move(ctrlItem)),
+          param_service_(std::move(ps)),
+          start_target_value_spread_(target_value_spread),
+          stable_start_desired_cnt_(cnt),
+          params_(std::move(params)),
+          current_point_(target_value_spread, cnt, params)
+    {}
+    ~Experiment() = default;
     void UpdateExperiment(double value){
         if(stable_reached_){
             PointProcess(value);
         }else
             InitialStabilization(value);
     }
+
+    void FinishExperiment(){
+
+    }
+
+private:
+    int point_cnt_{0};
+    PointEntity current_point_;
+    QVector<PointEntity> points_;
+    QVector<ParamEntity> params_;
+    QPair<double, double> start_target_value_spread_;
+    const int stable_start_desired_cnt_ {0};
+    bool stable_reached_ {false};
+
+    QSharedPointer<BenchViewCtrlItem> control_item_;
+    QSharedPointer<ParamService> param_service_;
 
     void PointProcess(double value){
         if(current_point_.isInBounds(value)){
@@ -87,16 +114,21 @@ private:
         control_item_->setRequestedValue(current_point_.TargetValue());
     }
 
-    void FinishExperiment(){
-    }
-
-    QJsonObject PrepareExpResults(){
-        QJsonObject result;
+    QJsonObject PrepareExpResultPoints(){
+        QJsonObject points;
         for(auto& point : points_){
-            QJsonArray point_array;
-            QJsonValue value;
-            value
+            QJsonObject point_record;
+            QJsonArray params_arr;
+            for(auto& [param_name, storage] : point.GetResultsStorage().toStdMap()){
+                QJsonObject param_record;
+                auto average_value = std::accumulate( storage.begin(), storage.end(), 0.0) / storage.size();
+                param_record[param_name] = average_value;
+                params_arr.append(param_record);
+            }
+            point_record.insert("Params", params_arr);
+            points.insert(QString::number(point.TargetValue()), point_record);
         }
+        return points;
     }
 
     void InitialStabilization(double value){
@@ -108,17 +140,9 @@ private:
         }
     }
 
-    bool IsInStabilizationBounds(double value){
-        return value >= start_bounds_.first && value <= start_bounds_.second;
+    [[nodiscard]] bool IsInStabilizationBounds(double value) const{
+        auto lower_bound = start_target_value_spread_.first - start_target_value_spread_.second;
+        auto upper_bound = start_target_value_spread_.first + start_target_value_spread_.second;
+        return value >= lower_bound && value <= upper_bound;
     }
-
-    int point_cnt_{0};
-    PointEntity current_point_;
-    QVector<PointEntity> points_;
-
-    QPair<double, double> start_bounds_;
-    const std::size_t stable_start_desired_cnt_;
-    bool stable_reached_ {false};
-
-    void MakeConnections();
 };

@@ -35,7 +35,7 @@ public:
     const QVariant &getCurrentValue() const;
     QPushButton *getButton() const;
     void loadDataFromJson(const QJsonObject&);
-    QJsonObject saveDataToJSon();
+    QJsonObject SaveDataToJSon();
     void repaintPlot();
 signals:
     void signalValueUpdated_itemValue(double value, bool ok);

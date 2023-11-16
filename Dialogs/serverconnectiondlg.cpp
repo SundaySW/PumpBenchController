@@ -58,7 +58,7 @@ void ServerConnectionDlg::autoConnectBtnClicked(){
     emit autoConnectStateChanged(autoConnect);
 }
 
-QJsonObject ServerConnectionDlg::saveDataToJson(){
+QJsonObject ServerConnectionDlg::SaveDataToJson(){
     QJsonObject retVal;
     retVal["IP"] = ui->ip_lineEdit->text();
     retVal["Port"] = ui->port_lineEdit->text();
