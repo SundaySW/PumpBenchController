@@ -31,7 +31,7 @@ private:
     QMap<ExperimentParam*, QSharedPointer<ExperimentParam>> params_map_;
     QSharedPointer<ParamService> param_service_;
     QSharedPointer<BenchViewCtrlItem> ctrlItem_;
-    Experiment* experiment_ {nullptr};
+    QSharedPointer<Experiment> experiment_;
     void MakeConnections();
     ExperimentPoint *addExpPoint();
     ExperimentParam *addExpParam();

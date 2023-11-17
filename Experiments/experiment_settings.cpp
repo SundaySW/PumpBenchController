@@ -9,13 +9,14 @@ ExperimentSettings::ExperimentSettings(QWidget *parent)
 {
     ui->setupUi(this);
     MakeConnections();
-//    SetValidators();
+    ui->stable_value_target->setValidator(new QRegExpValidator(QRegExp("[-+]?[0-9]+(\\.[0-9]+)?")));
+    ui->stable_value_spread->setValidator(new QRegExpValidator(QRegExp("[-+]?[0-9]+(\\.[0-9]+)?")));
+    ui->count_stable->setValidator(new QIntValidator());
 }
 
 ExperimentSettings::~ExperimentSettings()
 {
     delete ui;
-    delete experiment_;
 }
 
 void ExperimentSettings::MakeConnections() {
@@ -72,14 +73,12 @@ void ExperimentSettings::StartExperiment(){
     auto tg_value = ui->stable_value_target->text().toDouble();
     auto spread = ui->stable_value_spread->text().toDouble();
     auto qty = ui->count_stable->text().toInt();
-    delete experiment_;
-    experiment_ = new Experiment(ctrlItem_, param_service_, {tg_value,spread}, qty, std::move(params));
+    experiment_.reset(new Experiment(ctrlItem_, param_service_, {tg_value,spread}, qty, std::move(params)));
     connect(ctrlItem_->getFeedBackParamRawPtr(), &ParamItem::newParamValue, [this](){ UpdateExperiment(); });
 }
 
 void ExperimentSettings::StopExperiment(){
-    if(experiment_)
-        disconnect(ctrlItem_->getFeedBackParamRawPtr(), &ParamItem::newParamValue, this, nullptr);
+    disconnect(ctrlItem_->getFeedBackParamRawPtr(), &ParamItem::newParamValue, this, nullptr);
     experiment_->FinishExperiment();
 }
 

@@ -42,7 +42,7 @@ private:
     QPushButton* configBtn;
     QPushButton* pidEnabledBtn;
     QPushButton* sendValueBtn;
-    QLineEdit* itemValueEdit;
+    QLineEdit* set_item_value_edit_;
     QLineEdit* targetValueEdit;
     QComboBox* targetParamCombobox;
     QSlider* valueSlider;

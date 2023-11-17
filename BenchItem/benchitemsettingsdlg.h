@@ -5,6 +5,7 @@
 #include <QLabel>
 #include "Param_Item/ParamItem.h"
 #include "ParamService.h"
+#include "QRegExpValidator"
 
 namespace Ui {
 class BenchItemSettingsDlg;
@@ -43,6 +44,8 @@ private:
     Ui::BenchItemSettingsDlg *ui;
     PIDSettings pidSettings;
     QString itemName;
+    QSharedPointer<QRegExpValidator> doubleValueVal;
+    QSharedPointer<QRegExpValidator> unsFloatValueVal;
 
     void newParamRequested(const QString &mapKey);
     void getCalib();

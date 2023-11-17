@@ -2,6 +2,7 @@
 #define EXPERIMENT_POINT_SET_H
 
 #include <QWidget>
+#include <QRegExpValidator>
 
 namespace Ui {
 class ExperimentPoint;
@@ -24,6 +25,8 @@ signals:
     void deleteMe();
 private:
     Ui::ExperimentPoint *ui;
+    QSharedPointer<QRegExpValidator> doubleValueVal;
+
     double target_value_ {100};
     int qty_ {20};
     double spread_ {10};

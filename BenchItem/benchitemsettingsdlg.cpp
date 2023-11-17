@@ -15,7 +15,9 @@ BenchItemSettingsDlg::BenchItemSettingsDlg(QString name, ParamService* ps, bool 
     QDialog(parent),
     itemName(std::move(name)),
     pidSettings(),
-    ui(new Ui::BenchItemSettingsDlg)
+    ui(new Ui::BenchItemSettingsDlg),
+    doubleValueVal(new QRegExpValidator((QRegExp("[-+]?[0-9]+(\\.[0-9]+)?")))),
+    unsFloatValueVal(new QRegExpValidator((QRegExp("[0-9]+(\\.[0-9]+)?"))))
 {
     ui->setupUi(this);
     ui->itemName_label->setText(itemName.toUpper());
@@ -29,8 +31,8 @@ BenchItemSettingsDlg::BenchItemSettingsDlg(QString name, ParamService* ps, bool 
 }
 
 void BenchItemSettingsDlg::updateParamConnections(){
-//    ui->lowerBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
-//    ui->upperBound_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
+    ui->lowerBound_lineEdit->setValidator(doubleValueVal.get());
+    ui->upperBound_lineEdit->setValidator(doubleValueVal.get());
     connect(ui->refresh_button, &QPushButton::clicked, [this](){ refreshParamList(); });
     connect(ui->unbindParam_button, &QPushButton::clicked, [this](){ unbindProtosParam(); });
     connect(ui->updateParam_comboBox, &QComboBox::currentTextChanged, [this](const QString& s){ newParamRequested(s);});
@@ -40,6 +42,8 @@ void BenchItemSettingsDlg::updateParamConnections(){
         double newMaxValue = ui->upperBound_lineEdit->text().toDouble(&okMin);
         if(okMin && okMax)
             emit newUpdateValueBounds(qMakePair(newMinValue, newMaxValue));
+        else
+            QMessageBox::information(this, "Wrong value", "Previous kept");
     });
     connect(ui->upperBound_lineEdit, &QLineEdit::editingFinished, [this](){
         bool okMin,okMax;
@@ -47,6 +51,8 @@ void BenchItemSettingsDlg::updateParamConnections(){
         double newMaxValue = ui->upperBound_lineEdit->text().toDouble(&okMin);
         if(okMin && okMax)
             emit newUpdateValueBounds(qMakePair(newMinValue, newMaxValue));
+        else
+            QMessageBox::information(this, "Wrong value", "Previous kept");
     });
 }
 
@@ -60,8 +66,8 @@ void BenchItemSettingsDlg::unbindProtosParam(){
 void BenchItemSettingsDlg::setParamConnections(){
     ui->setParamID_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9a-fA-F]{1,2}")));
     ui->setParamHost_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9a-fA-F]{1,2}")));
-    ui->setValueMin_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
-    ui->setValueMax_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+")));
+    ui->setValueMin_lineEdit->setValidator(doubleValueVal.get());
+    ui->setValueMax_lineEdit->setValidator(doubleValueVal.get());
     connect(ui->setParamHost_lineEdit, &QLineEdit::editingFinished, [this](){
         short newHost = ui->setParamHost_lineEdit->text().toShort(nullptr,16);
         short ID = ui->setParamID_lineEdit->text().toShort(nullptr,16);
@@ -76,24 +82,28 @@ void BenchItemSettingsDlg::setParamConnections(){
     });
     connect(ui->setValueMin_lineEdit, &QLineEdit::editingFinished, [this](){
         bool okMin,okMax;
-        int newMinValue = ui->setValueMin_lineEdit->text().toInt(&okMin);
-        int maxValue = ui->setValueMax_lineEdit->text().toInt(&okMax);
+        int newMinValue = ui->setValueMin_lineEdit->text().toDouble(&okMin);
+        int maxValue = ui->setValueMax_lineEdit->text().toDouble(&okMax);
         if(okMin && okMax)
             emit newSetValueBounds(qMakePair(newMinValue, maxValue));
+        else
+            QMessageBox::information(this, "Wrong value", "Previous kept");
     });
     connect(ui->setValueMax_lineEdit, &QLineEdit::editingFinished, [this](){
         bool okMin,okMax;
-        int minValue = ui->setValueMin_lineEdit->text().toInt(&okMin);
-        int newMaxValue = ui->setValueMax_lineEdit->text().toInt(&okMax);
+        int minValue = ui->setValueMin_lineEdit->text().toDouble(&okMin);
+        int newMaxValue = ui->setValueMax_lineEdit->text().toDouble(&okMax);
         if(okMin && okMax)
             emit newSetValueBounds(qMakePair(minValue, newMaxValue));
+        else
+            QMessageBox::information(this, "Wrong value", "Previous kept");
     });
 }
 
 void BenchItemSettingsDlg::paramSettingsConnection(){
-    ui->offset_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+.[0-9]+")));
-    ui->mult_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+.[0-9]+")));
-    ui->updateRate_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
+    ui->offset_value_lineEdit->setValidator(doubleValueVal.get());
+    ui->mult_value_lineEdit->setValidator(doubleValueVal.get());
+    ui->updateRate_value_lineEdit->setValidator(doubleValueVal.get());
     ui->controlRate_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     ui->sendRate_value_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     connect(ui->getCalib_button, &QPushButton::clicked, [this](){ getCalib(); });
@@ -103,40 +113,55 @@ void BenchItemSettingsDlg::paramSettingsConnection(){
 }
 
 void BenchItemSettingsDlg::pidValuesConnection(){
-    ui->pidMin_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+.[0-9]+")));
-    ui->pidMax_lineEdit->setValidator(new QRegExpValidator(QRegExp("[-+][0-9]+.[0-9]+")));
-    ui->pidKp_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
-    ui->pidKi_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
-    ui->pidKd_lineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]+.[0-9]+")));
+    ui->pidMin_lineEdit->setValidator(doubleValueVal.get());
+    ui->pidMax_lineEdit->setValidator(doubleValueVal.get());
+    ui->pidKp_lineEdit->setValidator(unsFloatValueVal.get());
+    ui->pidKi_lineEdit->setValidator(unsFloatValueVal.get());
+    ui->pidKd_lineEdit->setValidator(unsFloatValueVal.get());
     connect(ui->pidKd_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidKd_lineEdit->text().toDouble(&ok);
-        if(ok)pidSettings.Kd = newValue;
-        emit newPIDSettings(pidSettings);
+        if(ok){
+            pidSettings.Kd = newValue;
+            emit newPIDSettings(pidSettings);
+        }
+        else QMessageBox::information(this, "Wrong value", "Previous kept");
     });
     connect(ui->pidKi_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidKi_lineEdit->text().toDouble(&ok);
-        if(ok)pidSettings.Ki = newValue;
-        emit newPIDSettings(pidSettings);
+        if(ok) {
+            pidSettings.Ki = newValue;
+            emit newPIDSettings(pidSettings);
+        }
+        else QMessageBox::information(this, "Wrong value", "Previous kept");
     });
     connect(ui->pidKp_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidKp_lineEdit->text().toDouble(&ok);
-        if(ok)pidSettings.Kp = newValue;
-        emit newPIDSettings(pidSettings);
+        if(ok) {
+            pidSettings.Kp = newValue;
+            emit newPIDSettings(pidSettings);
+        }
+        else QMessageBox::information(this, "Wrong value", "Previous kept");
     });
     connect(ui->pidMin_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidMin_lineEdit->text().toDouble(&ok);
-        if(ok)pidSettings.min = newValue;
-        emit newPIDSettings(pidSettings);
+        if(ok) {
+            pidSettings.min = newValue;
+            emit newPIDSettings(pidSettings);
+        }
+        else QMessageBox::information(this, "Wrong value", "Previous kept");
     });
     connect(ui->pidMax_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidMax_lineEdit->text().toDouble(&ok);
-        if(ok)pidSettings.max = newValue;
-        emit newPIDSettings(pidSettings);
+        if(ok) {
+            pidSettings.max = newValue;
+            emit newPIDSettings(pidSettings);
+        }
+        else QMessageBox::information(this, "Wrong value", "Previous kept");
     });
 }
 

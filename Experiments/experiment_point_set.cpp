@@ -4,9 +4,13 @@
 
 ExperimentPoint::ExperimentPoint(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ExperimentPoint)
+    ui(new Ui::ExperimentPoint),
+    doubleValueVal(new QRegExpValidator((QRegExp("[-+]?[0-9]+(\\.[0-9]+)?"))))
 {
     ui->setupUi(this);
+    ui->target_edit->setValidator(doubleValueVal.get());
+    ui->spread_edit->setValidator(doubleValueVal.get());
+    ui->count_edit->setValidator(new QIntValidator());
     connect(ui->delete_btn, &QPushButton::clicked, [this](){ emit deleteMe();});
     connect(ui->target_edit, &QLineEdit::editingFinished, [this](){
         bool ok;

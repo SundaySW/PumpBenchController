@@ -6,25 +6,25 @@
 #include <QMessageBox>
 
 BenchViewCtrlItem::BenchViewCtrlItem(QString _name, ParamService* ps, QPushButton* cfgBtn,
-                                     QLineEdit *ive, QLineEdit *tve, QPushButton *pid,
+                                     QLineEdit *setV, QLineEdit *pidV, QPushButton *pid,
                                      QPushButton *send, QComboBox *tpc, QSlider *vs,
                                      QWidget *parent)
-   :name(std::move(_name)),
-    paramService(ps),
-    configBtn(cfgBtn),
-    itemValueEdit(ive),
-    targetValueEdit(tve),
-    pidEnabledBtn(pid),
-    sendValueBtn(send),
-    targetParamCombobox(tpc),
-    valueSlider(vs),
-    pidControl()
+   : name(std::move(_name)),
+     paramService(ps),
+     configBtn(cfgBtn),
+     set_item_value_edit_(setV),
+     targetValueEdit(pidV),
+     pidEnabledBtn(pid),
+     sendValueBtn(send),
+     targetParamCombobox(tpc),
+     valueSlider(vs),
+     pidControl()
 {
     settingsDlg = new BenchItemSettingsDlg(name, paramService, false, parent);
-    itemValueEdit->setValidator(new QRegExpValidator(QRegExp("[+-][0-9a-FA-F]+")));
-//    targetValueEdit->setValidator(new QRegExpValidator(QRegExp(R"([0-9a-fA-F]{1,8}\.[0-9a-fA-F]{1,8})")));
+    set_item_value_edit_->setValidator(new QRegExpValidator(QRegExp("[0-9a-FA-F]+")));
+    targetValueEdit->setValidator(new QRegExpValidator(QRegExp("[-+]?[0-9]+(\\.[0-9]+)?")));
 
-    connect(itemValueEdit, &QLineEdit::editingFinished, [this]() { textValueEdited();});
+    connect(set_item_value_edit_, &QLineEdit::editingFinished, [this]() { textValueEdited();});
     connect(valueSlider, &QAbstractSlider::valueChanged, [this](int pos) { sliderMoved(pos);});
     connect(pidEnabledBtn, &QPushButton::clicked, [this]() { pidButtonClicked();});
     connect(sendValueBtn, &QPushButton::clicked, [this]() { sendValue();});
@@ -57,9 +57,9 @@ void BenchViewCtrlItem::sliderMoved(int position){
 
 void BenchViewCtrlItem::textValueEdited(){
     bool ok;
-    auto newValue = itemValueEdit->text().toDouble(&ok);
+    auto newValue = set_item_value_edit_->text().toDouble(&ok);
     if(!ok){
-        itemValueEdit->clear();
+        set_item_value_edit_->clear();
         return;
     }
     setRequestedValue(newValue);
@@ -70,11 +70,11 @@ bool BenchViewCtrlItem::setRequestedValue(T val){
     if(checkValue(val)){
         requestedValue = val;
         valueSlider->setValue((int)requestedValue);
-        itemValueEdit->setText(QString("%1").arg(requestedValue));
+        set_item_value_edit_->setText(QString("%1").arg(requestedValue));
         return true;
     }
     else
-        itemValueEdit->setText("out of set range");
+        set_item_value_edit_->setText("out of set range");
     return false;
 }
 
@@ -176,8 +176,8 @@ void BenchViewCtrlItem::checkPIDTargetValue(){
     auto[min, max] = targetValueItem->getBounds();
     auto currentItemValue = targetValueItem->getCurrentValue().toDouble();
     if(pidTargetValue > max || pidTargetValue < min){
-        showMsgBox(QString("Target value out of range for this protos_item_ (bounds in settings diag)\n"
-                           "value_ is set with currently received value! Please check!"));
+        showMsgBox(QString("Target value out of range for this protos item (bounds in settings diag)\n"
+                           "value is set with currently received value! Please check!"));
         targetValueEdit->setText(QString("%1").arg(currentItemValue));
         pidTargetValue = currentItemValue;
     }

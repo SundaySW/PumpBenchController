@@ -16,8 +16,7 @@
         "pidTargetValue": 0,
         "requestedValue": 282,
         "setParamHost": 5,
-        "setParamId": 5,
-        "targetValueItemName": "rpm"
+        "setParamId": 5
     },
     "Experiment": {
         "Params": [
@@ -39,12 +38,12 @@
             {
                 "count_edit": "20",
                 "spread_edit": "100",
-                "target_edit": "3000"
+                "target_edit": "2000"
             },
             {
                 "count_edit": "20",
                 "spread_edit": "100",
-                "target_edit": "2000"
+                "target_edit": "3000"
             }
         ],
         "count_stable": "20",
@@ -55,24 +54,7 @@
     "Params": [
         {
             "DestID": 255,
-            "ExpectedValue": "0",
-            "HostID": 16,
-            "ID_": 0,
-            "LastValueType": 8,
-            "SenderID": 16,
-            "Type": 1,
-            "UpdateRate": -1104,
-            "ViewUpdateRate": 5000,
-            "alt_name_": "",
-            "dateTime": "Чт июн 1 14:55:06 2023",
-            "note_": "",
-            "state_": 1,
-            "value_": "",
-            "write_to_DB_": false
-        },
-        {
-            "DestID": 255,
-            "ExpectedValue": "2866.5",
+            "ExpectedValue": "4093.194091796875",
             "HostID": 16,
             "ID_": 49,
             "LastValueType": 8,
@@ -81,78 +63,78 @@
             "UpdateRate": 1000,
             "ViewUpdateRate": 4000,
             "alt_name_": "",
-            "dateTime": "Ср июл 5 15:22:44 2023",
+            "dateTime": "Пт ноя 17 14:42:53 2023",
             "note_": "",
-            "state_": 1,
-            "value_": "2866.5",
+            "state_": 0,
+            "value_": "4090.6142578125",
             "write_to_DB_": false
         },
         {
             "DestID": 255,
-            "ExpectedValue": "2095.9521484375",
+            "ExpectedValue": "4092.93603515625",
             "HostID": 16,
             "ID_": 50,
             "LastValueType": 8,
             "SenderID": 16,
             "Type": 1,
-            "UpdateRate": 1,
+            "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Чт ноя 16 19:28:39 2023",
+            "dateTime": "Пт ноя 17 14:42:53 2023",
             "note_": "",
             "state_": 0,
-            "value_": "9.77265369653924e-37",
+            "value_": "4090.8720703125",
             "write_to_DB_": false
         },
         {
             "DestID": 255,
-            "ExpectedValue": "4316",
+            "ExpectedValue": "4095",
             "HostID": 16,
             "ID_": 51,
             "LastValueType": 8,
             "SenderID": 16,
             "Type": 1,
-            "UpdateRate": 0,
+            "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Чт ноя 16 19:28:39 2023",
+            "dateTime": "Пт ноя 17 14:42:53 2023",
             "note_": "",
             "state_": 0,
-            "value_": "0",
+            "value_": "4095",
             "write_to_DB_": false
         },
         {
             "DestID": 255,
-            "ExpectedValue": "3685.5",
+            "ExpectedValue": "4094.828125",
             "HostID": 16,
             "ID_": 52,
             "LastValueType": 8,
             "SenderID": 16,
             "Type": 1,
-            "UpdateRate": 1000,
-            "ViewUpdateRate": 4000,
+            "UpdateRate": -4083,
+            "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Чт ноя 16 19:28:39 2023",
+            "dateTime": "Пт ноя 17 14:42:53 2023",
             "note_": "",
             "state_": 0,
-            "value_": "0",
+            "value_": "4094.828125",
             "write_to_DB_": false
         },
         {
             "DestID": 255,
-            "ExpectedValue": "3686.39990234375",
+            "ExpectedValue": "4095",
             "HostID": 16,
             "ID_": 53,
             "LastValueType": 8,
             "SenderID": 16,
             "Type": 1,
-            "UpdateRate": 1000,
-            "ViewUpdateRate": 4000,
+            "UpdateRate": -4083,
+            "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Ср июл 5 15:22:44 2023",
+            "dateTime": "Пт ноя 17 14:42:53 2023",
             "note_": "",
-            "state_": 1,
-            "value_": "3686.39990234375",
+            "state_": 0,
+            "value_": "4094.828125",
             "write_to_DB_": false
         },
         {
@@ -163,12 +145,12 @@
             "LastValueType": 8,
             "SenderID": 16,
             "Type": 1,
-            "UpdateRate": 1000,
-            "ViewUpdateRate": 4000,
+            "UpdateRate": -4083,
+            "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Ср июл 5 15:22:44 2023",
+            "dateTime": "Пт ноя 17 14:42:53 2023",
             "note_": "",
-            "state_": 1,
+            "state_": 0,
             "value_": "0",
             "write_to_DB_": false
         },
@@ -180,30 +162,81 @@
             "LastValueType": 8,
             "SenderID": 16,
             "Type": 1,
-            "UpdateRate": 0,
+            "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Ср июл 5 15:22:44 2023",
+            "dateTime": "Пт ноя 17 14:42:53 2023",
             "note_": "",
-            "state_": 1,
+            "state_": 0,
             "value_": "0",
             "write_to_DB_": false
         },
         {
-            "DestID": 5,
-            "ExpectedValue": "282",
-            "HostID": 5,
-            "ID_": 5,
-            "LastValueType": 9,
-            "SenderID": 0,
-            "Type": 2,
-            "UpdateRate": 0,
+            "DestID": 255,
+            "ExpectedValue": "24",
+            "HostID": 16,
+            "ID_": 158,
+            "LastValueType": 8,
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Ср июл 5 15:22:44 2023",
+            "dateTime": "Пт ноя 17 14:42:50 2023",
             "note_": "",
-            "state_": 1,
-            "value_": "282",
+            "state_": 0,
+            "value_": "25",
+            "write_to_DB_": false
+        },
+        {
+            "DestID": 255,
+            "ExpectedValue": "23.34375",
+            "HostID": 16,
+            "ID_": 159,
+            "LastValueType": 8,
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": 5000,
+            "ViewUpdateRate": 7500,
+            "alt_name_": "",
+            "dateTime": "Пт ноя 17 14:42:51 2023",
+            "note_": "",
+            "state_": 0,
+            "value_": "23.53125",
+            "write_to_DB_": false
+        },
+        {
+            "DestID": 255,
+            "ExpectedValue": "22.406352996826172",
+            "HostID": 16,
+            "ID_": 160,
+            "LastValueType": 8,
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": 5000,
+            "ViewUpdateRate": 7500,
+            "alt_name_": "",
+            "dateTime": "Пт ноя 17 14:42:51 2023",
+            "note_": "",
+            "state_": 0,
+            "value_": "22.406352996826172",
+            "write_to_DB_": false
+        },
+        {
+            "DestID": 255,
+            "ExpectedValue": "0",
+            "HostID": 16,
+            "ID_": 161,
+            "LastValueType": 8,
+            "SenderID": 16,
+            "Type": 1,
+            "UpdateRate": 5000,
+            "ViewUpdateRate": 7500,
+            "alt_name_": "",
+            "dateTime": "Пт ноя 17 14:42:51 2023",
+            "note_": "",
+            "state_": 0,
+            "value_": "0",
             "write_to_DB_": false
         }
     ],
@@ -217,23 +250,22 @@
             "LastStatus": true,
             "LastValue": "0",
             "NormalLowerBoundValue": 0,
-            "NormalUpperBoundValue": 55000,
-            "paramTableName": "param_0x31_host_0x10"
+            "NormalUpperBoundValue": 55000
         },
         {
             "ItemName": "in_gauge",
             "LastStatus": true,
             "LastValue": "0",
             "NormalLowerBoundValue": 0,
-            "NormalUpperBoundValue": 8000,
-            "paramTableName": "param_0x41_host_0x10"
+            "NormalUpperBoundValue": 8000
         },
         {
             "ItemName": "motor_temp",
-            "LastStatus": false,
-            "LastValue": "0",
-            "NormalLowerBoundValue": 0,
-            "NormalUpperBoundValue": 0
+            "LastStatus": true,
+            "LastValue": "22.406352996826172",
+            "NormalLowerBoundValue": -5,
+            "NormalUpperBoundValue": 35.6,
+            "paramTableName": "param_0xa0_host_0x10"
         },
         {
             "ItemName": "out_gauge",
@@ -245,10 +277,10 @@
         {
             "ItemName": "rpm",
             "LastStatus": true,
-            "LastValue": "0",
+            "LastValue": "4090.6142578125",
             "NormalLowerBoundValue": 0,
             "NormalUpperBoundValue": 5000,
-            "paramTableName": "param_0x34_host_0x10"
+            "paramTableName": "param_0x31_host_0x10"
         },
         {
             "ItemName": "tank_temp",
@@ -262,12 +294,11 @@
             "LastStatus": true,
             "LastValue": "0",
             "NormalLowerBoundValue": -10,
-            "NormalUpperBoundValue": 5000,
-            "paramTableName": "param_0x35_host_0x10"
+            "NormalUpperBoundValue": 5000
         }
     ],
     "serverConnection": {
-        "IP": "127.0.0.5",
+        "IP": "192.168.1.99",
         "Port": "3699",
         "autoConnect": false
     }
