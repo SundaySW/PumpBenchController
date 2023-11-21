@@ -28,6 +28,8 @@ public:
     template<typename T>
     bool setRequestedValue(T val);
     ParamItem* getFeedBackParamRawPtr();
+    void SetPIDControl(bool);
+    bool SetTargetValue(double value);
 signals:
     void requestParamKeyByName(const QString&);
     void requestItemsList();
@@ -62,7 +64,7 @@ private:
         bool checkValue(T val);
     void newTargetValueItemUpdate();
     void configBtnClicked();
-    void checkPIDTargetValue();
+    bool checkPIDTargetValue();
     bool isOKReceivedNewParam(const QSharedPointer<BenchViewItem> &item);
     void showMsgBox(const QString &msg);
     void managePIDStatus(bool state);

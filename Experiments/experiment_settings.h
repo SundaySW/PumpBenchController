@@ -38,6 +38,7 @@ private:
     void StartExperiment();
     void UpdateExperiment();
     void StopExperiment();
+    void ExpPointFinished(int total, int current, double name);
 };
 
 #endif // EXPERIMENTSETTINGS_H

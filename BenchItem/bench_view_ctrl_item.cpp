@@ -71,6 +71,7 @@ bool BenchViewCtrlItem::setRequestedValue(T val){
         requestedValue = val;
         valueSlider->setValue((int)requestedValue);
         set_item_value_edit_->setText(QString("%1").arg(requestedValue));
+        pidControl.reset();
         return true;
     }
     else
@@ -108,7 +109,7 @@ void BenchViewCtrlItem::managePIDStatus(bool state){
     }
     if(state)
         pidControl.reset();
-    pidEnabledBtn->setChecked(state);
+    pidEnabledBtn->setChecked(!state);
     pidEnabled = state;
 }
 
@@ -122,8 +123,19 @@ void BenchViewCtrlItem::targetValueChanged() {
         return;
     }
     pidTargetValue = newValue;
-    checkPIDTargetValue();
+    if(checkPIDTargetValue())
+        pidControl.reset();
 }
+
+bool BenchViewCtrlItem::SetTargetValue(double newValue){
+    pidTargetValue = newValue;
+    if(checkPIDTargetValue()){
+        pidControl.reset();
+        return true;
+    }
+    return false;
+}
+
 
 void BenchViewCtrlItem::newTargetValueItem(const QString& itemName) {
     if(targetValueItem.isNull()){
@@ -139,11 +151,12 @@ void BenchViewCtrlItem::receiveItem(QSharedPointer<BenchViewItem>& item){
         return;
     targetValueItem = item;
     connect(targetValueItem->getParamPtr(), &ParamItem::newParamValue, [this](){ newTargetValueItemUpdate();});
-    auto bounds = targetValueItem->getBounds();
-    auto[min, max] = bounds;
-    settingsDlg->setPidBoundsOfNewItem(bounds);
-    pidControl.changeValueBounds(min, max);
-    checkPIDTargetValue();
+//    auto bounds = targetValueItem->getBounds();
+//    auto[min, max] = bounds;
+//    settingsDlg->setPidBoundsOfNewItem(bounds);
+//    pidControl.changeValueBounds(min, max);
+    if(checkPIDTargetValue())
+        pidControl.reset();
 }
 
 bool BenchViewCtrlItem::isOKReceivedNewParam(const QSharedPointer<BenchViewItem>& item){
@@ -168,10 +181,10 @@ void BenchViewCtrlItem::resetFeedBackItemComboBox(const QString& newName){
     emit newFeedBackItem(newName);
 }
 
-void BenchViewCtrlItem::checkPIDTargetValue(){
+bool BenchViewCtrlItem::checkPIDTargetValue(){
     if(targetValueItem.isNull()){
         showMsgBox(QString("No Item selected."));
-        return;
+        return false;
     }
     auto[min, max] = targetValueItem->getBounds();
     auto currentItemValue = targetValueItem->getCurrentValue().toDouble();
@@ -180,7 +193,9 @@ void BenchViewCtrlItem::checkPIDTargetValue(){
                            "value is set with currently received value! Please check!"));
         targetValueEdit->setText(QString("%1").arg(currentItemValue));
         pidTargetValue = currentItemValue;
+        return false;
     }
+    return true;
 }
 
 void BenchViewCtrlItem::showMsgBox(const QString& msg){
@@ -256,4 +271,6 @@ ParamItem *BenchViewCtrlItem::getFeedBackParamRawPtr() {
     return targetValueItem->getParamPtr();
 }
 
-
+void BenchViewCtrlItem::SetPIDControl(bool state) {
+    managePIDStatus(state);
+}

@@ -57,6 +57,9 @@ void ExperimentPoint::LoadDataFromJson(const QJsonObject& jsonObject) {
     ui->target_edit->setText(jsonObject["target_edit"].toString());
     ui->count_edit->setText(jsonObject["count_edit"].toString());
     ui->spread_edit->setText(jsonObject["spread_edit"].toString());
+    target_value_ = ui->target_edit->text().toDouble();
+    qty_ = ui->count_edit->text().toInt();
+    spread_ = ui->spread_edit->text().toDouble();
 }
 
 QJsonObject ExperimentPoint::SaveDataToJson(){
