@@ -179,9 +179,9 @@ void BenchItemSettingsDlg::newParamRequested(const QString& mapKey) {
             disconnect(paramItem.get(), &ParamItem::paramCalibDataChanged, this, nullptr);
         }
         paramItem = newParam;
-        connect(paramItem.get(), &ParamItem::paramRatesChanged,
+        connect(paramItem.get(), &ParamItem::paramRatesChanged, this,
                 [this](uchar t, short v) { setActualValues(t, v); });
-        connect(paramItem.get(), &ParamItem::paramCalibDataChanged,
+        connect(paramItem.get(), &ParamItem::paramCalibDataChanged, this,
                 [this](uchar t, double v) { setActualValues(t, v); });
         getRates();
         emit itemParamChanged(paramItem);

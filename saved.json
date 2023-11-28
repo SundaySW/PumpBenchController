@@ -13,8 +13,8 @@
             "valueMax": 4200,
             "valueMin": 0
         },
-        "pidTargetValue": 550,
-        "requestedValue": 1,
+        "pidTargetValue": 150,
+        "requestedValue": 0,
         "setParamHost": 5,
         "setParamId": 5,
         "targetValueItemName": "flow"
@@ -44,11 +44,6 @@
                 "count_edit": "5",
                 "spread_edit": "25",
                 "target_edit": "450"
-            },
-            {
-                "count_edit": "5",
-                "spread_edit": "25",
-                "target_edit": "550"
             }
         ],
         "count_stable": "5",
@@ -66,12 +61,12 @@
             "SenderID": 16,
             "Type": 1,
             "UpdateRate": 1000,
-            "ViewUpdateRate": 4000,
+            "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:07 2023",
+            "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
             "state_": 0,
-            "value_": "17.288307189941406",
+            "value_": "18.008441925048828",
             "write_to_DB_": false
         },
         {
@@ -85,10 +80,10 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:07 2023",
+            "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
             "state_": 0,
-            "value_": "27.00170135498047",
+            "value_": "30.478736877441406",
             "write_to_DB_": false
         },
         {
@@ -100,12 +95,12 @@
             "SenderID": 16,
             "Type": 1,
             "UpdateRate": 500,
-            "ViewUpdateRate": 2000,
+            "ViewUpdateRate": 2500,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:08 2023",
+            "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
             "state_": 0,
-            "value_": "545.497802734375",
+            "value_": "153.38525390625",
             "write_to_DB_": false
         },
         {
@@ -119,10 +114,10 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:07 2023",
+            "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
             "state_": 0,
-            "value_": "3.6056113243103027",
+            "value_": "5.862746715545654",
             "write_to_DB_": false
         },
         {
@@ -136,10 +131,10 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:07 2023",
+            "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
             "state_": 0,
-            "value_": "3.4296274185180664",
+            "value_": "5.719559669494629",
             "write_to_DB_": false
         },
         {
@@ -153,7 +148,7 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:07 2023",
+            "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
             "state_": 0,
             "value_": "0",
@@ -170,7 +165,7 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:07 2023",
+            "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
             "state_": 0,
             "value_": "0",
@@ -178,7 +173,7 @@
         },
         {
             "DestID": 5,
-            "ExpectedValue": "1",
+            "ExpectedValue": "0",
             "HostID": 5,
             "ID_": 5,
             "LastValueType": 9,
@@ -187,10 +182,10 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:07 2023",
+            "dateTime": "Чт ноя 23 14:46:04 2023",
             "note_": "",
-            "state_": 2,
-            "value_": "1",
+            "state_": 1,
+            "value_": "0",
             "write_to_DB_": false
         },
         {
@@ -272,9 +267,9 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:05 2023",
+            "dateTime": "Чт ноя 23 14:46:04 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "25",
             "write_to_DB_": false
         },
@@ -289,10 +284,10 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:06 2023",
+            "dateTime": "Чт ноя 23 14:46:00 2023",
             "note_": "",
-            "state_": 0,
-            "value_": "23.6875",
+            "state_": 1,
+            "value_": "23.9375",
             "write_to_DB_": false
         },
         {
@@ -306,9 +301,9 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:06 2023",
+            "dateTime": "Чт ноя 23 14:46:00 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "16.745983123779297",
             "write_to_DB_": false
         },
@@ -323,9 +318,9 @@
             "UpdateRate": -4083,
             "ViewUpdateRate": 5000,
             "alt_name_": "",
-            "dateTime": "Вт ноя 21 17:32:06 2023",
+            "dateTime": "Чт ноя 23 14:46:00 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "0",
             "write_to_DB_": false
         }
@@ -338,7 +333,7 @@
         {
             "ItemName": "flow",
             "LastStatus": true,
-            "LastValue": "545.497802734375",
+            "LastValue": "153.38525390625",
             "NormalLowerBoundValue": -100,
             "NormalUpperBoundValue": 10000,
             "paramTableName": "param_0x33_host_0x10"

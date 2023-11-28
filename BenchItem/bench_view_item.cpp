@@ -24,24 +24,24 @@ BenchViewItem::BenchViewItem(QString _name, QCustomPlot* _plot, QLabel* _label, 
 {
     settings_dlg_ = new BenchItemSettingsDlg(item_name_, param_service_, true, parent);
 
-    connect(settings_dlg_, &BenchItemSettingsDlg::itemParamChanged, [this](QSharedPointer<ParamItem>& newItem){
+    connect(settings_dlg_, &BenchItemSettingsDlg::itemParamChanged, this, [this](QSharedPointer<ParamItem>& newItem){
         if(!protos_item_.isNull())
             disconnect(protos_item_.get(), nullptr, this, nullptr);
         protos_item_ = newItem;
         connect(protos_item_.get(), &ParamItem::newParamValue, this, &BenchViewItem::updateView);
         resetPlotData();
     });
-    connect(settings_dlg_, &BenchItemSettingsDlg::itemParamUnbinded, [this](){
+    connect(settings_dlg_, &BenchItemSettingsDlg::itemParamUnbinded, this, [this](){
         disconnect(protos_item_.get(), nullptr, this, nullptr);
         protos_item_.reset();
         unsetPlotData();
     });
-    connect(settings_dlg_, &BenchItemSettingsDlg::newUpdateValueBounds, [this](const QPair<double, double>& newPairValues){
+    connect(settings_dlg_, &BenchItemSettingsDlg::newUpdateValueBounds, this, [this](const QPair<double, double>& newPairValues){
         normal_value_lower_bound_ = newPairValues.first;
         normal_value_upperBound_ = newPairValues.second;
     });
-    connect(button, &QPushButton::clicked, [this](){ itemButtonClicked(); });
-    connect(updateValueTimer, &QTimer::timeout, [this]() { updateValueTimerFinished(); });
+    connect(button, &QPushButton::clicked, this, [this](){ itemButtonClicked(); });
+    connect(updateValueTimer, &QTimer::timeout, this, [this]() { updateValueTimerFinished(); });
 
     iconDef = button->icon();
     iconOK = QIcon(QString(":/item_icons/item_svg/%1%2.svg").arg(item_name_, "_active"));
@@ -203,7 +203,7 @@ void BenchViewItem::setPlot(){
     Plot->plotLayout()->setFillOrder(QCPLayoutGrid::FillOrder::foRowsFirst);
     Plot->plotLayout()->setRowSpacing(0);
 
-    connect(Plot, &QCustomPlot::mouseDoubleClick, [this](QMouseEvent*  event) {
+    connect(Plot, &QCustomPlot::mouseDoubleClick, this, [this](QMouseEvent*  event) {
         livePlot = !livePlot;
 //        if(QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
 //            if(rect){

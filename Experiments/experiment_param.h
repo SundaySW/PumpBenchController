@@ -23,7 +23,6 @@ signals:
     void deleteMe();
 private:
     Ui::ExperimentParam *ui;
-    ParamEntity param_entity_;
 };
 
 #endif // EXPERIMENT_PARAM_H

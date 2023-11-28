@@ -23,10 +23,11 @@ void ExperimentSettings::MakeConnections() {
     connect(ui->add_point_btn, &QPushButton::clicked, [this](){ addExpPoint(); });
     connect(ui->add_param_btn, &QPushButton::clicked, [this](){ addExpParam(); });
     connect(ui->start_exp_btn, &QPushButton::clicked, [this](){
-        if(!ui->start_exp_btn->isChecked()){
+        if(ui->start_exp_btn->isChecked()){
             StartExperiment();
-        }else
+        }else{
             StopExperiment();
+        }
     });
 }
 
@@ -61,33 +62,42 @@ void ExperimentSettings::StartExperiment(){
     for(auto& view_param : params_map_){
         params.push_back(view_param->GetParamEntity());
     }
-    QVector<PointEntity> points;
-    points.reserve(points_map_.size());
-    for(auto& view_point : points_map_){
-        auto p = PointEntity(view_point->GetTargetValueSpreadPair(),
-                    view_point->GetQuantity(),
-                    params);
-        int x = 0;
-        points.push_back(std::move(p));
-    }
+
     auto tg_value = ui->stable_value_target->text().toDouble();
     auto spread = ui->stable_value_spread->text().toDouble();
     auto qty = ui->count_stable->text().toInt();
-    QString device_name = ui->device_n_edit->text();
-    experiment_.reset(new Experiment(points, ctrlItem_, param_service_, {tg_value,spread}, qty, std::move(params), device_name));
+
+    QVector<PointEntity> points;
+    points.reserve(points_map_.size());
+    points.push_back(PointEntity({tg_value, spread},
+                                 qty,
+                                 params,
+                                 true));
+    for(auto& view_point : points_map_){
+        points.push_back(PointEntity(view_point->GetTargetValueSpreadPair(),
+                                     view_point->GetQuantity(),
+                                     params));
+    }
+
+    ui->point_name_label->setText("Experiment started");
+    ui->start_exp_btn->setChecked(true);
+
+    auto device_name = ui->device_n_edit->text();
+    experiment_.reset(new Experiment(points, ctrlItem_, param_service_, std::move(params), device_name));
     connect(ctrlItem_->getFeedBackParamRawPtr(), &ParamItem::newParamValue, this, [this](){ UpdateExperiment(); });
     connect(experiment_.get(), &Experiment::ExperimentFinished, this, [this](){ StopExperiment(); });
-    connect(experiment_.get(), &Experiment::PointFinished, this,
+    connect(experiment_.get(), &Experiment::PointStarted, this,
             [this](int total, int current, double name){ ExpPointFinished(total, current, name); });
 }
 
 void ExperimentSettings::StopExperiment(){
     disconnect(ctrlItem_->getFeedBackParamRawPtr(), &ParamItem::newParamValue, this, nullptr);
     disconnect(experiment_.get(), &Experiment::ExperimentFinished, this, nullptr);
-    disconnect(experiment_.get(), &Experiment::PointFinished, this, nullptr);
+    disconnect(experiment_.get(), &Experiment::PointStarted, this, nullptr);
     experiment_->FinishExperiment();
-    ui->point_name_label->setText("");
+    ui->point_name_label->setText("Experiment finished");
     ui->progressBar->setValue(0);
+    ui->start_exp_btn->setChecked(false);
 }
 
 void ExperimentSettings::ExpPointFinished(int total, int current, double current_point_v){
