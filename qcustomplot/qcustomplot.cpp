@@ -3300,7 +3300,7 @@ void QCPLayoutElement::setAutoMargins(QCP::MarginSides sides)
 
 /*!
   Sets the minimum size of this layout element. A parent layout tries to respect the \a size here
-  by changing row/column sizes in the layout accordingly.
+  by changing row_/column sizes in the layout accordingly.
   
   If the parent layout size is not sufficient to satisfy all minimum size constraints of its child
   layout elements, the layout may set a size that is actually smaller than \a size. QCustomPlot
@@ -3334,7 +3334,7 @@ void QCPLayoutElement::setMinimumSize(int width, int height)
 
 /*!
   Sets the maximum size of this layout element. A parent layout tries to respect the \a size here
-  by changing row/column sizes in the layout accordingly.
+  by changing row_/column sizes in the layout accordingly.
   
   Whether this constraint applies to the inner or the outer rect can be specified with \ref
   setSizeConstraintRect (see \ref rect and \ref outerRect).
@@ -3573,7 +3573,7 @@ int QCPLayoutElement::calculateAutoMargin(QCP::MarginSide side)
 /*! \internal
   
   This virtual method is called when this layout element was moved to a different QCPLayout, or
-  when this layout element has changed its logical position (e.g. row and/or column) within the
+  when this layout element has changed its logical position (e.g. row_ and/or column) within the
   same QCPLayout. Subclasses may use this to react accordingly.
   
   Since this method is called after the completion of the move, you can access the new parent
@@ -3602,7 +3602,7 @@ void QCPLayoutElement::layoutChanged()
   functions are most notably \ref elementCount, \ref elementAt, \ref takeAt, \ref take, \ref
   simplify, \ref removeAt, \ref remove and \ref clear. Individual subclasses may add more functions
   to this interface which are more specialized to the form of the layout. For example, \ref
-  QCPLayoutGrid adds functions that take row and column indices to access cells of the layout grid
+  QCPLayoutGrid adds functions that take row_ and column indices to access cells of the layout grid
   more conveniently.
   
   Since this is an abstract base class, you can't instantiate it directly. Rather use one of its
@@ -4066,14 +4066,14 @@ QSize QCPLayout::getFinalMaximumOuterSize(const QCPLayoutElement *el)
   Elements are laid out in a grid with configurable stretch factors (\ref setColumnStretchFactor,
   \ref setRowStretchFactor) and spacing (\ref setColumnSpacing, \ref setRowSpacing).
 
-  Elements can be added to cells via \ref addElement. The grid is expanded if the specified row or
+  Elements can be added to cells via \ref addElement. The grid is expanded if the specified row_ or
   column doesn't exist yet. Whether a cell contains a valid layout element can be checked with \ref
   hasElement, that element can be retrieved with \ref element. If rows and columns that only have
   empty cells shall be removed, call \ref simplify. Removal of elements is either done by just
   adding the element to a different layout or by using the QCPLayout interface \ref take or \ref
   remove.
 
-  If you use \ref addElement(QCPLayoutElement*) without explicit parameters for \a row and \a
+  If you use \ref addElement(QCPLayoutElement*) without explicit parameters for \a row_ and \a
   column, the grid layout will choose the position according to the current \ref setFillOrder and
   the wrapping (\ref setWrap).
 
@@ -4117,9 +4117,9 @@ QCPLayoutGrid::~QCPLayoutGrid()
 }
 
 /*!
-  Returns the element in the cell in \a row and \a column.
+  Returns the element in the cell in \a row_ and \a column.
   
-  Returns \c nullptr if either the row/column is invalid or if the cell is empty. In those cases, a
+  Returns \c nullptr if either the row_/column is invalid or if the cell is empty. In those cases, a
   qDebug message is printed. To check whether a cell exists and isn't empty, use \ref hasElement.
   
   \see addElement, hasElement
@@ -4137,21 +4137,21 @@ QCPLayoutElement *QCPLayoutGrid::element(int row, int column) const
     } else
       qDebug() << Q_FUNC_INFO << "Invalid column. Row:" << row << "Column:" << column;
   } else
-    qDebug() << Q_FUNC_INFO << "Invalid row. Row:" << row << "Column:" << column;
+    qDebug() << Q_FUNC_INFO << "Invalid row_. Row:" << row << "Column:" << column;
   return nullptr;
 }
 
 
 /*! \overload
 
-  Adds the \a element to cell with \a row and \a column. If \a element is already in a layout, it
-  is first removed from there. If \a row or \a column don't exist yet, the layout is expanded
+  Adds the \a element to cell with \a row_ and \a column. If \a element is already in a layout, it
+  is first removed from there. If \a row_ or \a column don't exist yet, the layout is expanded
   accordingly.
 
-  Returns true if the element was added successfully, i.e. if the cell at \a row and \a column
+  Returns true if the element was added successfully, i.e. if the cell at \a row_ and \a column
   didn't already have an element.
 
-  Use the overload of this method without explicit row/column index to place the element according
+  Use the overload of this method without explicit row_/column index to place the element according
   to the configured fill order and wrapping settings.
 
   \see element, hasElement, take, remove
@@ -4168,7 +4168,7 @@ bool QCPLayoutGrid::addElement(int row, int column, QCPLayoutElement *element)
       adoptElement(element);
     return true;
   } else
-    qDebug() << Q_FUNC_INFO << "There is already an element in the specified row/column:" << row << column;
+    qDebug() << Q_FUNC_INFO << "There is already an element in the specified row_/column:" << row << column;
   return false;
 }
 
@@ -4213,7 +4213,7 @@ bool QCPLayoutGrid::addElement(QCPLayoutElement *element)
 }
 
 /*!
-  Returns whether the cell at \a row and \a column exists and contains a valid element, i.e. isn't
+  Returns whether the cell at \a row_ and \a column exists and contains a valid element, i.e. isn't
   empty.
   
   \see element
@@ -4280,7 +4280,7 @@ void QCPLayoutGrid::setColumnStretchFactors(const QList<double> &factors)
 }
 
 /*!
-  Sets the stretch \a factor of \a row.
+  Sets the stretch \a factor of \a row_.
   
   Stretch factors control the relative sizes of rows and columns. Cells will not be resized beyond
   their minimum and maximum widths/heights, regardless of the stretch factor. (see \ref
@@ -4300,7 +4300,7 @@ void QCPLayoutGrid::setRowStretchFactor(int row, double factor)
     else
       qDebug() << Q_FUNC_INFO << "Invalid stretch factor, must be positive:" << factor;
   } else
-    qDebug() << Q_FUNC_INFO << "Invalid row:" << row;
+    qDebug() << Q_FUNC_INFO << "Invalid row_:" << row;
 }
 
 /*!
@@ -4354,7 +4354,7 @@ void QCPLayoutGrid::setRowSpacing(int pixels)
 
 /*!
   Sets the maximum number of columns or rows that are used, before new elements added with \ref
-  addElement(QCPLayoutElement*) will start to fill the next row or column, respectively. It depends
+  addElement(QCPLayoutElement*) will start to fill the next row_ or column, respectively. It depends
   on \ref setFillOrder, whether rows or columns are wrapped.
 
   If \a count is set to zero, no wrapping will ever occur.
@@ -4363,8 +4363,8 @@ void QCPLayoutGrid::setRowSpacing(int pixels)
   rearrange set to true (the actual fill order doesn't need to be changed for the rearranging to be
   done).
 
-  note_ that the method \ref addElement(int row, int column, QCPLayoutElement *element) with
-  explicitly stated row and column is not subject to wrapping and can place elements even beyond
+  note_ that the method \ref addElement(int row_, int column, QCPLayoutElement *element) with
+  explicitly stated row_ and column is not subject to wrapping and can place elements even beyond
   the specified wrapping point_.
 
   \see setFillOrder
@@ -4379,7 +4379,7 @@ void QCPLayoutGrid::setWrap(int count)
   method \ref addElement(QCPLayoutElement*).
 
   The specified \a order defines whether rows or columns are filled first. Using \ref setWrap, you
-  can control at which row/column count wrapping into the next column/row will occur. If you set it
+  can control at which row_/column count wrapping into the next column/row_ will occur. If you set it
   to zero, no wrapping will ever occur. Changing the fill order also changes the meaning of the
   linear index used e.g. in \ref elementAt and \ref takeAt. The default fill order for \ref
   QCPLayoutGrid is \ref foColumnsFirst.
@@ -4393,8 +4393,8 @@ void QCPLayoutGrid::setWrap(int count)
   If \a rearrange is false, the current element arrangement is not changed, which means the
   linear indexes change (because the linear index is dependent on the fill order).
 
-  note_ that the method \ref addElement(int row, int column, QCPLayoutElement *element) with
-  explicitly stated row and column is not subject to wrapping and can place elements even beyond
+  note_ that the method \ref addElement(int row_, int column, QCPLayoutElement *element) with
+  explicitly stated row_ and column is not subject to wrapping and can place elements even beyond
   the specified wrapping point_.
 
   \see setWrap, addElement(QCPLayoutElement*)
@@ -4426,15 +4426,15 @@ void QCPLayoutGrid::setFillOrder(FillOrder order, bool rearrange)
 
 /*!
   Expands the layout to have \a newRowCount rows and \a newColumnCount columns. So the last valid
-  row index will be \a newRowCount-1, the last valid column index will be \a newColumnCount-1.
+  row_ index will be \a newRowCount-1, the last valid column index will be \a newColumnCount-1.
   
-  If the current column/row count is already larger or equal to \a newColumnCount/\a newRowCount,
+  If the current column/row_ count is already larger or equal to \a newColumnCount/\a newRowCount,
   this function does nothing in that dimension.
   
   Newly created cells are empty, new rows and columns have the stretch factor 1.
   
   note_ that upon a call to \ref addElement, the layout is expanded automatically to contain the
-  specified row and column, using this function.
+  specified row_ and column, using this function.
   
   \see simplify
 */
@@ -4458,8 +4458,8 @@ void QCPLayoutGrid::expandTo(int newRowCount, int newColumnCount)
 }
 
 /*!
-  Inserts a new row with empty cells at the row index \a newIndex. Valid values for \a newIndex
-  range from 0 (inserts a row at the top) to \a rowCount (appends a row at the bottom).
+  Inserts a new row_ with empty cells at the row_ index \a newIndex. Valid values for \a newIndex
+  range from 0 (inserts a row_ at the top) to \a rowCount (appends a row_ at the bottom).
   
   \see insertColumn
 */
@@ -4509,14 +4509,14 @@ void QCPLayoutGrid::insertColumn(int newIndex)
 }
 
 /*!
-  Converts the given \a row and \a column to the linear index used by some methods of \ref
+  Converts the given \a row_ and \a column to the linear index used by some methods of \ref
   QCPLayoutGrid and \ref QCPLayout.
 
   The way the cells are indexed depends on \ref setFillOrder. If it is \ref foRowsFirst, the
   indices increase left to right and then top to bottom. If it is \ref foColumnsFirst, the indices
   increase top to bottom and then left to right.
 
-  For the returned index to be valid, \a row and \a column must be valid indices themselves, i.e.
+  For the returned index to be valid, \a row_ and \a column must be valid indices themselves, i.e.
   greater or equal to zero and smaller than the current \ref rowCount/\ref columnCount.
 
   \see indexToRowCol
@@ -4533,23 +4533,23 @@ int QCPLayoutGrid::rowColToIndex(int row, int column) const
         case foColumnsFirst: return row*columnCount() + column;
       }
     } else
-      qDebug() << Q_FUNC_INFO << "row index out of bounds:" << row;
+      qDebug() << Q_FUNC_INFO << "row_ index out of bounds:" << row;
   } else
     qDebug() << Q_FUNC_INFO << "column index out of bounds:" << column;
   return 0;
 }
 
 /*!
-  Converts the linear index to row and column indices and writes the result to \a row and \a
+  Converts the linear index to row_ and column indices and writes the result to \a row_ and \a
   column.
 
   The way the cells are indexed depends on \ref setFillOrder. If it is \ref foRowsFirst, the
   indices increase left to right and then top to bottom. If it is \ref foColumnsFirst, the indices
   increase top to bottom and then left to right.
 
-  If there are no cells (i.e. column or row count is zero), sets \a row and \a column to -1.
+  If there are no cells (i.e. column or row_ count is zero), sets \a row_ and \a column to -1.
 
-  For the retrieved \a row and \a column to be valid, the passed \a index must be valid itself,
+  For the retrieved \a row_ and \a column to be valid, the passed \a index must be valid itself,
   i.e. greater or equal to zero and smaller than the current \ref elementCount.
 
   \see rowColToIndex
@@ -4617,7 +4617,7 @@ void QCPLayoutGrid::updateLayout()
 /*!
   \seebaseclassmethod
 
-  note_ that the association of the linear \a index to the row/column based cells depends on the
+  note_ that the association of the linear \a index to the row_/column based cells depends on the
   current setting of \ref setFillOrder.
 
   \see rowColToIndex
@@ -4636,7 +4636,7 @@ QCPLayoutElement *QCPLayoutGrid::elementAt(int index) const
 /*!
   \seebaseclassmethod
 
-  note_ that the association of the linear \a index to the row/column based cells depends on the
+  note_ that the association of the linear \a index to the row_/column based cells depends on the
   current setting of \ref setFillOrder.
 
   \see rowColToIndex
@@ -4785,11 +4785,11 @@ QSize QCPLayoutGrid::maximumOuterSizeHint() const
 
 /*! \internal
   
-  Places the minimum column widths and row heights into \a minColWidths and \a minRowHeights
+  Places the minimum column widths and row_ heights into \a minColWidths and \a minRowHeights
   respectively.
   
-  The minimum height of a row is the largest minimum height of any element's outer rect in that
-  row. The minimum width of a column is the largest minimum width of any element's outer rect in
+  The minimum height of a row_ is the largest minimum height of any element's outer rect in that
+  row_. The minimum width of a column is the largest minimum width of any element's outer rect in
   that column.
   
   This is a helper function for \ref updateLayout.
@@ -4818,11 +4818,11 @@ void QCPLayoutGrid::getMinimumRowColSizes(QVector<int> *minColWidths, QVector<in
 
 /*! \internal
   
-  Places the maximum column widths and row heights into \a maxColWidths and \a maxRowHeights
+  Places the maximum column widths and row_ heights into \a maxColWidths and \a maxRowHeights
   respectively.
   
-  The maximum height of a row is the smallest maximum height of any element's outer rect in that
-  row. The maximum width of a column is the smallest maximum width of any element's outer rect in
+  The maximum height of a row_ is the smallest maximum height of any element's outer rect in that
+  row_. The maximum width of a column is the smallest maximum width of any element's outer rect in
   that column.
   
   This is a helper function for \ref updateLayout.
@@ -14899,7 +14899,7 @@ int QCustomPlot::axisRectCount() const
   default \ref QCPLayoutGrid::setFillOrder "setFillOrder" of \ref QCPLayoutGrid::foColumnsFirst
   "foColumnsFirst" wasn't changed.
   
-  If you want to access axis rects by their row and column index, use the layout interface. For
+  If you want to access axis rects by their row_ and column index, use the layout interface. For
   example, use \ref QCPLayoutGrid::element of the top level grid layout, and \c qobject_cast the
   returned layout element to \ref QCPAxisRect. (See also \ref thelayoutsystem.)
   
@@ -16696,8 +16696,8 @@ void QCPColorGradient::setPeriodic(bool enabled)
   in \a range. \a logarithmic indicates whether the data values shall be mapped to colors
   logarithmically.
 
-  if \a data actually contains 2D-data linearized via <tt>[row*columnCount + column]</tt>, you can
-  set \a dataIndexFactor to <tt>columnCount</tt> to convert a column instead of a row of the data
+  if \a data actually contains 2D-data linearized via <tt>[row_*columnCount + column]</tt>, you can
+  set \a dataIndexFactor to <tt>columnCount</tt> to convert a column instead of a row_ of the data
   array, in \a scanLine. \a scanLine will remain a regular (1D) array. This works because \a data
   is addressed <tt>data[i*dataIndexFactor]</tt>.
   
@@ -19043,8 +19043,8 @@ QSize QCPPlottableLegendItem::minimumOuterSizeHint() const
   rect.
 
   Use the methods \ref setFillOrder and \ref setWrap inherited from \ref QCPLayoutGrid to control
-  in which order (column first or row first) the legend is filled up when calling \ref addItem, and
-  at which column or row wrapping occurs. The default fill order for legends is \ref foRowsFirst.
+  in which order (column first or row_ first) the legend is filled up when calling \ref addItem, and
+  at which column or row_ wrapping occurs. The default fill order for legends is \ref foRowsFirst.
 
   By default, every QCustomPlot has one legend (\ref QCustomPlot::legend) which is placed in the
   inset layout of the main axis rect (\ref QCPAxisRect::insetLayout). To move the legend to another
@@ -24746,7 +24746,7 @@ QCPRange QCPBars::getKeyRange(bool &foundRange, QCP::SignDomain inSignDomain) co
   spans than before, which in turn would require a different key range to perfectly fit, and so on.
   The only solution would be to iteratively approach the perfect fitting axis range, but the
   mismatch isn't large enough in most applications, to warrant this here. If a user does need a
-  better fit, he should call the corresponding axis rescale multiple times in a row.
+  better fit, he should call the corresponding axis rescale multiple times in a row_.
   */
   QCPRange range;
   range = mDataContainer->keyRange(foundRange, inSignDomain);

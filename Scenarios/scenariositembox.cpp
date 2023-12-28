@@ -113,7 +113,7 @@ ScenariosItemBox::~ScenariosItemBox()
 void ScenariosItemBox::enableBtnClicked()
 {
     if(!targetValue.has_value())
-        showMsgBox("Set target value for this scenario!");
+        showMsgBox("Set target value for this action!");
     else
         enabled = !enabled;
     ui->enable_pushButton->setChecked(enabled);

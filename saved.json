@@ -16,18 +16,18 @@
         "pidTargetValue": 150,
         "requestedValue": 0,
         "setParamHost": 5,
-        "setParamId": 5,
+        "setParamId": 193,
         "targetValueItemName": "flow"
     },
     "Experiment": {
         "Params": [
             {
-                "param_comboBox": "param_0x31_host_0x10",
-                "param_name_lineEdit": "RMP"
-            },
-            {
                 "param_comboBox": "param_0x34_host_0x10",
                 "param_name_lineEdit": "Preasure1"
+            },
+            {
+                "param_comboBox": "param_0x31_host_0x10",
+                "param_name_lineEdit": "RMP"
             },
             {
                 "param_comboBox": "param_0xe2_host_0x10",
@@ -51,6 +51,23 @@
         "stable_value_spread": "25",
         "stable_value_target": "150"
     },
+    "KeyPad": {
+        "KeyPad": [
+            {
+                "name": "A",
+                "protos_msg": [
+                    "1",
+                    "2",
+                    "3"
+                ]
+            },
+            {
+                "name": "NoName Button",
+                "protos_msg": [
+                ]
+            }
+        ]
+    },
     "Params": [
         {
             "DestID": 255,
@@ -65,7 +82,7 @@
             "alt_name_": "",
             "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "18.008441925048828",
             "write_to_DB_": false
         },
@@ -82,7 +99,7 @@
             "alt_name_": "",
             "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "30.478736877441406",
             "write_to_DB_": false
         },
@@ -99,7 +116,7 @@
             "alt_name_": "",
             "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "153.38525390625",
             "write_to_DB_": false
         },
@@ -116,7 +133,7 @@
             "alt_name_": "",
             "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "5.862746715545654",
             "write_to_DB_": false
         },
@@ -133,7 +150,7 @@
             "alt_name_": "",
             "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "5.719559669494629",
             "write_to_DB_": false
         },
@@ -150,7 +167,7 @@
             "alt_name_": "",
             "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "0",
             "write_to_DB_": false
         },
@@ -167,7 +184,7 @@
             "alt_name_": "",
             "dateTime": "Пт ноя 24 15:07:03 2023",
             "note_": "",
-            "state_": 0,
+            "state_": 1,
             "value_": "0",
             "write_to_DB_": false
         },
@@ -333,7 +350,7 @@
         {
             "ItemName": "flow",
             "LastStatus": true,
-            "LastValue": "153.38525390625",
+            "LastValue": "0",
             "NormalLowerBoundValue": -100,
             "NormalUpperBoundValue": 10000,
             "paramTableName": "param_0x33_host_0x10"
@@ -385,6 +402,6 @@
     "serverConnection": {
         "IP": "192.168.1.99",
         "Port": "3699",
-        "autoConnect": true
+        "autoConnect": false
     }
 }

@@ -1395,13 +1395,13 @@ public:
   
   /*!
     Defines in which direction the grid is filled when using \ref addElement(QCPLayoutElement*).
-    The column/row at which wrapping into the next row/column occurs can be specified with \ref
+    The column/row_ at which wrapping into the next row_/column occurs can be specified with \ref
     setWrap.
 
     \see setFillOrder
   */
-  enum FillOrder { foRowsFirst    ///< Rows are filled first, and a new element is wrapped to the next column if the row count would exceed \ref setWrap.
-                  ,foColumnsFirst ///< Columns are filled first, and a new element is wrapped to the next row if the column count would exceed \ref setWrap.
+  enum FillOrder { foRowsFirst    ///< Rows are filled first, and a new element is wrapped to the next column if the row_ count would exceed \ref setWrap.
+                  ,foColumnsFirst ///< Columns are filled first, and a new element is wrapped to the next row_ if the column count would exceed \ref setWrap.
                 };
   Q_ENUMS(FillOrder)
   

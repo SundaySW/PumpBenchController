@@ -68,7 +68,6 @@ private:
     bool isOKReceivedNewParam(const QSharedPointer<BenchViewItem> &item);
     void showMsgBox(const QString &msg);
     void managePIDStatus(bool state);
-
     void resetFeedBackItemComboBox(const QString& newName);
 };
 

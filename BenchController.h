@@ -13,6 +13,7 @@
 #include <utility>
 #include "Scenarios/scenariosdock.h"
 #include "experiment_settings.h"
+#include "KeyPad/keypad.h"
 
 class BenchController: public QObject{
     Q_OBJECT
@@ -37,6 +38,7 @@ private:
     QTimer* serverReconnectionTimer_;
     QTimer* plotReDrawTimer_;
     QSharedPointer<ScenariosDock> scenariosDock_;
+    QSharedPointer<KeyPad> key_pad_dock_;
 
     void makeConnections();
     void statusBtnClicked();
@@ -56,6 +58,8 @@ private:
     void sendItemFromName(const QString &itemName, T *customer);
     template<typename T>
     void sendItemsNameLogoListToComboBoxes(T *customer);
+
+    void makeKeyPadDock();
 };
 
 #endif //PUMPBENCHCONTROLLER_BENCHCONTROLLER_H

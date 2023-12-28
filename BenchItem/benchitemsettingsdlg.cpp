@@ -1,9 +1,13 @@
 #include "benchitemsettingsdlg.h"
 
-#include <utility>
-#include <QMessageBox>
 #include "ui_benchitemsettingsdlg.h"
 #include "colors.h"
+
+#include <utility>
+#include <QMessageBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFormLayout>
 
 BenchItemSettingsDlg::~BenchItemSettingsDlg()
 {
@@ -54,6 +58,7 @@ void BenchItemSettingsDlg::updateParamConnections(){
         else
             QMessageBox::information(this, "Wrong value", "Previous kept");
     });
+    connect(ui->calculate_btn, &QPushButton::clicked, this, [this](){ ShowCalculationDlg(); });
 }
 
 void BenchItemSettingsDlg::unbindProtosParam(){
@@ -115,9 +120,9 @@ void BenchItemSettingsDlg::paramSettingsConnection(){
 void BenchItemSettingsDlg::pidValuesConnection(){
     ui->pidMin_lineEdit->setValidator(doubleValueVal.get());
     ui->pidMax_lineEdit->setValidator(doubleValueVal.get());
-    ui->pidKp_lineEdit->setValidator(unsFloatValueVal.get());
-    ui->pidKi_lineEdit->setValidator(unsFloatValueVal.get());
-    ui->pidKd_lineEdit->setValidator(unsFloatValueVal.get());
+    ui->pidKp_lineEdit->setValidator(doubleValueVal.get());
+    ui->pidKi_lineEdit->setValidator(doubleValueVal.get());
+    ui->pidKd_lineEdit->setValidator(doubleValueVal.get());
     connect(ui->pidKd_lineEdit, &QLineEdit::editingFinished, [this](){
         bool ok;
         auto newValue = ui->pidKd_lineEdit->text().toDouble(&ok);
@@ -302,8 +307,8 @@ void BenchItemSettingsDlg::setSetValueBounds(const QPair<int, int>& bounds) {
 
 void BenchItemSettingsDlg::setSetParamAddr(const QPair<uchar , uchar>& bounds){
     auto[ID, HOST] = bounds;
-    ui->setParamID_lineEdit->setText(QString("%1").arg(ID));
-    ui->setParamHost_lineEdit->setText(QString("%1").arg(HOST));
+    ui->setParamID_lineEdit->setText(QString("%1").arg(ID,1,16).toUpper());
+    ui->setParamHost_lineEdit->setText(QString("%1").arg(HOST,1,16).toUpper());
 }
 
 void BenchItemSettingsDlg::setPIDSettings(const QJsonObject& jsonObject){
@@ -318,4 +323,50 @@ void BenchItemSettingsDlg::setUpdateParamFromController(const QString& mapKey){
     refreshParamList();
     emit newParamRequested(mapKey);
     ui->updateParam_comboBox->setCurrentText(mapKey);
+}
+
+
+void BenchItemSettingsDlg::ShowCalculationDlg(){
+    QDialog dlg(parentWidget());
+    dlg.setWindowTitle("Calculate Calibration");
+
+    auto firstGroupBox = QGroupBox("First point", this);
+    auto firstGroupBoxLayout = new QFormLayout();
+    firstGroupBox.setLayout(firstGroupBoxLayout);
+    auto first_point_result = new QLineEdit();
+    auto first_point_raw = new QLineEdit();
+    firstGroupBoxLayout->addRow("First point gauge value", first_point_result);
+    firstGroupBoxLayout->addRow("First point raw measure", first_point_raw);
+
+    auto secondGroupBox = new QGroupBox("Second point", this);
+    auto secondGroupBoxLayout = new QFormLayout();
+    secondGroupBox->setLayout(secondGroupBoxLayout);
+    auto second_point_result = new QLineEdit();
+    auto second_point_raw = new QLineEdit();
+    secondGroupBoxLayout->addRow("Second point gauge value", second_point_result);
+    secondGroupBoxLayout->addRow("Second point raw measure", second_point_raw);
+
+    auto *btn_box = new QDialogButtonBox(&dlg);
+    btn_box->setStandardButtons(QDialogButtonBox::Apply);
+    connect(btn_box, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+
+    auto *layout = new QVBoxLayout();
+    layout->addWidget(&firstGroupBox);
+    layout->addWidget(secondGroupBox);
+    layout->addWidget(btn_box);
+    dlg.setLayout(layout);
+
+    if(dlg.exec() == QDialog::Accepted){
+        auto result = CalcCalibValues(first_point_raw->text().toDouble(), first_point_result->text().toDouble(),
+                                      second_point_raw->text().toDouble(), second_point_result->text().toDouble());
+        ui->offset_value_lineEdit->setText(QString("%1").arg(result.first));
+        ui->mult_value_lineEdit->setText(QString("%1").arg(result.second));
+    }
+}
+//Result = Mult * (value + Offset)
+std::pair<double, double> BenchItemSettingsDlg::CalcCalibValues(double a1, double b1, double a2, double b2){
+    double c = b2/b1;
+    double offset = (c * a1 - a2) / (1 - c);
+    double mult = b1 / (a1 + offset);
+    return {offset, mult};
 }

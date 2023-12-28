@@ -18,26 +18,31 @@ ScenariosDock::ScenariosDock(QWidget *parent) :
 }
 
 ScenariosItemBox* ScenariosDock::addMsgItem(){
-    auto shrdPtr = QSharedPointer<ScenariosItemBox>(new ScenariosItemBox(this));
-    auto* scenariosItemBoxPtr = shrdPtr.get();
+    auto shrd_ptr = QSharedPointer<ScenariosItemBox>(new ScenariosItemBox(this));
+    auto* scenariosItemBoxPtr = shrd_ptr.get();
     emit reqViewItemsList(scenariosItemBoxPtr);
-    scenariosItemBoxPtr->setTitle(QString("Scenario №%1").arg(++scenarioCount));
-    msgItemsMap.insert(scenariosItemBoxPtr, shrdPtr);
+    scenariosItemBoxPtr->setTitle(QString("Action №%1").arg(++scenarioCount));
+    msgItemsMap.insert(scenariosItemBoxPtr, shrd_ptr);
+
     connect(scenariosItemBoxPtr, &ScenariosItemBox::requestItemByName, [this, scenariosItemBoxPtr](const QString& name){
         emit reqNewItemFromScenario(name, scenariosItemBoxPtr);
     });
+
     connect(scenariosItemBoxPtr, &ScenariosItemBox::requestItemsList,[this, scenariosItemBoxPtr](){
         emit reqViewItemsList(scenariosItemBoxPtr);
     });
+
     connect(scenariosItemBoxPtr, &ScenariosItemBox::protosMsgToSend,[this](const QString& m){
         emit protosMsgToSend(m);
     });
+
     connect(scenariosItemBoxPtr, &ScenariosItemBox::deleteMe, [this, scenariosItemBoxPtr](){
         disconnect(scenariosItemBoxPtr, nullptr, this, nullptr);
         msgItemsMap.remove(scenariosItemBoxPtr);
         ui->itemsLayout->removeWidget(scenariosItemBoxPtr);
     });
-    ui->itemsLayout->addWidget(scenariosItemBoxPtr);
+
+    ui->itemsLayout->insertWidget(0, scenariosItemBoxPtr);
     return scenariosItemBoxPtr;
 }
 

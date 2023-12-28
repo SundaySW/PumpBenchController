@@ -128,7 +128,7 @@
         <bool>true</bool>
        </property>
        <property name="currentText">
-        <string notr="true">grater</string>
+        <string notr="true">greater</string>
        </property>
        <property name="insertPolicy">
         <enum>QComboBox::InsertAtTop</enum>
@@ -147,7 +147,7 @@
        </property>
        <item>
         <property name="text">
-         <string notr="true">grater</string>
+         <string notr="true">greater</string>
         </property>
         <property name="icon">
          <iconset resource="../Resources/files.qrc">

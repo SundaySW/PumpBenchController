@@ -60,8 +60,9 @@ private:
     void updateParamConnections();
     void setParamConnections();
     void paramSettingsConnection();
-
     void unbindProtosParam();
+    void ShowCalculationDlg();
+    static std::pair<double, double> CalcCalibValues(double a1, double a2, double b1, double b2);
 };
 
 #endif // BENCHITEMSETTINGSDLG_H

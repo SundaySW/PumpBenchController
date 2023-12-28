@@ -39,6 +39,7 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/Dialogs/*.*
         ${CMAKE_CURRENT_SOURCE_DIR}/Scenarios/*.*
         ${CMAKE_CURRENT_SOURCE_DIR}/Experiments/*.*
+        ${CMAKE_CURRENT_SOURCE_DIR}/KeyPad/*.*
         )
 
 set(PROJECT_SOURCES
@@ -76,6 +77,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/Dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/Scenarios
         ${CMAKE_CURRENT_SOURCE_DIR}/Experiments
+        ${CMAKE_CURRENT_SOURCE_DIR}/KeyPad
         ${CMAKE_CURRENT_SOURCE_DIR}/qcustomplot
         )
 

@@ -18,7 +18,8 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
         experimentSettingsDlg_(new ExperimentSettings(mw)),
         plotReDrawTimer_(new QTimer(this)),
         serverReconnectionTimer_(new QTimer(this)),
-        scenariosDock_(new ScenariosDock(mw))
+        scenariosDock_(new ScenariosDock(mw)),
+        key_pad_dock_(new KeyPad(mw))
 {
     ui->setupUi(mw);
     jsonSaved_ = QJsonObject();
@@ -29,7 +30,15 @@ BenchController::BenchController(Ui::MainWindow *_ui, QMainWindow* mw):
     makeConnections();
     makeScenarioDock();
     makeExperimentDLg();
+    makeKeyPadDock();
     loadFromJson();
+}
+
+void BenchController::makeKeyPadDock(){
+    mainWindow->addDockWidget(Qt::DockWidgetArea::TopDockWidgetArea, key_pad_dock_.get());
+    connect(key_pad_dock_.get(), &KeyPad::protosMsgToSend, [this](const QString& m){
+        socketAdapter_->SendMsg(m);
+    });
 }
 
 void BenchController::makeExperimentDLg(){
@@ -46,7 +55,6 @@ void BenchController::makeScenarioDock(){
         sendItemsNameLogoListToComboBoxes(item);
     });
     connect(scenariosDock_.get(), &ScenariosDock::reqNewItemFromScenario, [this](const QString& n, ScenariosItemBox* c){
-        int css = 9;
         sendItemFromName(n, c);
     });
     connect(scenariosDock_.get(), &ScenariosDock::protosMsgToSend, [this](const QString& m){
@@ -85,11 +93,11 @@ void BenchController::loadFromJson(){
     serverConnectionDlg_->loadDataFromJson(jsonSaved_["serverConnection"].toObject());
     scenariosDock_->loadDataFromJson(jsonSaved_["Scenarios"].toObject());
     experimentSettingsDlg_->LoadDataFromJson(jsonSaved_["Experiment"].toObject());
+    key_pad_dock_->LoadDataFromJson(jsonSaved_["KeyPad"].toObject());
 }
 
 void BenchController::saveToJson() {
     paramService_->saveParams(jsonSaved_);
-
     QJsonArray paramArr;
     for(auto& p: updateItemsMap_)
         paramArr.append(p->SaveDataToJSon());
@@ -98,6 +106,7 @@ void BenchController::saveToJson() {
     jsonSaved_["serverConnection"] = serverConnectionDlg_->SaveDataToJson();
     jsonSaved_["Scenarios"] = scenariosDock_->SaveDataToJson();
     jsonSaved_["Experiment"] = experimentSettingsDlg_->SaveDataToJson();
+    jsonSaved_["KeyPad"] = key_pad_dock_->SaveDataToJson();
 
     QJsonDocument doc;
     doc.setObject(jsonSaved_);

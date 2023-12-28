@@ -52,6 +52,8 @@
         <file>experiment.svg</file>
         <file>stop_experiment.svg</file>
         <file>start_experiment.svg</file>
+        <file>calculate.svg</file>
+        <file>add_blue.svg</file>
     </qresource>
     <qresource prefix="/css">
         <file>css/dbsettings.css</file>

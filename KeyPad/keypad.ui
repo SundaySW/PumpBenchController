@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KeyPad</class>
+ <widget class="QDockWidget" name="KeyPad">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>191</width>
+    <height>143</height>
+   </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+QPushButton{
+	border: 2px solid #5D9ACF;
+	background: rgba(42, 134, 209, 0.7);
+	border-radius: 9px;
+	padding:5px;
+	color: white;
+}
+
+QPushButton::hover{
+	background: #0B87DA;
+}
+
+QPushButton::pressed{
+	background: #5D9ACF;
+	color: #0B87DA;
+}</string>
+  </property>
+  <property name="windowTitle">
+   <string>KeyPad</string>
+  </property>
+  <widget class="QWidget" name="dockWidgetContents">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QPushButton" name="add_btn">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: none;
+background: none;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../Resources/files.qrc">
+          <normaloff>:/icons/add_blue.svg</normaloff>:/icons/add_blue.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="autoDefault">
+         <bool>true</bool>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../Resources/files.qrc"/>
+ </resources>
+ <connections/>
+</ui>
